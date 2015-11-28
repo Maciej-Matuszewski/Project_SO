@@ -1,3 +1,4 @@
+package ZarzadzanieProcesami;
 
 public class Management 
 {	
