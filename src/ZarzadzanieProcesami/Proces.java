@@ -9,6 +9,7 @@ public class Proces {
 	public int PID;
 	public int PPID;
 	public int priorytet;
+	public int stan;
 	Random random = new Random();
 	
 	
@@ -18,6 +19,7 @@ public class Proces {
 		nazwa = "proces " + nr;
 		PID = nr;
 		priorytet = random.nextInt(39);
+		stan = 1;
 	}
 	
 	Proces(Proces proces)
@@ -27,6 +29,7 @@ public class Proces {
 		PID = nr;
 		PPID = proces.PID;
 		priorytet = random.nextInt(39);
+		stan = 1;
 	}
 	
 }
