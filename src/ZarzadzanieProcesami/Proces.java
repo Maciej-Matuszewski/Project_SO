@@ -1,29 +1,32 @@
 package ZarzadzanieProcesami;
 
+import java.util.Random;
+
 public class Proces {
 
 	public static int nr = 0;
 	String nazwa;
-	int ID;
-	int IDR;
-	
-	
-
+	public int PID;
+	public int PPID;
+	public int priorytet;
+	Random random = new Random();
 	
 	
 	Proces()
 	{
 		nr++;
 		nazwa = "proces " + nr;
-		ID = nr;
+		PID = nr;
+		priorytet = random.nextInt(39);
 	}
 	
 	Proces(Proces proces)
 	{
 		nr++;
-		nazwa = "proces potomny od: " + proces.nazwa;
-		ID = nr;
-		IDR = proces.ID;
+		nazwa = "proces " + nr;
+		PID = nr;
+		PPID = proces.PID;
+		priorytet = random.nextInt(39);
 	}
 	
 }
