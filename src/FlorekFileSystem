@@ -1,0 +1,13 @@
+/******************************************************************/
+/*                     FLOREK FILE SYSTEM v1.0                    */
+/*                     Author: Łukasz Florczak                    */
+/*                  Last update: 28.11.2015 10:37                 */
+/******************************************************************/
+package florekfilesystem;
+/******************************************************************/
+public class FlorekFileSystem {   
+    public static void main(String[] args) {
+       Disk SysDisk = new Disk("Dysk Systemowy", "Florek File System", 1024, 32);  
+    }  
+}
+/******************************************************************/
