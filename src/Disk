@@ -1,0 +1,100 @@
+/******************************************************************/
+/*                     FLOREK FILE SYSTEM v1.0                    */
+/*                     Author: Łukasz Florczak                    */
+/*                  Last update: 28.11.2015 10:37                 */
+/******************************************************************/
+package florekfilesystem;
+/******************************************************************/
+public class Disk {
+    String D_Name;              // nazwa dysku
+    String D_NameFileSystem;    // nazwa zamontowanego systemu plików
+    int D_Space;                // rozmiar dysku
+    int D_BusySpace;            // zajęte miejsce na dysku
+    int D_BlockSize;            // rozmiar bloku
+    int D_BlockValue;           // liczba bloków
+    Block[] D_Block;            // tablica z blokami danych
+    int[] D_BitVector_Block;    // wektor bitowy bloków
+    iNode[] D_iNode;            // tablica z i-węzłami
+    int[] D_BitVector_iNode;    // wektor bitowy i-węzłów
+    int D_MaxDirectBlock;       // liczba bezpośrednich bloków
+    int D_MaxInDirectBlock;     // liczba bloków w bloku pośrednm
+    int D_MaxFileSize;          // maksymalny rozmiar pliku
+    File D_Catalog;             // katalog główny systemu
+    /**************************************************************/
+    Disk(String D_Name, String D_NameFileSystem, int D_Space, int D_BlockSize) {
+        this.D_Name                 =   D_Name;
+        this.D_NameFileSystem       =   D_NameFileSystem;
+        this.D_Space                =   D_Space;
+        this.D_BusySpace            =   0;
+        this.D_BlockSize            =   D_BlockSize;
+        this.D_BlockValue           =   (this.D_Space / this.D_BlockSize);
+        this.D_Block                =   new Block[this.D_BlockValue];
+        this.D_BitVector_Block      =   new int[this.D_BlockValue];
+        this.D_iNode                =   new iNode[this.D_BlockValue];
+        this.D_BitVector_iNode      =   new int[this.D_BlockValue];    
+        this.D_MaxDirectBlock       =   2;
+        this.D_MaxInDirectBlock     =   4;
+        this.D_MaxFileSize          =   ((this.D_MaxDirectBlock + this.D_MaxInDirectBlock) * this.D_BlockSize); 
+        /**********************************************************/
+        for(int i = 0; i < this.D_BlockValue; i++) {
+            this.D_Block[i] = new Block(this.D_BlockSize, i);
+            this.D_iNode[i] = new iNode(this.D_MaxDirectBlock, this.D_MaxInDirectBlock);
+            this.D_BitVector_Block[i] = 0; // ustawienie bloków na wolne
+            this.D_BitVector_iNode[i] = 0; // ustawienie i-węzłów na wolne
+        }
+        this.D_Catalog              =   new File("/", this, 'C', "");
+        /**********************************************************/
+    }
+    /**************************************************************/
+    void D_CleanCatalogEntry(String F_Name) {
+        for(int i = 0; i < this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.size(); i++) {
+            File hlp_File = this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i);
+            if(F_Name == hlp_File.F_Name) {
+                this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.remove(i);
+            }
+        }
+    }
+    /**************************************************************/
+    int D_GetFreeBlock() {
+        for(int i = 0; i < this.D_BlockValue; i++) {
+            if(this.D_BitVector_Block[i] == 0) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    /**************************************************************/
+    int D_GetFreeiNode() {
+        for(int i = 0; i < this.D_BlockValue; i++) {
+            if(this.D_BitVector_iNode[i] == 0) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    /**************************************************************/
+    void D_ShowBlockBytes() {
+        for(int i = 1; i < this.D_BlockSize; i++) {
+            System.out.print("Blok nr " + i + ": \t");
+            this.D_Block[i].B_ShowBlockBytes();
+        }
+    }
+    /**************************************************************/
+    void D_ShowBlockContent() {
+        for(int i = 1; i < this.D_BlockSize; i++) {
+            System.out.print("Blok nr " + i + ": \t");
+            this.D_Block[i].B_ShowBlockContent();
+        }
+    }
+    /**************************************************************/
+    void D_ShowCatalog() {
+        System.out.println("Katalog\t\tPlik\t\ti-Węzeł");
+        System.out.println("ROOT" + "\t\t\t\t" + this.D_Catalog.F_iNode_Id);
+        for(int i = 0; i < this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.size(); i++) {
+            System.out.println("\t\t" + this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_Name 
+                               + ".ftf\t" + this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_iNode_Id);
+        }
+    }
+    /**************************************************************/
+}
+/******************************************************************/
