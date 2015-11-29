@@ -1,0 +1,36 @@
+/******************************************************************/
+/*                     FLOREK FILE SYSTEM v1.0                    */
+/*                     Author: Łukasz Florczak                    */
+/*                  Last update: 28.11.2015 10:37                 */
+/******************************************************************/
+package florekfilesystem;
+/******************************************************************/
+public class iNode {
+    int F_Size;             // rozmiar pliku
+    Disk SysDisk;           // dysk na którym i-węzeł się znajduje
+    char[] F_Type;          // typ pliku C - catalog  F - file
+    Block[] DirBlock;       // bloki bezpośrednie
+    Block[][] InDirBlock;   // bloki jednopośrednie
+    Boolean F_isOpen;       // zmienna wskazująca, czy plik jest używany(true) lub nie używany(false)
+    /**************************************************************/
+    iNode(int i_MaxDirBlock, int i_MaxInDirBlock) {
+        super();
+        this.F_Size = -1;
+        this.F_Type = new char[1];
+        this.DirBlock = new Block[i_MaxDirBlock];
+        this.F_isOpen = false;
+        this.InDirBlock = new Block[1][i_MaxInDirBlock];
+        /**********************************************************/
+        for(int i = 0; i < i_MaxDirBlock; i++) {
+            DirBlock[i] = null;
+        }
+        /**********************************************************/
+        for(int i = 0; i < i_MaxInDirBlock; i++) {
+            InDirBlock[0][i] = null;
+            
+        }
+        /**********************************************************/
+    }
+    /**************************************************************/
+}
+/******************************************************************/
