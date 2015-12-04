@@ -2,7 +2,6 @@ package ZarzadzanieProcesami;
 
 import java.util.Random;
 import java.util.ArrayList;
-import java.util.Random;
 
 import komunikacja_miedzy_procesami.Pipe;
 import komunikacja_miedzy_procesami.PipeField;
