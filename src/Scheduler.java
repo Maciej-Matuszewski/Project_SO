@@ -14,7 +14,7 @@ public class Scheduler {
 	{
 		for(int i=0;i<7;i++)
 		{
-			qs.add(i,new ArrayList());
+			qs.add(i,new ArrayList<Proces>());
 			whichqs[i] = false;
 		}
 	}
@@ -56,7 +56,7 @@ public class Scheduler {
 	{
 		Proces tmp_proces;
 		ArrayList<ArrayList<Proces>> tmp_qs = new ArrayList<ArrayList<Proces>>(8);
-		boolean tmp_whichqs[] = whichqs;
+		boolean tmp_whichqs[] = new boolean[8];
 		System.out.println("Przeliczanie priorytetu");
 		for(int i=0;i<7;i++)
 		{
@@ -64,21 +64,30 @@ public class Scheduler {
 			{
 				for(int j=0;j<qs.get(i).size();j++)
 				{
-					qs.get(i).get(j).cpu /= 2;
+					qs.get(i).get(j).cpu = qs.get(i).get(j).cpu / 2;
 					qs.get(i).get(j).uspri = base + qs.get(i).get(j).cpu/2 + qs.get(i).get(j).nice;
 					qs.get(i).get(j).pri = qs.get(i).get(j).uspri;
 				}
 			}
 		}
-		tmp_qs = qs;
+		for(int i=0;i<8;i++){
+			tmp_qs.add(i, new ArrayList<Proces>());
+			if(whichqs[i] == true)
+			for(int j=0;j<qs.get(i).size();j++)
+				tmp_qs.get(i).add(qs.get(i).get(j));
+			
+		}
+
+
 		for(int i=0;i<7;i++)
 		{
 			qs.get(i).clear();
-			whichqs[i]=false;
 		}
+
 		for(int i=0;i<7;i++)
 		{
-			if(tmp_whichqs[i])
+			
+			if(whichqs[i] == true)
 			{
 				for(int j=0;j<tmp_qs.get(i).size();j++)
 				{
@@ -86,16 +95,25 @@ public class Scheduler {
 				}
 			}
 		}
+		
+		for(int i=0;i<7;i++)
+		{
+			if(qs.get(i).size()>0)
+				whichqs[i] = true;
+			else
+				whichqs[i] = false;
+		}
+		
 		int first_not_empty=8;
 		for(int i=0;i<8;i++)
 		{
-			if(whichqs[i])
+			if(whichqs[i] == true)
 			{
 				first_not_empty = i;
 				break;
 			}
 		}
-		if(first_not_empty != 8 && qs.get(first_not_empty).get(0).pri>pr_rdy.pri)
+		if(first_not_empty != 8 && qs.get(first_not_empty).get(0).pri<pr_rdy.pri)
 			return true;
 		else
 			return false;
@@ -115,8 +133,14 @@ public class Scheduler {
 		}
 		if(first_not_empty==8)
 			return false;		//nie udalo sie zmienic kontekstu / brak gotowych procesow
-		
-		pr_rdy = qs.get(first_not_empty).get(0);
+		if(pr_rdy==qs.get(first_not_empty).get(0))
+		{
+			qs.get(first_not_empty).remove(0);
+			add_to_ready(pr_rdy);
+			pr_rdy = qs.get(first_not_empty).get(0);
+		}
+		else
+			pr_rdy = qs.get(first_not_empty).get(0);
 		
 		return true; // udalo sie zmienic kontekst
 	}

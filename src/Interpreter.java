@@ -1,4 +1,4 @@
-
+import java.util.Random;
 
 public class Interpreter {
 	private int RA = 63;
@@ -6,21 +6,22 @@ public class Interpreter {
 	private int PC;
 	private boolean CF;
 	private int  CPU;
+	Random random = new Random();
+
 	
 	
-	
-	Interpreter(Scheduler sch){
-		Proces p1 = new Proces();
-		p1.pri = sch.base + p1.nice;
-		Proces p2 = new Proces();
-		p2.pri = sch.base + p2.nice;
-		Proces p3 = new Proces();
-		p3.pri = sch.base + p2.nice;
-		sch.add_to_ready(p1);
-		sch.add_to_ready(p2);
-		sch.add_to_ready(p3);
+	Interpreter(){
+		Scheduler sch= new Scheduler();
+		Management man = new Management();
+		man.fork();
+		man.fork();
+		man.fork();
+		sch.add_to_ready(man.procesList.get(0));
+		sch.add_to_ready(man.procesList.get(1));
+		sch.add_to_ready(man.procesList.get(2));
 		
 		int przelicz = 0;
+		CPU=0;
 		String cmd = "mv RB,50";
 		String arg1;
 		String arg2;
@@ -31,75 +32,76 @@ public class Interpreter {
 				RB = sch.pr_rdy.pRB;
 				PC = sch.pr_rdy.pPC;
 				CF = sch.pr_rdy.pCF;
-			}
-			while(CPU < 3){
-				//pobranie kolejnego rozkazu
-				arg1 = cmd.substring(3, 5);
-				arg2 = cmd.substring(6, 8);
-				switch(cmd.substring(0, 2)){				//rozpoznawanie rozkazu i jego obsluga
-				case "mi":
-					mi(arg1,arg2);
-					break;
-				case "mv":
-					mv(arg1,arg2);
-					break;
-				case "ad":
-					ad(arg1,arg2);
-					break;
-				case "sb":
-					sb(arg1,arg2);
-					break;
-				case "ml":
-					ml(arg1,arg2);
-					break;
-				case "j0":
-					cmd = j0(arg1);
-					break;
-				case "j1":
-					cmd = j1(arg1);
-					break;
-				case "fk":
-					break;
-				case "ex":
-					break;
-				case "et":
-					break;
-				case "fr":
-					break;
-				case "fw":
-					break;
-				}
-				CPU++; przelicz++;
-				System.out.println("RA = " + RA + ", RB = " + RB + ", CF =" + CF + ", CPU = " + CPU);
-				System.out.println(sch.pr_rdy.PID);
-				if(przelicz == 8)
-				{
-					przelicz =0;
-					if(sch.przelicz())
-					{
-						System.out.println("Hurra");
+			
+				while(CPU < 4){
+					//pobranie kolejnego rozkazu
+					arg1 = cmd.substring(3, 5);
+					arg2 = cmd.substring(6, 8);
+					switch(cmd.substring(0, 2)){				//rozpoznawanie rozkazu i jego obsluga
+					case "mi":
+						mi(arg1,arg2);
+						break;
+					case "mv":
+						mv(arg1,arg2);
+						break;
+					case "ad":
+						ad(arg1,arg2);
+						break;
+					case "sb":
+						sb(arg1,arg2);
+						break;
+					case "ml":
+						ml(arg1,arg2);
+						break;
+					case "j0":
+						cmd = j0(arg1);
+						break;
+					case "j1":
+						cmd = j1(arg1);
+						break;
+					case "fk":
+						break;
+					case "ex":
+						break;
+					case "et":
+						break;
+					case "fr":
+						break;
+					case "fw":
 						break;
 					}
-				}
-			}
-			sch.pr_rdy.pRA = RA;
-			sch.pr_rdy.pRB = RB;
-			sch.pr_rdy.pPC = PC;
-			sch.pr_rdy.pCF = CF;
-			sch.pr_rdy.cpu +=CPU;
-			//zwrot kontekstu
-			CPU = 0;
-			
-			try 
-			{
-				Thread.sleep(1000);
-			}
-			catch ( InterruptedException e) 
-			{
-				System.out.println("np. zosta³em obudzony przedwczeœnie");
-			}
-			System.out.println();
+					CPU++; przelicz++;
+					System.out.println("RA = " + RA + ", RB = " + RB + ", CF =" + CF + ", CPU = " + CPU);
+					System.out.println(sch.pr_rdy.nazwa +" pri= "+ sch.pr_rdy.pri);
 
+					if(przelicz == 12)
+					{
+						przelicz = 0;
+						if(sch.przelicz())
+						{
+							System.out.println("Hurra");
+							break;
+						}
+					}
+				}
+				sch.pr_rdy.pRA = RA;
+				sch.pr_rdy.pRB = RB;
+				sch.pr_rdy.pPC = PC;
+				sch.pr_rdy.pCF = CF;
+				sch.pr_rdy.cpu +=CPU;
+				//zwrot kontekstu
+				CPU = 0;
+				
+				try 
+				{
+					Thread.sleep(500);
+				}
+				catch ( InterruptedException e) 
+				{
+					System.out.println("np. zosta³em obudzony przedwczeœnie");
+				}
+				System.out.println();
+			}
 			
 		}
 	}
@@ -211,8 +213,7 @@ public class Interpreter {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		Scheduler sch = new Scheduler();
-		Interpreter a = new Interpreter(sch);
+		Interpreter a = new Interpreter();
 	}
 
 }

@@ -26,7 +26,8 @@ public class Proces {
 		pri = 0; //P
 		uspri = 0; //P
 		stan = 1;
-		
+		cpu=0;
+		nice=0;
 		
 	}
 	
