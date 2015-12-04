@@ -8,6 +8,7 @@ public class Scheduler {
 	ArrayList<Proces> wait_list = new ArrayList<Proces>();
 	boolean[] whichqs = new boolean[8]; //ktore kolejki sa nie puste
 	public int base = 8;
+	Proces pr_rdy;
 	
 	Scheduler()
 	{
@@ -70,5 +71,25 @@ public class Scheduler {
 		
 		
 		return true;
+	}
+	
+	public boolean change_context()
+	{
+		System.out.println("Zmiana kontekstu");
+		int first_not_empty=8;
+		for(int i=0;i<8;i++)
+		{
+			if(whichqs[i] == true)
+			{
+				first_not_empty = i;
+				break;
+			}
+		}
+		if(first_not_empty==8)
+			return false;		//nie udalo sie zmienic kontekstu / brak gotowych procesow
+		
+		pr_rdy = qs.get(first_not_empty).get(0);
+		
+		return true; // udalo sie zmienic kontekst
 	}
 }
