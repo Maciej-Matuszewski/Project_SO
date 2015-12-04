@@ -1,6 +1,11 @@
 package ZarzadzanieProcesami;
 
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.Random;
+
+import komunikacja_miedzy_procesami.Pipe;
+import komunikacja_miedzy_procesami.PipeField;
 
 public class Proces {
 
@@ -11,7 +16,8 @@ public class Proces {
 	public int priorytet;
 	public int stan;
 	Random random = new Random();
-	
+	public ArrayList<Pipe> pipes = new ArrayList<>();
+	public PipeField childPipe = null;
 	
 	Proces()
 	{
@@ -30,6 +36,12 @@ public class Proces {
 		PPID = proces.PID;
 		priorytet = random.nextInt(39);
 		stan = 1;
+		try {
+			new Pipe(proces, this);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }
