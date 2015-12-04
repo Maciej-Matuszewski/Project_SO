@@ -20,7 +20,26 @@ public class Scheduler {
 	
 	public void add_to_ready(Proces pr)
 	{
-		qs.get(pr.pri/4).add(pr);	
+		if(qs.get(pr.pri/4).size()>0)
+		{
+			boolean add=false;
+			for(int i=0; i<qs.get(pr.pri/4).size();i++)
+			{
+				if(pr.pri<qs.get(pr.pri/4).get(i).pri)
+				{
+					qs.get(pr.pri/4).add(i,pr);
+					add = true;
+					break;
+				}
+			}
+			if(add == false)
+				qs.get(pr.pri/4).add(pr);
+		}
+		else
+		{
+			qs.get(pr.pri/4).add(pr);
+		}
+			
 		whichqs[pr.pri/4] = true;
 	}
 	
@@ -34,7 +53,6 @@ public class Scheduler {
 	
 	public boolean przelicz()  
 	{
-		Proces tmp;
 		System.out.println("Przeliczanie priorytetu");
 		for(int i=0;i<7;i++)
 		{
