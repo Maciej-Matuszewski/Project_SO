@@ -10,6 +10,16 @@ public class Interpreter {
 	
 	
 	Interpreter(Scheduler sch){
+		Proces p1 = new Proces();
+		p1.pri = sch.base + p1.nice;
+		Proces p2 = new Proces();
+		p2.pri = sch.base + p2.nice;
+		Proces p3 = new Proces();
+		p3.pri = sch.base + p2.nice;
+		sch.add_to_ready(p1);
+		sch.add_to_ready(p2);
+		sch.add_to_ready(p3);
+		
 		int przelicz = 0;
 		String cmd = "mv RB,50";
 		String arg1;
@@ -61,6 +71,16 @@ public class Interpreter {
 				}
 				CPU++; przelicz++;
 				System.out.println("RA = " + RA + ", RB = " + RB + ", CF =" + CF + ", CPU = " + CPU);
+				System.out.println(sch.pr_rdy.PID);
+				if(przelicz == 8)
+				{
+					przelicz =0;
+					if(sch.przelicz())
+					{
+						System.out.println("Hurra");
+						break;
+					}
+				}
 			}
 			sch.pr_rdy.pRA = RA;
 			sch.pr_rdy.pRB = RB;
@@ -69,6 +89,18 @@ public class Interpreter {
 			sch.pr_rdy.cpu +=CPU;
 			//zwrot kontekstu
 			CPU = 0;
+			
+			try 
+			{
+				Thread.sleep(1000);
+			}
+			catch ( InterruptedException e) 
+			{
+				System.out.println("np. zosta³em obudzony przedwczeœnie");
+			}
+			System.out.println();
+
+			
 		}
 	}
 

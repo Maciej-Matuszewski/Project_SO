@@ -54,6 +54,9 @@ public class Scheduler {
 	
 	public boolean przelicz()  
 	{
+		Proces tmp_proces;
+		ArrayList<ArrayList<Proces>> tmp_qs = new ArrayList<ArrayList<Proces>>(8);
+		boolean tmp_whichqs[] = whichqs;
 		System.out.println("Przeliczanie priorytetu");
 		for(int i=0;i<7;i++)
 		{
@@ -65,12 +68,37 @@ public class Scheduler {
 					qs.get(i).get(j).uspri = base + qs.get(i).get(j).cpu/2 + qs.get(i).get(j).nice;
 					qs.get(i).get(j).pri = qs.get(i).get(j).uspri;
 				}
-						
 			}
 		}
-		
-		
-		return true;
+		tmp_qs = qs;
+		for(int i=0;i<7;i++)
+		{
+			qs.get(i).clear();
+			whichqs[i]=false;
+		}
+		for(int i=0;i<7;i++)
+		{
+			if(tmp_whichqs[i])
+			{
+				for(int j=0;j<tmp_qs.get(i).size();j++)
+				{
+					add_to_ready(tmp_qs.get(i).get(j));
+				}
+			}
+		}
+		int first_not_empty=8;
+		for(int i=0;i<8;i++)
+		{
+			if(whichqs[i])
+			{
+				first_not_empty = i;
+				break;
+			}
+		}
+		if(first_not_empty != 8 && qs.get(first_not_empty).get(0).pri>pr_rdy.pri)
+			return true;
+		else
+			return false;
 	}
 	
 	public boolean change_context()

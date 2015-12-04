@@ -10,7 +10,7 @@ public class Proces {
 	public int uspri; //P
 	public int nice; //P parametr nadawany przez uzytkownika
 	public int cpu; //P wykorzystanie procesora
-	public int pRA = 63;  //P
+	public int pRA;  //P
 	public int pRB;  //P
 	public int pPC;  //P
 	public boolean pCF;  //P
