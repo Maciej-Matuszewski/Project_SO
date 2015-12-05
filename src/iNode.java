@@ -12,24 +12,47 @@ public class iNode {
     Block[] DirBlock;       // bloki bezpośrednie
     Block[][] InDirBlock;   // bloki jednopośrednie
     Boolean F_isOpen;       // zmienna wskazująca, czy plik jest używany(true) lub nie używany(false)
+    int[] FileBlockIds;     // tablica przechowująca identyfikatory bloków zajętych przez plik
     /**************************************************************/
     iNode(int i_MaxDirBlock, int i_MaxInDirBlock) {
-        super();
-        this.F_Size = -1;
+        this.F_Size = 0;
         this.F_Type = new char[1];
         this.DirBlock = new Block[i_MaxDirBlock];
         this.F_isOpen = false;
         this.InDirBlock = new Block[1][i_MaxInDirBlock];
+        this.FileBlockIds = new int[i_MaxDirBlock + i_MaxInDirBlock];
         /**********************************************************/
         for(int i = 0; i < i_MaxDirBlock; i++) {
-            DirBlock[i] = null;
+            this.DirBlock[i] = null;
         }
         /**********************************************************/
         for(int i = 0; i < i_MaxInDirBlock; i++) {
-            InDirBlock[0][i] = null;
-            
+            this.InDirBlock[0][i] = null;
         }
         /**********************************************************/
+    }
+    /**************************************************************/
+    void iNode_AddBlockId(int value) {
+        int hlp_var = 0;
+        for(int i = 0; i < this.FileBlockIds.length; i++) {
+            if(this.FileBlockIds[i] == value) {
+                hlp_var = 1;
+            }
+        }
+        if(hlp_var == 0) {
+            for(int i = 0; i < this.FileBlockIds.length; i++) {
+                if(this.FileBlockIds[i] == -1) {
+                    this.FileBlockIds[i] = value;
+                    break;
+                }
+            }
+        }
+    }
+    /**************************************************************/
+    void iNode_Clean() {
+        for(int i = 0; i < this.FileBlockIds.length; i++) {
+            this.FileBlockIds[i] = -1;
+        }
     }
     /**************************************************************/
 }
