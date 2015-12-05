@@ -16,6 +16,7 @@ public class Block {
     List<File>CatalogEntry; // dostępny tylko dla katalogu
     /**************************************************************/
     Block(int B_Size, int Id) {
+        this.B_Id = Id;
         this.B_Size = B_Size;
         this.B_PointerToFreeByte = 0;
         this.B_Bytes = new int[B_Size];
@@ -33,12 +34,18 @@ public class Block {
     }
     /**************************************************************/
     Boolean B_BlockIsFull() {
-        if(this.B_PointerToFreeByte == this.B_Size) {
+        for(int i = 0; i < this.B_Size; i++) {
+            if(this.B_Bytes[i] == 0) {
+                return false;
+            }
+        }
+        return true;
+       /* if(this.B_PointerToFreeByte >= this.B_Size) {
             return true;
         }
         else {
             return false;
-        }
+        }*/
     }
     /**************************************************************/
     void B_ShowBlockBytes() {
@@ -48,11 +55,21 @@ public class Block {
         System.out.println();
     }
     /**************************************************************/
-    void B_ShowBlockContent() {
-        for(int i = 0; i < this.B_Size; i++) {
+    void B_ShowBlockContent(int From, int To) {
+        if(From == -1) {
+            From = 0;
+        }
+        if(To == -1 || To > this.B_Size) {
+            To = this.B_PointerToFreeByte;
+        }
+        for(int i = From; i < To; i++) {
             System.out.print(this.B_Content[i]);
         }
         System.out.println();
+    }
+    /**************************************************************/
+    char[] B_SendToMemory() {
+        return this.B_Content;
     }
     /**************************************************************/
 }
