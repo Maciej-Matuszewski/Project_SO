@@ -1,18 +1,18 @@
 package ZarzadzanieProcesami;
-
+import ZarzadzanieProcesami.Proces;
 import java.awt.List;
 import java.util.ArrayList;
 
 public class Management 
 {	
-	public static ArrayList<Proces> procesList;
+	public static ArrayList<Proces> procesList = new ArrayList<>();
 	
 	Management()
 	{
 		procesList = new ArrayList<>();
 	}
 	
-	static void fork()
+	public static void fork()
 	{
 		Proces proces = new Proces();
 		System.out.println("Powstal: " + proces.nazwa);
@@ -60,7 +60,7 @@ public class Management
 	
 	static void exec()
 	{
-		System.out.println("Tu bêdzie metoda exec");
+		System.out.println("Tu bï¿½dzie metoda exec");
 	}
 	
 	static void ProcessPrint()
@@ -101,6 +101,14 @@ public class Management
 		return x;
 	}
 	
-	
+	///
+	static public Proces processLookup(int id){
+		for(Proces temp : procesList){
+			if(temp.PID == id){ //PID or PPID?
+			return temp;
+			}
+		}
+		return null;
+	}
 	
 }

@@ -1,5 +1,7 @@
 package ZarzadzanieProcesami;
 
+import Pamiec_wirtualna.PageTable;
+
 import java.util.Random;
 
 public class Proces {
@@ -11,8 +13,9 @@ public class Proces {
 	public int priorytet;
 	public int stan;
 	Random random = new Random();
-	
-	
+////
+	public PageTable ptable = new PageTable();
+////
 	Proces()
 	{
 		nr++;
