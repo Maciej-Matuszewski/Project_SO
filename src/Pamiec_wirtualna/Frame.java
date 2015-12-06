@@ -34,7 +34,9 @@ public class Frame {
         //cb.put(s.data,page*MemoryManagement.pagesize,s.data.length);
         //TODO overwrite destination offset
         //MemoryManagement.overwrite(MemoryManagement.physicalMemory,s.data,page*MemoryManagement.pagesize,MemoryManagement.pagesize);
-        MemoryManagement.overwrite(s.data,0,MemoryManagement.physicalMemory,page*MemoryManagement.pagesize,s.data.length);
+        //MemoryManagement.overwrite(s.data,0,MemoryManagement.physicalMemory,page*MemoryManagement.pagesize,s.data.length);
+        MemoryManagement.overwrite(s.data,0,MemoryManagement.physicalMemory,number*MemoryManagement.pagesize,s.data.length);
+        //TODO make it work with blank spaces ?
     }
 
     Frame(int number, int processID){

@@ -42,7 +42,9 @@ public class MemoryManagement {
         mm.readProgramtTest(1);
         mm.displayStatus();
 
-        System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(1,10,1)));
+        System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(1,30,1)));
+        mm.displayStatus();
+        System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(64,5,1)));
         mm.displayStatus();
         System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(80,5,1)));
         mm.displayStatus();
@@ -100,12 +102,13 @@ public class MemoryManagement {
                 //add SwapFileEntry to SwapFile and an entry to the PageTable
                 if (freeFrames.size() != 0) {//page can be loaded into memory
                     //TODO fill up a free frame
-                    Iterator<Integer> it = freeFrames.iterator();
-                    int freeFrameNumber = it.next();
+                    /*Iterator<Integer> it = freeFrames.iterator();
+                    int freeFrameNumber = it.next(); deprecated*/
+                    int freeFrameNumber = getFreeFrame();
                     //!
                     System.out.println("freeframenumber "+freeFrameNumber);
                     //!
-                    freeFrames.remove(freeFrameNumber);
+                    /*freeFrames.remove(freeFrameNumber); deprecated*/
                     System.out.println("szukana strona to:"+pagenumber+"procesu "+processID);
                     for(SwapFileEntry temp : swapFile){
                         if(temp.processID == processID && temp.page == pagenumber)
@@ -198,7 +201,28 @@ public class MemoryManagement {
 
         //int index = paddress & 0b00110000 * 16 + paddress & 0b00001111;
 
+        int offset = paddress % MemoryManagement.pagesize;
 
+        if(offset+size>pagesize) {
+            int leftToRead = size;
+
+            String result = new String(readMemory(virtualAddress, pagesize - offset, processID)); //read till the end of current frame
+            leftToRead = leftToRead - (pagesize - offset);
+            int wholePages = leftToRead / pagesize;
+            for (int i = 0; i < wholePages; i++) {
+                result = result + new String(readMemory(paddress + pagesize - offset, pagesize, processID));
+                leftToRead = leftToRead - pagesize;
+            }
+            if (leftToRead > 0){
+                result = result + new String(readMemory(paddress + size - leftToRead, leftToRead, processID));
+            }
+            //!
+            System.out.println("wynik długiego odczytu: "+result);
+            //!
+            output = result.toCharArray();
+
+            return output;
+        }
 
         output = Arrays.copyOfRange(physicalMemory,paddress,paddress+size); //TODO make it work properly (using virtual address)
 
@@ -223,6 +247,8 @@ public class MemoryManagement {
 
         //
         //overwrite(physicalMemory,input,frameNumber*pagesize,input.length);
+        //TODO make it work properly (recursively, using virtual ddresses)
+
         overwrite(input,0,physicalMemory,frameNumber*pagesize,input.length);
 
 
@@ -283,6 +309,16 @@ public class MemoryManagement {
             }
             MemoryManagement.clockHand++;
         }
+    }
+
+    static int getFreeFrame(){
+        Iterator<Integer> it = freeFrames.iterator();
+        if(it.hasNext()){
+            Integer element = it.next();
+            it.remove();
+            return element;
+        }
+        else return -1;
     }
 
     void readProgramtTest(int processID){
