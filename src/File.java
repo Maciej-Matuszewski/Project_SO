@@ -121,27 +121,32 @@ public class File {
         }         
     }
     /**************************************************************/
-    void F_Read(Disk SysDisk) {
+    char[] F_Read(Disk SysDisk) {
+        char[] Content = new char[SysDisk.D_iNode[this.F_iNode_Id].F_Size];
+        int k = 0;
         if(SysDisk.D_BitVector_iNode[this.F_iNode_Id] == 1) {
             for(int i = 0; i < SysDisk.D_MaxDirectBlock; i++) {
                 if(SysDisk.D_iNode[this.F_iNode_Id].DirBlock[i] != null) {
                     for(int j = 0; j < SysDisk.D_iNode[this.F_iNode_Id].DirBlock[i].B_PointerToFreeByte; j++) {
-                        System.out.print(SysDisk.D_iNode[this.F_iNode_Id].DirBlock[i].B_Content[j]);
+                        Content[k] = SysDisk.D_iNode[this.F_iNode_Id].DirBlock[i].B_Content[j];
+                        k++;
                     }
                 }
             }
             for(int i = 0; i < SysDisk.D_MaxInDirectBlock; i++) {
                 if(SysDisk.D_iNode[this.F_iNode_Id].InDirBlock[0][i] != null) {
                     for(int j = 0; j < SysDisk.D_iNode[this.F_iNode_Id].InDirBlock[0][i].B_PointerToFreeByte; j++) {
-                        System.out.print(SysDisk.D_iNode[this.F_iNode_Id].InDirBlock[0][i].B_Content[j]);
+                        Content[k] = SysDisk.D_iNode[this.F_iNode_Id].InDirBlock[0][i].B_Content[j];
+                        k++;
                     }
                 }
             }
-            System.out.println();
         }
         else {
             System.out.println("Plik nie może zostać odczytany, gdyż nie istnieje!");
+            return null;
         }
+        return Content;
     }
     /**************************************************************/
     void F_Delete(Disk SysDisk) {
