@@ -6,30 +6,27 @@ import java.util.ArrayList;
 public class Management 
 {	
 	public static ArrayList<Proces> procesList;
+	Proces proces = new Proces();
 	
 	Management()
 	{
 		procesList = new ArrayList<>();
+		procesList.add(proces);
 	}
 	
-	static void fork()
+	public void fork()
 	{
-		Proces proces = new Proces();
-		System.out.println("Powstal: " + proces.nazwa);
-		procesList.add(proces);
+		fork(proces);
 	}
 	
 	public static void fork(Proces pro)
 	{
 		Proces proces = new Proces(pro);
-		System.out.println("Powstal: " + proces.nazwa);
 		procesList.add(proces);
-		
 	}
 	
 	static void kill(int pid)
 	{
-		FindProces(pid);
 		procesList.remove(FindProces(pid));
 	}
 	
@@ -49,7 +46,7 @@ public class Management
 					{
 						if(procesList.get(j).PPID == procesList.get(i).PID)
 						{
-							procesList.get(j).PPID = 69;
+							procesList.get(j).PPID = 1;
 						}
 					}
 					kill(procesList.get(i).PID);

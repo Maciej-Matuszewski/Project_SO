@@ -14,6 +14,10 @@ public class Proces {
 	public int PPID;
 	public int priorytet;
 	public int stan;
+	// STAN 1 - NOWY
+	// STAN 2 - GOTOWY
+	// STAN 3 - CZEKAJACY
+	// STAN 4 - WYKONANY
 	Random random = new Random();
 	public ArrayList<Pipe> pipes = new ArrayList<>();
 	public PipeField childPipe = null;
@@ -21,10 +25,11 @@ public class Proces {
 	Proces()
 	{
 		nr++;
-		nazwa = "proces " + nr;
+		nazwa = "root(Init)";
 		PID = nr;
-		priorytet = random.nextInt(39);
-		stan = 1;
+		priorytet = 0;
+		stan = 0;
+		System.out.println("Powstal proces systemowy - root(Init)");
 	}
 	
 	Proces(Proces proces)
@@ -33,8 +38,9 @@ public class Proces {
 		nazwa = "proces " + nr;
 		PID = nr;
 		PPID = proces.PID;
-		priorytet = random.nextInt(39);
-		stan = 1;
+		priorytet = random.nextInt(32);
+		stan = random.nextInt(4) + 1;
+		System.out.println("Powstal: " + this.nazwa + ", Od procesu: " + proces.nazwa);
 		try {
 			new Pipe(proces, this);
 		} catch (Exception e) {
