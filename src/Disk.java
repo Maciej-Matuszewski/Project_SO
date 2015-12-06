@@ -164,7 +164,8 @@ public class Disk {
     void D_OpenFile(String F_Name) {
         File hlp_File = this.D_FindFile(F_Name);
         if(hlp_File != null) {
-            hlp_File.F_Read(this);
+            char[] hlp_Content = hlp_File.F_Read(this);
+            System.out.println(hlp_Content);
         }
         else {
             System.out.println("Plik o podanej ścieżce nie istnieje!");
@@ -239,7 +240,6 @@ public class Disk {
                             if(Com.length > 2) {
                                 for(int i = 2; i < Com.length; i++) {
                                     hlp_File.F_Write(this, Com[i]);
-                                    hlp_File.F_Write(this, Com[i]);
                                 }
                             }
                             System.out.println("Plik został pomyślnie utworzony!");
@@ -252,7 +252,6 @@ public class Disk {
                         hlp_File = new File(Com[1], this, 'F', "");
                         if(Com.length > 2) {
                             for(int i = 2; i < Com.length; i++) {
-                                hlp_File.F_Write(this, Com[i]);
                                 hlp_File.F_Write(this, Com[i]);
                             }
                         }
