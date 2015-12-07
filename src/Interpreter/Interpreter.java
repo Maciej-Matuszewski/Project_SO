@@ -135,8 +135,7 @@ public class Interpreter extends FlorekFileSystem {
 					}
 					catch(NumberFormatException e){
 						System.out.println("Nieznany format liczby");
-						/*if(!test)
-							management.exit();*/
+						error_exit();
 					}
 					set_CF();
 					CPU++;
@@ -157,6 +156,11 @@ public class Interpreter extends FlorekFileSystem {
 				wywlaszczenie();
 			}
 		}
+	}
+
+	private void error_exit() {
+		if(!test)
+			management.exit(scheduler.pr_rdy.PID);
 	}
 
 	void mi(String arg1, String arg2){
@@ -191,8 +195,7 @@ public class Interpreter extends FlorekFileSystem {
 				break;
 			default:
 				System.out.println(cmd + " - jest nierozpoznawalny");
-				/*if(!test)
-					management.exit();*/
+				error_exit();
 				break;	
 			}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -216,8 +219,7 @@ public class Interpreter extends FlorekFileSystem {
 			break;
 		default:
 			System.out.println(cmd + " - jest nierozpoznawalny");
-			/*if(!test)
-				management.exit();*/
+			error_exit();
 			break;
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -241,8 +243,7 @@ public class Interpreter extends FlorekFileSystem {
 			break;
 		default:
 			System.out.println(cmd + " - jest nierozpoznawalny");
-			/*if(!test)
-				management.exit();*/
+			error_exit();
 			break;
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -266,8 +267,7 @@ public class Interpreter extends FlorekFileSystem {
 			break;
 		default:
 			System.out.println(cmd + " - jest nierozpoznawalny");
-			/*if(!test)
-				management.exit();*/
+			error_exit();
 			break;
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -294,8 +294,7 @@ public class Interpreter extends FlorekFileSystem {
 					break;
 				default:
 					System.out.println(cmd + " - jest nierozpoznawalny");
-					/*if(!test)
-						management.exit();*/
+					error_exit();
 					break;
 			}
 		}
@@ -309,8 +308,7 @@ public class Interpreter extends FlorekFileSystem {
 				break;
 			default:
 				System.out.println(cmd + " - jest nierozpoznawalny");
-				/*if(!test)
-					management.exit();*/
+				error_exit();
 				break;
 			}
 		}
