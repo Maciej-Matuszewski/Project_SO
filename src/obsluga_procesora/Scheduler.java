@@ -21,6 +21,11 @@ public class Scheduler {
 		}
 	}
 	
+	public void exit_proces()
+	{
+		qs.get(pr_rdy.pri/4).remove(pr_rdy);
+	}
+	
 	public void add_to_ready(Proces pr)
 	{
 		if(qs.get(pr.pri/4).size()>0)
