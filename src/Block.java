@@ -1,7 +1,7 @@
 /******************************************************************/
 /*                     FLOREK FILE SYSTEM v1.0                    */
 /*                     Author: Łukasz Florczak                    */
-/*                  Last update: 28.11.2015 10:37                 */
+/*                  Last update: 07.12.2015 10:08                 */
 /******************************************************************/
 package florekfilesystem;
 import java.util.ArrayList;
@@ -40,12 +40,6 @@ public class Block {
             }
         }
         return true;
-       /* if(this.B_PointerToFreeByte >= this.B_Size) {
-            return true;
-        }
-        else {
-            return false;
-        }*/
     }
     /**************************************************************/
     void B_ShowBlockBytes() {
@@ -66,10 +60,6 @@ public class Block {
             System.out.print(this.B_Content[i]);
         }
         System.out.println();
-    }
-    /**************************************************************/
-    char[] B_SendToMemory() {
-        return this.B_Content;
     }
     /**************************************************************/
 }
