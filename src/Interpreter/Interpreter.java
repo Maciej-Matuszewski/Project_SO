@@ -3,21 +3,20 @@ package Interpreter;
 import java.io.IOException;
 import java.util.Scanner;
 
-import javax.swing.JOptionPane;
 
 import obsluga_dysku.FlorekFileSystem;
 import obsluga_procesora.Scheduler;
 import pamiec_wirtualna.MemoryManagement;
 import zarzadzanie_procesami.Management;
-import komunikacja_miedzy_procesami.Pipe;
 
-public class Interpreter extends FlorekFileSystem {
+public class Interpreter{
 	static int RA;
 	static int RB;
 	static int PC;
 	static boolean CF;
 	static int  CPU;
 	
+	boolean exit = false;
 	boolean test = false;
 	private int wynik;
 	private int  przelicz;
@@ -50,9 +49,9 @@ public class Interpreter extends FlorekFileSystem {
 	}
 	
 	void start() throws Exception{
-		//test();
+		test();
 		while(true){
-			if(test || scheduler.change_context()){
+			if(scheduler.change_context()){
 					// pobranie kontekstu
 				if(!test){
 					RA = scheduler.pr_rdy.pRA;
@@ -61,7 +60,7 @@ public class Interpreter extends FlorekFileSystem {
 					CF = scheduler.pr_rdy.pCF;
 				}
 				
-				while(CPU < 4){
+				while(!exit && CPU < 4){
 					if(test){
 						System.out.println("Podaj rozkaz: ");
 						cmd = input.nextLine();
@@ -109,7 +108,6 @@ public class Interpreter extends FlorekFileSystem {
 							test = false;
 							System.out.println("Zakonczono testowanie.");
 						}
-<<<<<<< HEAD
 						exit = true;
 						//scheduler.add_to_zombies();
 						management.exit(scheduler.pr_rdy.PID);
@@ -124,18 +122,6 @@ public class Interpreter extends FlorekFileSystem {
 						break;
 					case "fw":				//zapis do pliku arg1(rejestr
 						fw(arg1);
-=======
-						//zakonczenie wykonywanie procesu
-						wywlaszczenie();
-						et();
-						break;
-					case "wt":
-						wt();
-						break;
-					case "fr":
-						break;
-					case "fw":
->>>>>>> origin/master
 						break;
 					case "pr":				//pr rejestr,od PA(rodzic)/nr rury(potomek)
 						pr(arg1, arg2);
@@ -152,8 +138,7 @@ public class Interpreter extends FlorekFileSystem {
 					}
 					catch(NumberFormatException e){
 						System.out.println("Nieznany format liczby");
-						/*if(!test)
-							management.exit();*/
+						error_exit();
 					}
 					set_CF();
 					CPU++;
@@ -162,17 +147,22 @@ public class Interpreter extends FlorekFileSystem {
 					if(przelicz == 12 && !test){
 						przelicz = 0;
 						if(scheduler.przelicz()){
+							System.out.println("Hurra");
 							break;
 						}
 					}
-					
 					aktualny_stan();
-					
 				}
 				//zwrot kontekstu
 				wywlaszczenie();
 			}
 		}
+	}
+
+	private void error_exit() {
+		exit = true;
+		if(!test)
+			management.exit(scheduler.pr_rdy.PID);
 	}
 
 	void mi(String arg1, String arg2){
@@ -207,8 +197,7 @@ public class Interpreter extends FlorekFileSystem {
 				break;
 			default:
 				System.out.println(cmd + " - jest nierozpoznawalny");
-				/*if(!test)
-					management.exit();*/
+				error_exit();
 				break;	
 			}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -232,8 +221,7 @@ public class Interpreter extends FlorekFileSystem {
 			break;
 		default:
 			System.out.println(cmd + " - jest nierozpoznawalny");
-			/*if(!test)
-				management.exit();*/
+			error_exit();
 			break;
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -257,8 +245,7 @@ public class Interpreter extends FlorekFileSystem {
 			break;
 		default:
 			System.out.println(cmd + " - jest nierozpoznawalny");
-			/*if(!test)
-				management.exit();*/
+			error_exit();
 			break;
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -282,8 +269,7 @@ public class Interpreter extends FlorekFileSystem {
 			break;
 		default:
 			System.out.println(cmd + " - jest nierozpoznawalny");
-			/*if(!test)
-				management.exit();*/
+			error_exit();
 			break;
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -310,8 +296,7 @@ public class Interpreter extends FlorekFileSystem {
 					break;
 				default:
 					System.out.println(cmd + " - jest nierozpoznawalny");
-					/*if(!test)
-						management.exit();*/
+					error_exit();
 					break;
 			}
 		}
@@ -325,11 +310,11 @@ public class Interpreter extends FlorekFileSystem {
 				break;
 			default:
 				System.out.println(cmd + " - jest nierozpoznawalny");
-				/*if(!test)
-					management.exit();*/
+				error_exit();
 				break;
 			}
 		}
+		PC += 8; //zwiekszenie licznika rozkazow
 	}
 	
 	void pw(String arg1, String arg2){
@@ -349,29 +334,52 @@ public class Interpreter extends FlorekFileSystem {
 			else
 				scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1)).write(arg2);
 		}
+		PC += 8; //zwiekszenie licznika rozkazow
 	}
 	
-	void et()
-	{
-		if(management.exit(scheduler.pr_rdy.PID))
-			scheduler.wakeup(scheduler.pr_rdy.PPID);		
+	void fm(){
+		System.out.println(scheduler.pr_rdy.PID);
+		scheduler.pr_rdy.nazwa_pliku = String.valueOf(scheduler.pr_rdy.PID);
+		FlorekFileSystem.Create_File(scheduler.pr_rdy.nazwa_pliku, "");
 	}
 	
-	void wt()
-	{
-		int tmp = management.wait(scheduler.pr_rdy);
-		if(tmp == 0)
-		{
-			scheduler.add_to_wait(scheduler.pr_rdy);
+	void fr(String arg1){
+		try{
+		String tmp = String.valueOf(FlorekFileSystem.F_Read(scheduler.pr_rdy.nazwa_pliku));
+		System.out.println(scheduler.pr_rdy.nazwa_pliku + tmp);
+		switch(arg1){
+		case "RA":
+			RA = Integer.parseInt(tmp.substring(0, 2),16);
+			break;
+		case "RB":
+			RB =  Integer.parseInt(tmp.substring(0, 2),16);
+			break;
+		default:
+			System.out.println(cmd + " - jest nierozpoznawalny");
+			error_exit();
+			break;
 		}
-		else if(tmp == -1)
-		{
-			//obsluga bledu metody wait
+		}catch(Exception e){
+			System.out.println("Plik nie istnieje");
+			error_exit();
 		}
-		else if(tmp > 0)
-		{
-			//tmp posiada pid nieistniejacego juz potomka
+	}
+	
+	void fw(String arg1){
+		System.out.println("wut");
+		switch(arg1){
+		case "RA":
+			FlorekFileSystem.F_Write(scheduler.pr_rdy.nazwa_pliku, String.valueOf(RA));
+			break;
+		case "RB":
+			FlorekFileSystem.F_Write(scheduler.pr_rdy.nazwa_pliku, String.valueOf(RB));
+			break;
+		default:
+			System.out.println(cmd + " - jest nierozpoznawalny");
+			error_exit();
+			break;
 		}
+		FlorekFileSystem.main(null);
 	}
 	
 	void aktualny_stan() throws IOException{
