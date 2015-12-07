@@ -29,7 +29,7 @@ public class Management
 		procesList.remove(FindProces(pid));
 	}
 	
-	public static void exit()
+	static void exit_all()
 	{
 		for(int i=0; i<procesList.size(); i++)
 		{
@@ -52,6 +52,29 @@ public class Management
 				}
 			}
 		}	
+	}
+	
+	static void exit(int pid)
+	{
+		int i = FindProces(pid);
+		if(procesList.get(i).stan == 4)
+		{
+			if(Is_parent(procesList.get(i)) == false)
+			{
+				kill(procesList.get(i).PID);
+			}
+			else
+			{
+				for(int j=0; j<procesList.size(); j++)
+				{
+					if(procesList.get(j).PPID == procesList.get(i).PID)
+					{
+						procesList.get(j).PPID = 1;
+					}
+				}
+				kill(procesList.get(i).PID);
+			}
+		}
 	}
 	
 	public static void exec()
