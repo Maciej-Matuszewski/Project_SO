@@ -3,15 +3,13 @@ package Interpreter;
 import java.io.IOException;
 import java.util.Scanner;
 
-import javax.swing.JOptionPane;
 
 import obsluga_dysku.FlorekFileSystem;
 import obsluga_procesora.Scheduler;
 import pamiec_wirtualna.MemoryManagement;
 import zarzadzanie_procesami.Management;
-import komunikacja_miedzy_procesami.Pipe;
 
-public class Interpreter extends FlorekFileSystem {
+public class Interpreter{
 	static int RA;
 	static int RB;
 	static int PC;
@@ -50,9 +48,9 @@ public class Interpreter extends FlorekFileSystem {
 	}
 	
 	void start() throws Exception{
-		//test();
+		test();
 		while(true){
-			if(test || scheduler.change_context()){
+			if(scheduler.change_context()){
 					// pobranie kontekstu
 				if(!test){
 					RA = scheduler.pr_rdy.pRA;
@@ -116,7 +114,11 @@ public class Interpreter extends FlorekFileSystem {
 						break;
 					case "wt":
 						break;
+					case "fm":
+						fm();
+						break;
 					case "fr":
+						fr(arg1);
 						break;
 					case "fw":
 						break;
@@ -148,9 +150,7 @@ public class Interpreter extends FlorekFileSystem {
 							break;
 						}
 					}
-					
 					aktualny_stan();
-					
 				}
 				//zwrot kontekstu
 				wywlaszczenie();
@@ -312,6 +312,7 @@ public class Interpreter extends FlorekFileSystem {
 				break;
 			}
 		}
+		PC += 8; //zwiekszenie licznika rozkazow
 	}
 	
 	void pw(String arg1, String arg2){
@@ -331,6 +332,46 @@ public class Interpreter extends FlorekFileSystem {
 			else
 				scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1)).write(arg2);
 		}
+		PC += 8; //zwiekszenie licznika rozkazow
+	}
+	
+	void fm(){
+		System.out.println(scheduler.pr_rdy.PID);
+		scheduler.pr_rdy.nazwa_pliku = String.valueOf(scheduler.pr_rdy.PID);
+		FlorekFileSystem.Create_File(scheduler.pr_rdy.nazwa_pliku, "");
+	}
+	
+	void fr(String arg1){
+		String tmp = String.valueOf(FlorekFileSystem.F_Read(scheduler.pr_rdy.nazwa_pliku));
+		System.out.println(scheduler.pr_rdy.nazwa_pliku + tmp);
+		switch(arg1){
+		case "RA":
+			RA = Integer.parseInt(tmp.substring(0, 2),16);
+			break;
+		case "RB":
+			RB =  Integer.parseInt(tmp.substring(0, 2),16);
+			break;
+		default:
+			System.out.println(cmd + " - jest nierozpoznawalny");
+			error_exit();
+			break;
+		}
+	}
+	
+	void fw(String arg1){
+		switch(arg1){
+		case "RA":
+			FlorekFileSystem.F_Write(scheduler.pr_rdy.nazwa_pliku, String.valueOf(RA));
+			break;
+		case "RB":
+			FlorekFileSystem.F_Write(scheduler.pr_rdy.nazwa_pliku, String.valueOf(RB));
+			break;
+		default:
+			System.out.println(cmd + " - jest nierozpoznawalny");
+			error_exit();
+			break;
+		}
+		FlorekFileSystem.main(null);
 	}
 	
 	void aktualny_stan() throws IOException{
