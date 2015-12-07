@@ -16,6 +16,7 @@ public class Interpreter{
 	static boolean CF;
 	static int  CPU;
 	
+	boolean exit = false;
 	boolean test = false;
 	private int wynik;
 	private int  przelicz;
@@ -59,7 +60,7 @@ public class Interpreter{
 					CF = scheduler.pr_rdy.pCF;
 				}
 				
-				while(CPU < 4){
+				while(!exit && CPU < 4){
 					if(test){
 						System.out.println("Podaj rozkaz: ");
 						cmd = input.nextLine();
@@ -108,7 +109,7 @@ public class Interpreter{
 							System.out.println("Zakonczono testowanie.");
 						}
 						//zakonczenie wykonywanie procesu
-						wywlaszczenie();
+						exit = true;
 						//scheduler.add_to_zombies();
 						management.exit(scheduler.pr_rdy.PID);
 						break;
@@ -121,6 +122,7 @@ public class Interpreter{
 						fr(arg1);
 						break;
 					case "fw":
+						fw(arg1);
 						break;
 					case "pr":				//pr rejestr,od PA(rodzic)/nr rury(potomek)
 						pr(arg1, arg2);
@@ -159,6 +161,7 @@ public class Interpreter{
 	}
 
 	private void error_exit() {
+		exit = true;
 		if(!test)
 			management.exit(scheduler.pr_rdy.PID);
 	}
@@ -342,6 +345,7 @@ public class Interpreter{
 	}
 	
 	void fr(String arg1){
+		try{
 		String tmp = String.valueOf(FlorekFileSystem.F_Read(scheduler.pr_rdy.nazwa_pliku));
 		System.out.println(scheduler.pr_rdy.nazwa_pliku + tmp);
 		switch(arg1){
@@ -356,9 +360,14 @@ public class Interpreter{
 			error_exit();
 			break;
 		}
+		}catch(Exception e){
+			System.out.println("Plik nie istnieje");
+			error_exit();
+		}
 	}
 	
 	void fw(String arg1){
+		System.out.println("wut");
 		switch(arg1){
 		case "RA":
 			FlorekFileSystem.F_Write(scheduler.pr_rdy.nazwa_pliku, String.valueOf(RA));
