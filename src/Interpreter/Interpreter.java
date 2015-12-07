@@ -51,7 +51,7 @@ public class Interpreter extends FlorekFileSystem {
 		start();
 	}
 	
-	void start() throws IOException{
+	public void start() throws IOException{
 		test();
 		while(true){
 			if(test || scheduler.change_context()){
