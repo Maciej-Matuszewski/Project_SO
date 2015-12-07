@@ -184,7 +184,7 @@ public class MemoryManagement {
 
 
     //TODO what if the page is in the swapFile
-    char[] readMemory(int virtualAddress, int size, int processID) { //rename to memoryRead ?
+    public char[] readMemory(int virtualAddress, int size, int processID) { //rename to memoryRead ?
         //Proces pcb = Management.processLookup(processID);
 
         int paddress = translateAddress(virtualAddress, processID);
@@ -230,7 +230,7 @@ public class MemoryManagement {
     }
 
 
-    void writeMemory(int virtualAddress, char[] input, int processID) { //rename to memoryRead ?
+    public void writeMemory(int virtualAddress, char[] input, int processID) { //rename to memoryRead ?
         //Proces pcb = Management.processLookup(processID);
 
         int paddress = translateAddress(virtualAddress, processID);

@@ -10,9 +10,9 @@ public class Scheduler {
 	ArrayList<Proces> wait_list = new ArrayList<Proces>();
 	boolean[] whichqs = new boolean[8]; //ktore kolejki sa nie puste
 	public int base = 8;
-	Proces pr_rdy;
+	public Proces pr_rdy;
 	
-	Scheduler()
+	public Scheduler()
 	{
 		for(int i=0;i<7;i++)
 		{

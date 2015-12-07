@@ -8,7 +8,7 @@ public class Management
 	public static ArrayList<Proces> procesList = new ArrayList<>();
 	static Proces proces = new Proces();
 	
-	Management()
+	public Management()
 	{
 		procesList.add(proces);
 	}
@@ -29,7 +29,7 @@ public class Management
 		procesList.remove(FindProces(pid));
 	}
 	
-	static void exit()
+	public static void exit()
 	{
 		for(int i=0; i<procesList.size(); i++)
 		{
@@ -54,7 +54,7 @@ public class Management
 		}	
 	}
 	
-	static void exec()
+	public static void exec()
 	{
 		System.out.println("Tu b�dzie metoda exec");
 	}
