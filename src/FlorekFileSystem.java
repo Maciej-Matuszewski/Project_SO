@@ -59,7 +59,6 @@ public class FlorekFileSystem {
                        hlp_Block.B_PointerToFreeByte++;
                    }
                    else {
-                       System.out.println("Nie udało się zapisać zawartości, brak wolnych bloków lub plik osiągnął maksymalny rozmiar!");
                        break;
                    }
                }
@@ -210,7 +209,6 @@ public class FlorekFileSystem {
                             for(int i = 2; i < Com.length; i++) {
                                 if(SysDisk.D_iNode[hlp_File.F_iNode_Id].F_Size  < SysDisk.D_MaxFileSize) {
                                     F_Write(Com[1].substring(1), Com[i] + " ");
-                                    System.out.println("Zawartość dopisana!");
                                 }
                                 else {
                                     System.out.println("Nie udało się zapisać zawartości, brak wolnych bloków lub plik osiągnął maksymalny rozmiar!");
@@ -315,9 +313,8 @@ public class FlorekFileSystem {
        Scanner Command = new Scanner(System.in);
        String Decision;
        
-       File sgf = new File("gsdgh", SysDisk, 'F', " kdfkgkdfsgsd okfgsd gs kodfgsdo kp");
-       //Create_File("Program1", "mv RA,01\nmv RB,05\nad RA,RB\nj1 00");
-       //Create_File("Program2", "mv RA,05\nmi 50,RA\nmv BR,RA\nml BR,BA \nsb b,01\nj1 25\net");
+       Create_File("Program1", "mv RA,01\nmv RB,05\nad RA,RB\nj1 00");
+       Create_File("Program2", "mv RA,05\nmi 50,RA\nmv BR,RA\nml BR,BA \nsb b,01\nj1 25\net");
        while(true) {
            System.out.print("Komenda: ");
            Decision = Command.nextLine(); 
