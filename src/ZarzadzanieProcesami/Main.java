@@ -1,7 +1,5 @@
 package ZarzadzanieProcesami;
 
-import jdk.nashorn.internal.runtime.FindProperty;
-
 public class Main {
 
 	public static void main(String[] args) 
