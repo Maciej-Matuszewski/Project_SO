@@ -22,12 +22,24 @@ public class Proces {
 	public ArrayList<Pipe> pipes = new ArrayList<>();
 	public PipeField childPipe = null;
 	
+
+	public int pri; //P
+	public int uspri; //P
+	public int nice; //P parametr nadawany przez uzytkownika
+	public int cpu; //P wykorzystanie procesora
+	public int pRA;  //P
+	public int pRB;  //P
+	public int pPC;  //P
+	public boolean pCF;  //P
+	
 	Proces()
 	{
 		nr++;
 		nazwa = "root(Init)";
 		PID = nr;
 		priorytet = 0;
+		pri = 0; //P
+		uspri = 0; //P
 		stan = 0;
 		System.out.println("Powstal proces systemowy - root(Init)");
 	}
@@ -38,6 +50,8 @@ public class Proces {
 		nazwa = "proces " + nr;
 		PID = nr;
 		PPID = proces.PID;
+		pri = proces.pri; //P
+		uspri = proces.uspri; //P
 		priorytet = random.nextInt(32);
 		stan = random.nextInt(4) + 1;
 		System.out.println("Powstal: " + this.nazwa + ", Od procesu: " + proces.nazwa);
