@@ -5,6 +5,10 @@
 /******************************************************************/
 package obsluga_dysku;
 import java.util.Scanner;
+import obsluga_dysku.FlorekFileSystem;
+import obsluga_procesora.Scheduler;
+import pamiec_wirtualna.MemoryManagement;
+import zarzadzanie_procesami.Management;
 /******************************************************************/
 public class FlorekFileSystem {   
     /****************************************************************/
@@ -303,18 +307,23 @@ public class FlorekFileSystem {
                 }
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
+            else if(Com[0].equals("bcp")) {
+                SysDisk.BackupProgramFiles();
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else {
                 System.out.println("Nie rozpoznano komendy!");
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
     /**************************************************************/
-    public static void main(String[] args) { 
+     public static void main(String[] args) { 
        Scanner Command = new Scanner(System.in);
        String Decision;
-
+       
        Create_File("Program1", "mv RA,01\nmv RB,05\nad RA,RB\nj1 00");
        Create_File("Program2", "mv RA,05\nmi 50,RA\nmv BR,RA\nml BR,BA \nsb b,01\nj1 25\net");
+       
        while(true) {
            System.out.print("Komenda: ");
            Decision = Command.nextLine(); 
