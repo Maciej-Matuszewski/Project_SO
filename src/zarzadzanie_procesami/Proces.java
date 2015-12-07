@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import komunikacja_miedzy_procesami.Pipe;
 import komunikacja_miedzy_procesami.PipeField;
+import pamiec_wirtualna.*;
 
 public class Proces {
 
@@ -19,6 +20,7 @@ public class Proces {
 	// STAN 3 - CZEKAJACY
 	// STAN 4 - WYKONANY
 	Random random = new Random();
+	public PageTable ptable = new PageTable();
 	public ArrayList<Pipe> pipes = new ArrayList<>();
 	public PipeField childPipe = null;
 	

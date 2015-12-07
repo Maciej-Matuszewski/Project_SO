@@ -5,16 +5,15 @@ import java.util.ArrayList;
 
 public class Management 
 {	
-	public static ArrayList<Proces> procesList;
-	Proces proces = new Proces();
+	public static ArrayList<Proces> procesList = new ArrayList<>();
+	static Proces proces = new Proces();
 	
 	Management()
 	{
-		procesList = new ArrayList<>();
 		procesList.add(proces);
 	}
 	
-	public void fork()
+	public static void fork()
 	{
 		fork(proces);
 	}
@@ -98,6 +97,13 @@ public class Management
 		return x;
 	}
 	
-	
+	static public Proces processLookup(int id){
+		for(Proces temp : procesList){
+			if(temp.PID == id){ //PID or PPID?
+			return temp;
+			}
+		}
+		return null;
+	}
 	
 }
