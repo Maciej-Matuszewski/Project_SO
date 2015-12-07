@@ -5,8 +5,9 @@
 /******************************************************************/
 package obsluga_dysku;
 import java.util.Scanner;
+import obsluga_dysku.FlorekFileSystem;
 /******************************************************************/
-public class Disk extends FlorekFileSystem {
+public class Disk {
     String D_Name;              // nazwa dysku
     String D_NameFileSystem;    // nazwa zamontowanego systemu plików
     int D_Space;                // rozmiar dysku
@@ -167,7 +168,7 @@ public class Disk extends FlorekFileSystem {
     void D_OpenFile(String F_Name) {
         File hlp_File = this.D_FindFile(F_Name);
         if(hlp_File != null) {
-            char[] hlp_Content = F_Read(F_Name);
+            char[] hlp_Content = FlorekFileSystem.F_Read(F_Name);
             System.out.println(hlp_Content);
         }
         else {
