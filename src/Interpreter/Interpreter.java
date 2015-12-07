@@ -111,6 +111,9 @@ public class Interpreter extends FlorekFileSystem {
 						}
 						//zakonczenie wykonywanie procesu
 						wywlaszczenie();
+						scheduler.add_to_zombies();
+						break;
+					case "wt":
 						break;
 					case "fr":
 						break;

@@ -8,6 +8,7 @@ public class Scheduler {
 		
 	ArrayList<ArrayList<Proces>> qs = new ArrayList<ArrayList<Proces>>(8);
 	ArrayList<Proces> wait_list = new ArrayList<Proces>();
+	ArrayList<Proces> zombies_list = new ArrayList<Proces>();
 	boolean[] whichqs = new boolean[8]; //ktore kolejki sa nie puste
 	public int base = 8;
 	public Proces pr_rdy;
@@ -21,10 +22,14 @@ public class Scheduler {
 		}
 	}
 	
-	public void exit_proces()
+	public void add_to_zombies()
 	{
-		qs.get(pr_rdy.pri/4).remove(pr_rdy);
+		int tmp = qs.get(pr_rdy.pri/4).indexOf(pr_rdy);
+		zombies_list.add(qs.get(pr_rdy.pri/4).get(tmp));
+		qs.get(pr_rdy.pri/4).remove(tmp);
 	}
+	
+	
 	
 	public void add_to_ready(Proces pr)
 	{
@@ -47,6 +52,7 @@ public class Scheduler {
 		{
 			qs.get(pr.pri/4).add(pr);
 		}
+		pr.stan = 2;
 			
 		whichqs[pr.pri/4] = true;
 	}
@@ -56,6 +62,7 @@ public class Scheduler {
 		int tmp = qs.get(pr.pri/4).indexOf(pr);
 		wait_list.add(qs.get(pr.pri/4).get(tmp));
 		qs.get(pr.pri/4).remove(tmp);
+		pr.stan=3;
 	}
 	
 	
