@@ -7,8 +7,9 @@
 package obsluga_dysku;
 import java.util.ArrayList;
 import java.util.List;
+import obsluga_dysku.FlorekFileSystem;
 /******************************************************************/
-public class File extends FlorekFileSystem {
+public class File {
     String F_Name;      // nazwa pliku
     int F_iNode_Id;     // identyfikator i-węzła
     /**************************************************************/
@@ -19,7 +20,7 @@ public class File extends FlorekFileSystem {
         if(F_Type != 'C') {
             File hlp_File = SysDisk.D_FindFile(F_Name); //obsługa nadpisania pliku
             if(hlp_File != null) {
-                F_Delete(F_Name);
+                FlorekFileSystem.F_Delete(F_Name);
             }
         }
             if(hlp_Block != -1 && hlp_iNode != -1) {
@@ -50,14 +51,13 @@ public class File extends FlorekFileSystem {
                 }
                 /**********************************************************/
                  if(Content.length() > 0) {
-                    F_Write(this.F_Name, Content);
+                    FlorekFileSystem.F_Write(this.F_Name, Content);
                 }
                 /**********************************************************/
             }
             else {
                 System.out.println("Nie udało się stworzyć plików, brak wolnego miejsca na dysku!");
-            }
-        
+            }        
     }
     /**************************************************************/
     Block F_CheckBlock(Disk SysDisk) {
