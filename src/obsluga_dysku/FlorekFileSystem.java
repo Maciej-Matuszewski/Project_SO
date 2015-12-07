@@ -121,7 +121,7 @@ public class FlorekFileSystem {
                                 Create_File(Com[1].substring(1), "");
                                 if(Com.length > 2) {
                                     for(int i = 2; i < Com.length; i++) {
-                                        F_Write(Com[1], Com[i] + " ");
+                                        F_Write(Com[1].substring(1), Com[i] + " ");
                                     }
                                 }
                                 System.out.println("Plik został pomyślnie utworzony!");
@@ -134,7 +134,7 @@ public class FlorekFileSystem {
                             hlp_File = new File(Com[1].substring(1), SysDisk, 'F', "");
                             if(Com.length > 2) {
                                 for(int i = 2; i < Com.length; i++) {
-                                    F_Write(Com[1], Com[i] + " ");
+                                    F_Write(Com[1].substring(1), Com[i] + " ");
                                 }
                             }
                             hlp_File = SysDisk.D_FindFile(Com[1].substring(1));
