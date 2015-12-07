@@ -19,6 +19,7 @@ public class Proces {
 	// STAN 2 - GOTOWY
 	// STAN 3 - CZEKAJACY
 	// STAN 4 - WYKONANY
+	// STAN 5 - ZOMBIE
 	Random random = new Random();
 	public PageTable ptable = new PageTable();
 	public ArrayList<Pipe> pipes = new ArrayList<>();

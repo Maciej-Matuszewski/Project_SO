@@ -8,7 +8,6 @@ public class Scheduler {
 		
 	ArrayList<ArrayList<Proces>> qs = new ArrayList<ArrayList<Proces>>(8);
 	ArrayList<Proces> wait_list = new ArrayList<Proces>();
-	ArrayList<Proces> zombies_list = new ArrayList<Proces>();
 	boolean[] whichqs = new boolean[8]; //ktore kolejki sa nie puste
 	public int base = 8;
 	public Proces pr_rdy;
@@ -21,15 +20,6 @@ public class Scheduler {
 			whichqs[i] = false;
 		}
 	}
-	
-	public void add_to_zombies()
-	{
-		int tmp = qs.get(pr_rdy.pri/4).indexOf(pr_rdy);
-		zombies_list.add(qs.get(pr_rdy.pri/4).get(tmp));
-		qs.get(pr_rdy.pri/4).remove(tmp);
-	}
-	
-	
 	
 	public void add_to_ready(Proces pr)
 	{
@@ -66,12 +56,21 @@ public class Scheduler {
 		pr.stan=3;
 	}
 	
+	public void wakeup(int PID)
+	{
+		for(Proces temp : wait_list){
+			if(temp.PID == PID){
+				add_to_ready(temp);
+				wait_list.remove(temp);
+				break;
+			}
+			}
+	}
+	
 	
 	public boolean przelicz()  
 	{
-		Proces tmp_proces;
 		ArrayList<ArrayList<Proces>> tmp_qs = new ArrayList<ArrayList<Proces>>(8);
-		boolean tmp_whichqs[] = new boolean[8];
 		System.out.println("Przeliczanie priorytetu");
 		for(int i=0;i<7;i++)
 		{

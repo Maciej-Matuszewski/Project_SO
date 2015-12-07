@@ -111,10 +111,10 @@ public class Interpreter extends FlorekFileSystem {
 						}
 						//zakonczenie wykonywanie procesu
 						wywlaszczenie();
-						//scheduler.add_to_zombies();
-						management.exit(scheduler.pr_rdy.PID);
+						et();
 						break;
 					case "wt":
+						wt();
 						break;
 					case "fr":
 						break;
@@ -144,7 +144,6 @@ public class Interpreter extends FlorekFileSystem {
 					if(przelicz == 12 && !test){
 						przelicz = 0;
 						if(scheduler.przelicz()){
-							System.out.println("Hurra");
 							break;
 						}
 					}
@@ -330,6 +329,29 @@ public class Interpreter extends FlorekFileSystem {
 				scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1)).write(Integer.toString(RB));
 			else
 				scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1)).write(arg2);
+		}
+	}
+	
+	void et()
+	{
+		if(management.exit(scheduler.pr_rdy.PID))
+			scheduler.wakeup(scheduler.pr_rdy.PPID);		
+	}
+	
+	void wt()
+	{
+		int tmp = management.wait(scheduler.pr_rdy);
+		if(tmp == 0)
+		{
+			scheduler.add_to_wait(scheduler.pr_rdy);
+		}
+		else if(tmp == -1)
+		{
+			//obsluga bledu metody wait
+		}
+		else if(tmp > 0)
+		{
+			//tmp posiada pid nieistniejacego juz potomka
 		}
 	}
 	
