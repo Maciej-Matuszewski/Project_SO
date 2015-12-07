@@ -3,7 +3,7 @@
 /*                     Author: Łukasz Florczak                    */
 /*                  Last update: 07.12.2015 10:08                 */
 /******************************************************************/
-package florekfilesystem;
+package Obsluga_dysku;
 /******************************************************************/
 public class iNode {
     int F_Size;             // rozmiar pliku
