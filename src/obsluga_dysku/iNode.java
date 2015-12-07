@@ -3,7 +3,7 @@
 /*                     Author: Łukasz Florczak                    */
 /*                  Last update: 07.12.2015 10:08                 */
 /******************************************************************/
-package Obsluga_dysku;
+package obsluga_dysku;
 /******************************************************************/
 public class iNode {
     int F_Size;             // rozmiar pliku

@@ -2,7 +2,7 @@ package komunikacja_miedzy_procesami;
 
 import java.util.ArrayList;
 
-import ZarzadzanieProcesami.Proces;
+import zarzadzanie_procesami.Proces;
 
 public class Pipe {
 

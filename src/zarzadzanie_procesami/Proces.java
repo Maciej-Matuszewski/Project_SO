@@ -1,4 +1,4 @@
-package ZarzadzanieProcesami;
+package zarzadzanie_procesami;
 
 import java.util.Random;
 import java.util.ArrayList;

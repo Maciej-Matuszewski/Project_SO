@@ -1,7 +1,7 @@
 package obsluga_procesora;
 import java.util.ArrayList;
 
-import ZarzadzanieProcesami.*;
+import zarzadzanie_procesami.*;
 
 
 public class Scheduler {

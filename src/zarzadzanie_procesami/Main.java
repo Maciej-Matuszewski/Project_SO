@@ -1,4 +1,4 @@
-package ZarzadzanieProcesami;
+package zarzadzanie_procesami;
 
 public class Main {
 

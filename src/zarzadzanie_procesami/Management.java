@@ -1,4 +1,4 @@
-package ZarzadzanieProcesami;
+package zarzadzanie_procesami;
 
 import java.awt.List;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class Management
 	
 	static void exec()
 	{
-		System.out.println("Tu bêdzie metoda exec");
+		System.out.println("Tu bï¿½dzie metoda exec");
 	}
 	
 	static void ProcessPrint()
