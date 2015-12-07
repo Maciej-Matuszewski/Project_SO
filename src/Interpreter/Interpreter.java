@@ -22,7 +22,6 @@ public class Interpreter extends FlorekFileSystem {
 	private int wynik;
 	private int  przelicz;
 	
-	private Pipe pipe;
 	private Scheduler scheduler;
 	private Management management;
 	private MemoryManagement MemManagement;
@@ -36,7 +35,6 @@ public class Interpreter extends FlorekFileSystem {
 	//String program = "mv RA,05mi 50,RAmv BR,RAml BR,BA sb b,01j1 25et";
 
 	public Interpreter() throws Exception{
-		//pipe = new Pipe(null, null);
 		scheduler= new Scheduler();
 		management = new Management();
 		MemManagement = new MemoryManagement();
@@ -51,8 +49,8 @@ public class Interpreter extends FlorekFileSystem {
 		start();
 	}
 	
-	public void start() throws IOException{
-		test();
+	void start() throws Exception{
+		//test();
 		while(true){
 			if(test || scheduler.change_context()){
 					// pobranie kontekstu
@@ -111,18 +109,18 @@ public class Interpreter extends FlorekFileSystem {
 							test = false;
 							System.out.println("Zakonczono testowanie.");
 						}
-						management.exit();
+						//zakonczenie wykonywanie procesu
+						wywlaszczenie();
 						break;
 					case "fr":
 						break;
 					case "fw":
 						break;
-					case "pc":
-						
+					case "pr":				//pr rejestr,od PA(rodzic)/nr rury(potomek)
+						pr(arg1, arg2);
 						break;
-					case "pr":
-						break;
-					case "pw":
+					case "pw":				//pw PA(rodzic)/nr rury(potomek),rejestr
+						pw(arg1, arg2);
 						break;
 					default:
 						System.out.println(cmd + " - jest nierozpoznawalny");
@@ -152,14 +150,7 @@ public class Interpreter extends FlorekFileSystem {
 					
 				}
 				//zwrot kontekstu
-				if(!test){
-					scheduler.pr_rdy.pRA = RA;
-					scheduler.pr_rdy.pRB = RB;
-					scheduler.pr_rdy.pPC = PC;
-					scheduler.pr_rdy.pCF = CF;
-					scheduler.pr_rdy.cpu +=CPU;
-				}
-				CPU = 0;
+				wywlaszczenie();
 			}
 		}
 	}
@@ -287,6 +278,58 @@ public class Interpreter extends FlorekFileSystem {
 		if(CF == true);
 		PC = Integer.parseInt(arg1); 
 	}
+
+	void pr(String arg1, String arg2) throws Exception{
+		if(arg2.equals("PA")){
+			switch(arg1){
+				case "RA":
+					RA = Integer.parseInt(scheduler.pr_rdy.childPipe.read(),16);
+					break;
+				case "RB":
+					RB = Integer.parseInt(scheduler.pr_rdy.childPipe.read(),16);
+					break;
+				default:
+					System.out.println(cmd + " - jest nierozpoznawalny");
+					if(!test)
+						management.exit();
+					break;
+			}
+		}
+		else{
+			switch(arg1){
+			case "RA":
+				RA = Integer.parseInt(scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1,16)).read(),16);
+				break;
+			case "RB":
+				RB = Integer.parseInt(scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1,16)).read(),16);
+				break;
+			default:
+				System.out.println(cmd + " - jest nierozpoznawalny");
+				if(!test)
+					management.exit();
+				break;
+			}
+		}
+	}
+	
+	void pw(String arg1, String arg2){
+		if(arg1.equals("PA")){
+			if(arg2.equals("RA"))
+				scheduler.pr_rdy.childPipe.write(Integer.toString(RA));
+			else if(arg2.equals("RB"))
+				scheduler.pr_rdy.childPipe.write(Integer.toString(RB));
+			else
+				scheduler.pr_rdy.childPipe.write(arg2);
+		}
+		else{
+			if(arg2.equals("RA"))
+				scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1)).write(Integer.toString(RA));
+			else if(arg2.equals("RB"))
+				scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1)).write(Integer.toString(RB));
+			else
+				scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1)).write(arg2);
+		}
+	}
 	
 	void aktualny_stan() throws IOException{
 		System.out.println("Stan Interpretera:");
@@ -311,4 +354,16 @@ public class Interpreter extends FlorekFileSystem {
 		RB = 0;
 		PC = 0;
 	}
+
+	void wywlaszczenie(){
+		if(!test){
+			scheduler.pr_rdy.pRA = RA;
+			scheduler.pr_rdy.pRB = RB;
+			scheduler.pr_rdy.pPC = PC;
+			scheduler.pr_rdy.pCF = CF;
+			scheduler.pr_rdy.cpu +=CPU;
+		}
+		CPU = 0;
+	}
+
 }
