@@ -2,13 +2,13 @@
 /*                     FLOREK FILE SYSTEM v1.0                    */
 /*                     Author: Łukasz Florczak                    */
 /*                    Created: 02.11.2015 09:54                   */
-/*                  Last update: 28.11.2015 10:37                 */
+/*                  Last update: 07.12.2015 10:08                 */
 /******************************************************************/
 package florekfilesystem;
 import java.util.ArrayList;
 import java.util.List;
 /******************************************************************/
-public class File {
+public class File extends FlorekFileSystem {
     String F_Name;      // nazwa pliku
     int F_iNode_Id;     // identyfikator i-węzła
     /**************************************************************/
@@ -19,7 +19,7 @@ public class File {
         if(F_Type != 'C') {
             File hlp_File = SysDisk.D_FindFile(F_Name); //obsługa nadpisania pliku
             if(hlp_File != null) {
-                hlp_File.F_Delete(SysDisk);
+                F_Delete(F_Name);
             }
         }
             if(hlp_Block != -1 && hlp_iNode != -1) {
@@ -36,10 +36,6 @@ public class File {
                 SysDisk.D_BitVector_Block[hlp_Block] = 1;
                 SysDisk.D_BitVector_iNode[hlp_iNode] = 1;
                 /**********************************************************/
-                if(Content.length() > 0) {
-                    this.F_Write(SysDisk, Content);
-                }
-                /**********************************************************/
                 if(SysDisk.D_iNode[hlp_iNode].F_Type[0] == 'C') {
                     SysDisk.D_Block[hlp_Block].CatalogEntry = new ArrayList<File>();
                     /**********************************************************/
@@ -51,6 +47,10 @@ public class File {
                 }
                 else {
                     SysDisk.D_iNode[SysDisk.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.add(this); // wpis katalogowy
+                }
+                /**********************************************************/
+                 if(Content.length() > 0) {
+                    F_Write(this.F_Name, Content);
                 }
                 /**********************************************************/
             }
@@ -99,7 +99,7 @@ public class File {
         return null; // w przypadku braku wolnych bloków
     }
     /**************************************************************/
-    void F_Write(Disk SysDisk, String Content) {
+   /* void F_Write(String Content) {
         Block hlp_Block = this.F_CheckBlock(SysDisk);
         if(SysDisk.D_iNode[this.F_iNode_Id].F_Size < SysDisk.D_MaxFileSize && hlp_Block != null) {
             for(int i = 0; i < Content.length(); i++) {
@@ -119,9 +119,9 @@ public class File {
                }
            }
         }         
-    }
+    }*/
     /**************************************************************/
-    char[] F_Read(Disk SysDisk) {
+    /*char[] F_Read(Disk SysDisk) {
         char[] Content = new char[SysDisk.D_iNode[this.F_iNode_Id].F_Size];
         int k = 0;
         if(SysDisk.D_BitVector_iNode[this.F_iNode_Id] == 1) {
@@ -147,9 +147,9 @@ public class File {
             return null;
         }
         return Content;
-    }
+    }*/
     /**************************************************************/
-    void F_Delete(Disk SysDisk) {
+    /*void F_Delete(Disk SysDisk) {
         if(SysDisk.D_iNode[this.F_iNode_Id].F_isOpen == false) {
             for(int i = 0; i < SysDisk.D_MaxDirectBlock; i++) {
                 Block hlp_Block = SysDisk.D_iNode[this.F_iNode_Id].DirBlock[i];
@@ -180,7 +180,7 @@ public class File {
         else {
             System.out.println("Pliku nie można usunąć, gdyż jest on używany przez inny proces!");
         }
-    }
+    }*/
     /**************************************************************/
 }
 /******************************************************************/
