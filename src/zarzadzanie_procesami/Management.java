@@ -29,7 +29,7 @@ public class Management
 		procesList.remove(FindProces(pid));
 	}
 	
-	static void exit_all()
+	public static void exit_all()
 	{
 		for(int i=0; i<procesList.size(); i++)
 		{
@@ -54,7 +54,7 @@ public class Management
 		}	
 	}
 	
-	static void exit(int pid)
+	public static void exit(int pid)
 	{
 		int i = FindProces(pid);
 		if(procesList.get(i).stan == 4)

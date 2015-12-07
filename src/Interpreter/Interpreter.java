@@ -112,6 +112,7 @@ public class Interpreter extends FlorekFileSystem {
 						//zakonczenie wykonywanie procesu
 						wywlaszczenie();
 						scheduler.add_to_zombies();
+						management.exit(scheduler.pr_rdy.PID);
 						break;
 					case "wt":
 						break;
