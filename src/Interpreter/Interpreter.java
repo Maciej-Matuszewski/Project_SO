@@ -3,20 +3,21 @@ package Interpreter;
 import java.io.IOException;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
 
 import obsluga_dysku.FlorekFileSystem;
 import obsluga_procesora.Scheduler;
 import pamiec_wirtualna.MemoryManagement;
 import zarzadzanie_procesami.Management;
+import komunikacja_miedzy_procesami.Pipe;
 
-public class Interpreter{
+public class Interpreter extends FlorekFileSystem {
 	static int RA;
 	static int RB;
 	static int PC;
 	static boolean CF;
 	static int  CPU;
 	
-	boolean exit = false;
 	boolean test = false;
 	private int wynik;
 	private int  przelicz;
@@ -49,9 +50,9 @@ public class Interpreter{
 	}
 	
 	void start() throws Exception{
-		test();
+		//test();
 		while(true){
-			if(scheduler.change_context()){
+			if(test || scheduler.change_context()){
 					// pobranie kontekstu
 				if(!test){
 					RA = scheduler.pr_rdy.pRA;
@@ -60,7 +61,7 @@ public class Interpreter{
 					CF = scheduler.pr_rdy.pCF;
 				}
 				
-				while(!exit && CPU < 4){
+				while(CPU < 4){
 					if(test){
 						System.out.println("Podaj rozkaz: ");
 						cmd = input.nextLine();
@@ -76,53 +77,65 @@ public class Interpreter{
 						cmd = "  ";
 					try{
 					switch(cmd.substring(0, 2)){				//rozpoznawanie rozkazu i jego obsluga
-					case "mi":
+					case "mi":				//zapisywanie/czytanie z pamieci operacyjnej arg1(rejestr lub adres) arg2(rejestr lub adres)
 						mi(arg1,arg2);
 						break;
-					case "mv":
+					case "mv":				//przypisywanie wartosci do rejestru arg1(rejestr) arg2(wartosc lub rejestr)
 						mv(arg1,arg2);
 						break;
-					case "ad":
+					case "ad":				//dodawanie
 						ad(arg1,arg2);
 						break;
-					case "sb":
+					case "sb":				//odejmowanie
 						sb(arg1,arg2);
 						break;
-					case "ml":
+					case "ml":				//mnozenie
 						ml(arg1,arg2);
 						break;
-					case "j0":
+					case "j0":				//jump jezeli CF == false arg1(adres)
 						j0(arg1);
 						break;
-					case "j1":
+					case "j1":				//jump jezeli CF == true arg1(adres)
 						j1(arg1);
 						break;
-					case "fk":
+					case "fk":				//fork()
 						scheduler.add_to_ready(management.fork(scheduler.pr_rdy));
 						break;
-					case "ex":
+					case "ex":				//exec()
 						management.exec();
 						break;
-					case "et":
+					case "et":				//zakonczenie wykonywania procesu
 						if(test){
 							test = false;
 							System.out.println("Zakonczono testowanie.");
 						}
-						//zakonczenie wykonywanie procesu
+<<<<<<< HEAD
 						exit = true;
 						//scheduler.add_to_zombies();
 						management.exit(scheduler.pr_rdy.PID);
 						break;
-					case "wt":
+					case "wt":				//wait()
 						break;
-					case "fm":
+					case "fm":				//tworzenie nowego pliku o nazwie PID porcesu
 						fm();
 						break;
-					case "fr":
+					case "fr":				//odczyt z pliku arg1(rejestr)
 						fr(arg1);
 						break;
-					case "fw":
+					case "fw":				//zapis do pliku arg1(rejestr
 						fw(arg1);
+=======
+						//zakonczenie wykonywanie procesu
+						wywlaszczenie();
+						et();
+						break;
+					case "wt":
+						wt();
+						break;
+					case "fr":
+						break;
+					case "fw":
+>>>>>>> origin/master
 						break;
 					case "pr":				//pr rejestr,od PA(rodzic)/nr rury(potomek)
 						pr(arg1, arg2);
@@ -139,7 +152,8 @@ public class Interpreter{
 					}
 					catch(NumberFormatException e){
 						System.out.println("Nieznany format liczby");
-						error_exit();
+						/*if(!test)
+							management.exit();*/
 					}
 					set_CF();
 					CPU++;
@@ -148,22 +162,17 @@ public class Interpreter{
 					if(przelicz == 12 && !test){
 						przelicz = 0;
 						if(scheduler.przelicz()){
-							System.out.println("Hurra");
 							break;
 						}
 					}
+					
 					aktualny_stan();
+					
 				}
 				//zwrot kontekstu
 				wywlaszczenie();
 			}
 		}
-	}
-
-	private void error_exit() {
-		exit = true;
-		if(!test)
-			management.exit(scheduler.pr_rdy.PID);
 	}
 
 	void mi(String arg1, String arg2){
@@ -198,7 +207,8 @@ public class Interpreter{
 				break;
 			default:
 				System.out.println(cmd + " - jest nierozpoznawalny");
-				error_exit();
+				/*if(!test)
+					management.exit();*/
 				break;	
 			}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -222,7 +232,8 @@ public class Interpreter{
 			break;
 		default:
 			System.out.println(cmd + " - jest nierozpoznawalny");
-			error_exit();
+			/*if(!test)
+				management.exit();*/
 			break;
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -246,7 +257,8 @@ public class Interpreter{
 			break;
 		default:
 			System.out.println(cmd + " - jest nierozpoznawalny");
-			error_exit();
+			/*if(!test)
+				management.exit();*/
 			break;
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -270,7 +282,8 @@ public class Interpreter{
 			break;
 		default:
 			System.out.println(cmd + " - jest nierozpoznawalny");
-			error_exit();
+			/*if(!test)
+				management.exit();*/
 			break;
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -297,7 +310,8 @@ public class Interpreter{
 					break;
 				default:
 					System.out.println(cmd + " - jest nierozpoznawalny");
-					error_exit();
+					/*if(!test)
+						management.exit();*/
 					break;
 			}
 		}
@@ -311,11 +325,11 @@ public class Interpreter{
 				break;
 			default:
 				System.out.println(cmd + " - jest nierozpoznawalny");
-				error_exit();
+				/*if(!test)
+					management.exit();*/
 				break;
 			}
 		}
-		PC += 8; //zwiekszenie licznika rozkazow
 	}
 	
 	void pw(String arg1, String arg2){
@@ -335,52 +349,29 @@ public class Interpreter{
 			else
 				scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1)).write(arg2);
 		}
-		PC += 8; //zwiekszenie licznika rozkazow
 	}
 	
-	void fm(){
-		System.out.println(scheduler.pr_rdy.PID);
-		scheduler.pr_rdy.nazwa_pliku = String.valueOf(scheduler.pr_rdy.PID);
-		FlorekFileSystem.Create_File(scheduler.pr_rdy.nazwa_pliku, "");
+	void et()
+	{
+		if(management.exit(scheduler.pr_rdy.PID))
+			scheduler.wakeup(scheduler.pr_rdy.PPID);		
 	}
 	
-	void fr(String arg1){
-		try{
-		String tmp = String.valueOf(FlorekFileSystem.F_Read(scheduler.pr_rdy.nazwa_pliku));
-		System.out.println(scheduler.pr_rdy.nazwa_pliku + tmp);
-		switch(arg1){
-		case "RA":
-			RA = Integer.parseInt(tmp.substring(0, 2),16);
-			break;
-		case "RB":
-			RB =  Integer.parseInt(tmp.substring(0, 2),16);
-			break;
-		default:
-			System.out.println(cmd + " - jest nierozpoznawalny");
-			error_exit();
-			break;
+	void wt()
+	{
+		int tmp = management.wait(scheduler.pr_rdy);
+		if(tmp == 0)
+		{
+			scheduler.add_to_wait(scheduler.pr_rdy);
 		}
-		}catch(Exception e){
-			System.out.println("Plik nie istnieje");
-			error_exit();
+		else if(tmp == -1)
+		{
+			//obsluga bledu metody wait
 		}
-	}
-	
-	void fw(String arg1){
-		System.out.println("wut");
-		switch(arg1){
-		case "RA":
-			FlorekFileSystem.F_Write(scheduler.pr_rdy.nazwa_pliku, String.valueOf(RA));
-			break;
-		case "RB":
-			FlorekFileSystem.F_Write(scheduler.pr_rdy.nazwa_pliku, String.valueOf(RB));
-			break;
-		default:
-			System.out.println(cmd + " - jest nierozpoznawalny");
-			error_exit();
-			break;
+		else if(tmp > 0)
+		{
+			//tmp posiada pid nieistniejacego juz potomka
 		}
-		FlorekFileSystem.main(null);
 	}
 	
 	void aktualny_stan() throws IOException{
