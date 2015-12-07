@@ -39,11 +39,11 @@ public class Interpreter extends FlorekFileSystem {
 		management = new Management();
 		MemManagement = new MemoryManagement();
 		management.fork();
-		management.fork();
-		management.fork();
+		//management.fork();
+		//management.fork();
 		scheduler.add_to_ready(management.procesList.get(0));
-		scheduler.add_to_ready(management.procesList.get(1));
-		scheduler.add_to_ready(management.procesList.get(2));
+		//scheduler.add_to_ready(management.procesList.get(1));
+		//scheduler.add_to_ready(management.procesList.get(2));
 		
 		input = new Scanner(System.in);
 		start();
@@ -99,7 +99,7 @@ public class Interpreter extends FlorekFileSystem {
 						j1(arg1);
 						break;
 					case "fk":
-						management.fork();
+						scheduler.add_to_ready(management.fork(scheduler.pr_rdy));
 						break;
 					case "ex":
 						management.exec();
@@ -111,7 +111,7 @@ public class Interpreter extends FlorekFileSystem {
 						}
 						//zakonczenie wykonywanie procesu
 						wywlaszczenie();
-						scheduler.add_to_zombies();
+						//scheduler.add_to_zombies();
 						management.exit(scheduler.pr_rdy.PID);
 						break;
 					case "wt":
@@ -128,15 +128,15 @@ public class Interpreter extends FlorekFileSystem {
 						break;
 					default:
 						System.out.println(cmd + " - jest nierozpoznawalny");
-						if(!test)
-							management.exit();
+						/*if(!test)
+							management.exit();*/
 						break;
 					}
 					}
 					catch(NumberFormatException e){
 						System.out.println("Nieznany format liczby");
-						if(!test)
-							management.exit();
+						/*if(!test)
+							management.exit();*/
 					}
 					set_CF();
 					CPU++;
@@ -191,8 +191,8 @@ public class Interpreter extends FlorekFileSystem {
 				break;
 			default:
 				System.out.println(cmd + " - jest nierozpoznawalny");
-				if(!test)
-					management.exit();
+				/*if(!test)
+					management.exit();*/
 				break;	
 			}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -216,8 +216,8 @@ public class Interpreter extends FlorekFileSystem {
 			break;
 		default:
 			System.out.println(cmd + " - jest nierozpoznawalny");
-			if(!test)
-				management.exit();
+			/*if(!test)
+				management.exit();*/
 			break;
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -241,8 +241,8 @@ public class Interpreter extends FlorekFileSystem {
 			break;
 		default:
 			System.out.println(cmd + " - jest nierozpoznawalny");
-			if(!test)
-				management.exit();
+			/*if(!test)
+				management.exit();*/
 			break;
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -266,8 +266,8 @@ public class Interpreter extends FlorekFileSystem {
 			break;
 		default:
 			System.out.println(cmd + " - jest nierozpoznawalny");
-			if(!test)
-				management.exit();
+			/*if(!test)
+				management.exit();*/
 			break;
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -294,8 +294,8 @@ public class Interpreter extends FlorekFileSystem {
 					break;
 				default:
 					System.out.println(cmd + " - jest nierozpoznawalny");
-					if(!test)
-						management.exit();
+					/*if(!test)
+						management.exit();*/
 					break;
 			}
 		}
@@ -309,8 +309,8 @@ public class Interpreter extends FlorekFileSystem {
 				break;
 			default:
 				System.out.println(cmd + " - jest nierozpoznawalny");
-				if(!test)
-					management.exit();
+				/*if(!test)
+					management.exit();*/
 				break;
 			}
 		}

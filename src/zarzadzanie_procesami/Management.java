@@ -18,10 +18,11 @@ public class Management
 		fork(proces);
 	}
 	
-	public static void fork(Proces pro)
+	public static Proces fork(Proces pro)
 	{
 		Proces proces = new Proces(pro);
 		procesList.add(proces);
+		return proces;
 	}
 	
 	static void kill(int pid)
@@ -88,7 +89,7 @@ public class Management
 		System.out.println("");
 		for(int i=0; i<procesList.size(); i++)
 		{
-			System.out.print(procesList.get(i).nazwa +"\t"+ procesList.get(i).PID +"\t" + procesList.get(i).PPID + "\t" +  procesList.get(i).priorytet + "\t\t" + procesList.get(i).stan);
+			System.out.print(procesList.get(i).nazwa +"\t"+ procesList.get(i).PID +"\t" + procesList.get(i).PPID + "\t" +  procesList.get(i).pri + "\t\t" + procesList.get(i).stan);
 			System.out.println("");
 		}
 		

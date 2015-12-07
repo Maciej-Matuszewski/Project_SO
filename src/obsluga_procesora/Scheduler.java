@@ -55,6 +55,7 @@ public class Scheduler {
 		pr.stan = 2;
 			
 		whichqs[pr.pri/4] = true;
+		System.out.println("Dodano proces PID: "+pr.PID+" do kolejki procesow gotowych.");
 	}
 	
 	public void add_to_wait(Proces pr)

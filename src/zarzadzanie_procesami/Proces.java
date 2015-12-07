@@ -39,7 +39,6 @@ public class Proces {
 		nr++;
 		nazwa = "root(Init)";
 		PID = nr;
-		priorytet = 0;
 		pri = 0; //P
 		uspri = 0; //P
 		stan = 0;
@@ -52,10 +51,9 @@ public class Proces {
 		nazwa = "proces " + nr;
 		PID = nr;
 		PPID = proces.PID;
-		pri = proces.pri; //P
-		uspri = proces.uspri; //P
-		priorytet = random.nextInt(32);
-		stan = random.nextInt(4) + 1;
+		uspri = 8+nice; //P
+		pri = uspri; //P
+		stan = 1;
 		System.out.println("Powstal: " + this.nazwa + ", Od procesu: " + proces.nazwa);
 		try {
 			new Pipe(proces, this);
