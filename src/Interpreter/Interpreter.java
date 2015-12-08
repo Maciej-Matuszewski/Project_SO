@@ -67,6 +67,7 @@ public class Interpreter{
 					}
 					else{
 					cmd = String.valueOf(MemoryManagement.readMemory(PC,8,scheduler.pr_rdy.PID)); //pobranie kolejnego rozkazu
+					System.out.println("Aktualny rozkaz: " + cmd);
 					}
 					if(cmd.length() >= 5)
 						arg1 = cmd.substring(3, 5);
