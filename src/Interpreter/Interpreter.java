@@ -27,7 +27,6 @@ public class Interpreter{
 	
 	private static Scheduler scheduler;
 	private static Management management;
-	private MemoryManagement MemManagement;
 	Proces tenproces;
 	
 	private String cmd = "ml RA,RB";
@@ -41,13 +40,7 @@ public class Interpreter{
 	public Interpreter() throws Exception{
 		scheduler= new Scheduler();
 		management = new Management();
-		MemManagement = new MemoryManagement();
-		//management.fork();
-		//management.fork();
-		//management.fork();
-		//scheduler.add_to_ready(management.procesList.get(0));
-		//scheduler.add_to_ready(management.procesList.get(1));
-		//scheduler.add_to_ready(management.procesList.get(2));
+		new MemoryManagement();
 		
 		input = new Scanner(System.in);
 		start();
@@ -65,7 +58,7 @@ public class Interpreter{
 					PC = scheduler.pr_rdy.pPC;
 					ZF = scheduler.pr_rdy.pZF;
 				}
-				while(!exit && CPU < 4 && (test || MemManagement.inMemory(PC, scheduler.pr_rdy.PID))){
+				while(!exit && CPU < 4 && (test || MemoryManagement.inMemory(PC, scheduler.pr_rdy.PID))){
 					/*if(System.in.read() == 27)
 						FlorekFileSystem.cmd();*/
 					if(test){
@@ -73,7 +66,7 @@ public class Interpreter{
 						cmd = input.nextLine();
 					}
 					else{
-					cmd = String.valueOf(MemManagement.readMemory(PC,8,scheduler.pr_rdy.PID)); //pobranie kolejnego rozkazu
+					cmd = String.valueOf(MemoryManagement.readMemory(PC,8,scheduler.pr_rdy.PID)); //pobranie kolejnego rozkazu
 					}
 					if(cmd.length() >= 5)
 						arg1 = cmd.substring(3, 5);
@@ -105,9 +98,9 @@ public class Interpreter{
 						j1(arg1);
 						break;
 					case "fk":				//fork()
-						tenproces = management.fork(scheduler.pr_rdy);
+						tenproces = Management.fork(scheduler.pr_rdy);
 						scheduler.add_to_ready(tenproces);
-						management.exec("Program1",tenproces.PID);
+						Management.exec("Program1",tenproces.PID);
 						//scheduler.add_to_ready(management.fork(scheduler.pr_rdy));
 						break;
 					case "ex":				//exec()
@@ -173,26 +166,26 @@ public class Interpreter{
 	private void error_exit() {
 		exit = true;
 		if(!test)
-			management.exit(scheduler.pr_rdy.PID);
+			Management.exit(scheduler.pr_rdy.PID);
 	}
 
 	void mi(String arg1, String arg2){
 		if (arg1.equals("RA")){
 			//RA = wczytanie z pamieci operacyjnej
 
-			RA = Integer.parseInt(String.valueOf(MemManagement.readMemory(Integer.parseInt(arg2,16),2,scheduler.pr_rdy.PID)),16);
+			RA = Integer.parseInt(String.valueOf(MemoryManagement.readMemory(Integer.parseInt(arg2,16),2,scheduler.pr_rdy.PID)),16);
 			MemoryManagement.displayStatus();
 		}
 		else if(arg1.equals("RB")){
 			//RB = wczytanie z pamieci operacyjnej
-			RB = Integer.parseInt(String.valueOf(MemManagement.readMemory(Integer.parseInt(arg2,16),2,scheduler.pr_rdy.PID)),16);
-			MemManagement.displayStatus();
+			RB = Integer.parseInt(String.valueOf(MemoryManagement.readMemory(Integer.parseInt(arg2,16),2,scheduler.pr_rdy.PID)),16);
+			MemoryManagement.displayStatus();
 		}
 		else{
 			//zapis do pamieci operacyjnej
 
-			MemManagement.writeMemory(Integer.parseInt(arg1,16), arg2.toCharArray(), scheduler.pr_rdy.PID);
-			MemManagement.displayStatus();
+			MemoryManagement.writeMemory(Integer.parseInt(arg1,16), arg2.toCharArray(), scheduler.pr_rdy.PID);
+			MemoryManagement.displayStatus();
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
 	}
@@ -422,7 +415,7 @@ public class Interpreter{
 	void et()
 	{
 		scheduler.pr_rdy.stan = 4;
-		if(management.exit(scheduler.pr_rdy.PID))
+		if(Management.exit(scheduler.pr_rdy.PID))
 			scheduler.wakeup(scheduler.pr_rdy.PPID);	
 		scheduler.remove(scheduler.pr_rdy);
 		PC += 2; //zwiekszenie licznika rozkazow
@@ -455,7 +448,7 @@ public class Interpreter{
 	
 	public static void test(){
 		test = true;
-		scheduler.add_to_ready_test(management.fork(management.procesList.get(0)));
+		scheduler.add_to_ready_test(Management.fork(Management.procesList.get(0)));
 		scheduler.change_context();
 		RA = 0;
 		RB = 0;
