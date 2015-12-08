@@ -47,7 +47,10 @@ public class Interpreter{
 	}
 	
 	void start() throws Exception{
-		test();
+		//test();
+		System.out.print("Podaj komende: ");
+		Decision = input.nextLine();
+		FlorekFileSystem.Disk_Command(Decision);
 		while(true){
 			exit = false;
 			if(test || scheduler.change_context()){
@@ -59,8 +62,7 @@ public class Interpreter{
 					ZF = scheduler.pr_rdy.pZF;
 				}
 				while(!exit && CPU < 4 && (test || MemoryManagement.inMemory(PC, scheduler.pr_rdy.PID))){
-					/*if(System.in.read() == 27)
-						FlorekFileSystem.cmd();*/
+					
 					if(test){
 						System.out.println("Podaj rozkaz: ");
 						cmd = input.nextLine();
@@ -99,10 +101,10 @@ public class Interpreter{
 						j1(arg1);
 						break;
 					case "fk":				//fork()
-						tenproces = Management.fork(scheduler.pr_rdy);
-						scheduler.add_to_ready(tenproces);
-						Management.exec("Program1",tenproces.PID);
-						//scheduler.add_to_ready(management.fork(scheduler.pr_rdy));
+						/*tenproces = Management.fork(scheduler.pr_rdy);
+						Scheduler.add_to_ready(tenproces);
+						Management.exec("Program1",tenproces.PID);*/
+						Scheduler.add_to_ready(Management.fork(scheduler.pr_rdy));
 						break;
 					case "ex":				//exec()
 						
@@ -150,9 +152,7 @@ public class Interpreter{
 					
 					if(przelicz == 12 && !test){
 						przelicz = 0;
-						System.out.println("Hurra1");
 						if(scheduler.przelicz()){
-							System.out.println("Hurra");
 							break;
 						}
 					}
