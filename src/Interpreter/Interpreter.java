@@ -52,7 +52,7 @@ public class Interpreter{
 		test();
 		while(true){
 			exit = false;
-			if(scheduler.change_context()){
+			if(!test || scheduler.change_context()){
 					// pobranie kontekstu
 				System.out.println("sad");
 				if(!test){
@@ -345,6 +345,7 @@ public class Interpreter{
 		System.out.println(scheduler.pr_rdy.PID);
 		scheduler.pr_rdy.nazwa_pliku = String.valueOf(scheduler.pr_rdy.PID);
 		FlorekFileSystem.Create_File(scheduler.pr_rdy.nazwa_pliku, "");
+		PC += 2; //zwiekszenie licznika rozkazow
 	}
 	
 	void fr(String arg1){
@@ -367,6 +368,7 @@ public class Interpreter{
 			System.out.println("Plik nie istnieje");
 			error_exit();
 		}
+		PC += 5; //zwiekszenie licznika rozkazow
 	}
 	
 	void fw(String arg1){
@@ -383,6 +385,7 @@ public class Interpreter{
 			error_exit();
 			break;
 		}		
+		PC += 5; //zwiekszenie licznika rozkazow
 	}
 	
 	void aktualny_stan() throws IOException{
@@ -400,6 +403,7 @@ public class Interpreter{
 		if(management.exit(scheduler.pr_rdy.PID))
 			scheduler.wakeup(scheduler.pr_rdy.PPID);	
 		scheduler.remove(scheduler.pr_rdy);
+		PC += 2; //zwiekszenie licznika rozkazow
 	}
 	
 	void wt()
@@ -417,6 +421,7 @@ public class Interpreter{
 		{
 			//tmp posiada pid nieistniejacego juz potomka
 		}
+		PC += 2; //zwiekszenie licznika rozkazow
 	}
 	
 	void set_CF(){
