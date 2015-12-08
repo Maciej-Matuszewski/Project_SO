@@ -1,6 +1,7 @@
 package pamiec_wirtualna;
 
-import zarzadzanie_procesami.*;
+import ZarzadzanieProcesami.Management;
+import ZarzadzanieProcesami.Proces;
 
 import java.nio.CharBuffer;
 import java.util.Arrays;
@@ -24,7 +25,7 @@ public class Frame {
     }
 
 
-    Frame(int number, SwapFileEntry s){
+    Frame(int number, pamiec_wirtualna.SwapFileEntry s){
         this.number = number;
         this.page = s.page;
         this.processID = s.processID;

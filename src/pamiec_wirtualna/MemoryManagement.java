@@ -8,7 +8,9 @@ import java.util.LinkedList;
 import java.util.Set;
 
 
-import zarzadzanie_procesami.*;
+import ZarzadzanieProcesami.Management;
+import ZarzadzanieProcesami.Proces;
+
 
 public class MemoryManagement {
 
@@ -40,17 +42,29 @@ public class MemoryManagement {
         mm.readProgramtTest(1);
         mm.displayStatus();
 
-        System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(1,30,1)));
+        System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(1,100,1)));
         mm.displayStatus();
-        System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(64,5,1)));
+        //String testinput = new String("xxxxxxxxxxyyyyyyyyyyzzzzzzzzzz");
+        String testinput = new String("0123456789ABCDEF0123456789ABCDEF");
+        System.out.println("zapis do pamieci \""+testinput+"\" od poczatku");
+        writeMemory(0,testinput.toCharArray(),1);
+        mm.displayStatus();
+        System.out.println("koniec?");
+        readMemory(50,2,1);
+        readMemory(70,2,1);
+        readMemory(90,2,1);
+        readMemory(110,2,1);
+        mm.displayStatus();
+
+        /*System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(64,5,1)));
         mm.displayStatus();
         System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(80,5,1)));
-        mm.displayStatus();
+        mm.displayStatus();*/
     }
 
 
 
-    void readProgram(String programFile, int processID) {
+ public  static void readProgram(String programFile, int processID) {
         char[] bufor = new char[pagesize];
         char[] file = new char[10]; /* TODO function_returning_file_content(programFile)*/
         long length = programFile.length();
@@ -71,7 +85,7 @@ public class MemoryManagement {
     }
 
 
-    int translateAddress(int virtualAddress, int processID) {
+ public  static int translateAddress(int virtualAddress, int processID) {
 
         Proces pcb = Management.processLookup(processID);
         int paddress;
@@ -91,6 +105,8 @@ public class MemoryManagement {
 
             if (pcb.ptable.map.get(pagenumber).memoryOrSwapFile == 1) { //page in memory
                 paddress = pcb.ptable.map.get(pagenumber).pageSizeUnits + offset; //TODO check it
+                int frN = paddress/pagesize;
+                frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
                 //!
                 System.out.println("weszło do ifa1");
                 //!
@@ -117,6 +133,8 @@ public class MemoryManagement {
                             //TODO update page table
                             pcb.ptable.map.put(pagenumber,new PageTableEntry(freeFrameNumber,1));
                             paddress = pcb.ptable.map.get(pagenumber).pageSizeUnits*MemoryManagement.pagesize+offset;//test - result of get() should be the same as f.number
+                            int frN = paddress/pagesize;
+                            frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
                             //!
                             System.out.println("weszło do odpowiedniego ifa(2)");
                             //!
@@ -124,11 +142,14 @@ public class MemoryManagement {
                         }
                     }
                     System.out.println("Nie znaleziono szukanego fragmetnu pliku wymiany");
-                    /*frameTable[freeFrameNumber] = new Frame(freeFrameNumber, pagenumber, processID); // TODO PageFault happening
+                    frameTable[freeFrameNumber] = new Frame(freeFrameNumber, pagenumber, processID); // TODO PageFault happening
                     pcb.ptable.map.put(pagenumber, new PageTableEntry(freeFrameNumber, 1));
                     paddress = freeFrameNumber*MemoryManagement.pagesize + offset;
+                    int frN = paddress/pagesize;
+                    frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
+                    frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
 
-                    return paddress;*/
+                    return paddress;
                 }
                 else
                 {
@@ -147,6 +168,7 @@ public class MemoryManagement {
 
             Frame f = frameTable[findVictim()];
 
+            f.flags = (byte) (f.flags|used);
             if((f.flags& mustSave) !=0){
                 f.swap(pagenumber,processID);
                 //TODO update page table
@@ -184,8 +206,13 @@ public class MemoryManagement {
 
 
     //TODO what if the page is in the swapFile
-    public char[] readMemory(int virtualAddress, int size, int processID) { //rename to memoryRead ?
+  public  static char[] readMemory(int virtualAddress, int size, int processID) { //rename to memoryRead ?
         //Proces pcb = Management.processLookup(processID);
+
+        if(size>physicalMemory.length){
+            String wynik = new String("Argument size większy od rozmiaru fizycznej pamięci ("+physicalMemory.length+")");
+            return wynik.toCharArray() ;
+        }
 
         int paddress = translateAddress(virtualAddress, processID);
         //!
@@ -199,30 +226,34 @@ public class MemoryManagement {
 
         //int index = paddress & 0b00110000 * 16 + paddress & 0b00001111;
 
-        int offset = paddress % MemoryManagement.pagesize;
+        int offset = paddress % pagesize;
 
         if(offset+size>pagesize) {
             int leftToRead = size;
 
             String result = new String(readMemory(virtualAddress, pagesize - offset, processID)); //read till the end of current frame
             leftToRead = leftToRead - (pagesize - offset);
+            if(paddress+leftToRead>physicalMemory.length){
+                String napis = new String("Przekroczono zakres tablicy");
+                return napis.toCharArray();
+            }
             int wholePages = leftToRead / pagesize;
             for (int i = 0; i < wholePages; i++) {
-                result = result + new String(readMemory(paddress + pagesize - offset, pagesize, processID));
+                result = result + new String(readMemory(virtualAddress + i*pagesize - offset, pagesize, processID)); //chyba i powinno zaczynać od 1
                 leftToRead = leftToRead - pagesize;
             }
             if (leftToRead > 0){
                 result = result + new String(readMemory(paddress + size - leftToRead, leftToRead, processID));
             }
             //!
-            System.out.println("wynik długiego odczytu: "+result);
+            System.out.println("wynik długiego odczytu (vaddress = "+virtualAddress+": "+result);
             //!
             output = result.toCharArray();
 
             return output;
         }
 
-        output = Arrays.copyOfRange(physicalMemory,paddress,paddress+size); //TODO make it work properly (using virtual address)
+        output = Arrays.copyOfRange(physicalMemory,paddress,paddress+size);
 
         return output;
 
@@ -230,7 +261,7 @@ public class MemoryManagement {
     }
 
 
-    public void writeMemory(int virtualAddress, char[] input, int processID) { //rename to memoryRead ?
+  public static void writeMemory(int virtualAddress, char[] input, int processID) { //rename to memoryRead ?
         //Proces pcb = Management.processLookup(processID);
 
         int paddress = translateAddress(virtualAddress, processID);
@@ -247,7 +278,35 @@ public class MemoryManagement {
         //overwrite(physicalMemory,input,frameNumber*pagesize,input.length);
         //TODO make it work properly (recursively, using virtual ddresses)
 
-        overwrite(input,0,physicalMemory,frameNumber*pagesize,input.length);
+        int offset = virtualAddress%pagesize;
+        if(offset+input.length>pagesize){
+            int leftToWrite = input.length;
+
+            overwrite(input,0,physicalMemory,paddress, pagesize -offset);
+            leftToWrite = leftToWrite - (pagesize - offset);
+
+            int wholePages = leftToWrite/pagesize;
+
+            for(int i = 0;i<wholePages;i++){
+                //translateAddress(virtualAddress+input.length - leftToWrite,processID)
+                paddress = translateAddress(virtualAddress+input.length - leftToWrite,processID);
+                frameNumber = paddress/pagesize;
+                frameTable[frameNumber].flags = (byte) (frameTable[frameNumber].flags | dirtyandused);
+                overwrite(input,input.length - leftToWrite,physicalMemory,paddress,pagesize);
+                leftToWrite = leftToWrite - pagesize;
+            }
+            if(leftToWrite>0){
+                //overwrite(input,input.length - leftToWrite, physicalMemory, translateAddress(virtualAddress+input.length - leftToWrite,processID),leftToWrite);
+                paddress = translateAddress(virtualAddress+input.length - leftToWrite,processID);
+                frameNumber = paddress/pagesize;
+                frameTable[frameNumber].flags = (byte) (frameTable[frameNumber].flags | dirtyandused);
+                overwrite(input,input.length - leftToWrite, physicalMemory, paddress,leftToWrite);
+            }
+
+
+        }
+
+        //overwrite(input,0,physicalMemory,frameNumber*pagesize,input.length);
 
 
 
@@ -256,7 +315,7 @@ public class MemoryManagement {
 
     }
 
-    void releaseMemory(int processid) {
+  public static void releaseMemory(int processid) {
         Proces pcb = Management.processLookup(processid); //will be needed in an indexed swapfile
         for (Frame temp : MemoryManagement.frameTable) {
             //TODO release frames
@@ -290,11 +349,21 @@ public class MemoryManagement {
 
     }
 
-    int findVictim(){
+  public static int findVictim(){ //TODO check if f.flags changes inside if statements
         byte dirtyUsed = (byte) (dirty|used);
         while(true){
             Frame f = MemoryManagement.frameTable[MemoryManagement.clockHand%frameCount];
-            if((f.flags&swappable)==0){ //dirty == 0 & used == 0
+
+            if(f.flags==0 || f.flags == 4){
+                return f.number;
+            } else if ((f.flags & dirtyUsed) == 3) {
+
+            }
+            else if((f.flags & dirty) != 0 || (f.flags & used) != 0) {
+                f.flags = (byte) (f.flags&clear);
+            }
+            MemoryManagement.clockHand++;
+            /*if((f.flags&swappable)==0){ //dirty == 0 & used == 0
                 return f.number; //f.number should equal clockHand%frameCount
             }
             else if((f.flags & dirtyUsed) != 0 ) // dirty == 1 & used == 1
@@ -305,11 +374,11 @@ public class MemoryManagement {
             {
                 f.flags = (byte)(f.flags&clear);
             }
-            MemoryManagement.clockHand++;
+            MemoryManagement.clockHand++;*/
         }
     }
 
-    static int getFreeFrame(){
+   public static int getFreeFrame(){
         Iterator<Integer> it = freeFrames.iterator();
         if(it.hasNext()){
             Integer element = it.next();
@@ -319,8 +388,8 @@ public class MemoryManagement {
         else return -1;
     }
 
-    void readProgramtTest(int processID){
-        String s = new String("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+  public static void readProgramtTest(int processID){
+        String s = new String("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuooooooooooooooooooooooooooooooooooooooooooooooooooooooooooodddddddddddddddddddddddddddddddddddddddddddddd");
         char[] file = s.toCharArray();
         char[] bufor = new char[pagesize];
         //!
@@ -353,7 +422,7 @@ public class MemoryManagement {
         }
     }
 
-    void displayStatus (){
+ public  static void displayStatus (){
         if(freeFrames.size()!=frameCount) {
 
         for(Frame temp : MemoryManagement.frameTable){
@@ -368,7 +437,7 @@ public class MemoryManagement {
                // CharBuffer cb = CharBuffer.wrap(physicalMemory);
                 char[] content = new char[pagesize];
                // cb.get(content, temp.number * pagesize, pagesize);
-                content = Arrays.copyOfRange(physicalMemory,temp.number,temp.number+pagesize);
+                content = Arrays.copyOfRange(physicalMemory,temp.number*pagesize,temp.number*pagesize+pagesize);
                 System.out.println(String.valueOf(content));
                 System.out.println("=======");
             }
@@ -396,7 +465,7 @@ public class MemoryManagement {
     }
 
     public static void overwrite(char[] source,int srcoffset, char[] dst, int dstoffset, int length) {
-        for (int i = 0; i < length-srcoffset; i++) {
+        for (int i = 0; i < length; i++) { // for (int i = 0; i < length-srcoffset; i++)
             dst[dstoffset + i] = source[i + srcoffset];
         }
     }
