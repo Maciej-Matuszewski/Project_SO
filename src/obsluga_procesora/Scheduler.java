@@ -23,6 +23,12 @@ public class Scheduler {
 	
 	public void add_to_ready(Proces pr)
 	{
+		add_to_ready_list(pr);
+		System.out.println("Dodano proces PID: "+pr.PID+" do kolejki procesow gotowych.");
+	}
+	
+	public void add_to_ready_list(Proces pr)
+	{
 		if(qs.get(pr.pri/4).size()>0)
 		{
 			boolean add=false;
@@ -45,7 +51,7 @@ public class Scheduler {
 		pr.stan = 2;
 			
 		whichqs[pr.pri/4] = true;
-		System.out.println("Dodano proces PID: "+pr.PID+" do kolejki procesow gotowych.");
+		
 	}
 	
 	
@@ -79,8 +85,9 @@ public class Scheduler {
 	{
 		for(Proces temp : wait_list){
 			if(temp.PID == PID){
+				System.out.println("Proces PID: "+temp.PID+" zostal obudzony.");
 				add_to_ready(temp);
-				wait_list.remove(temp);
+				wait_list.remove(temp);	
 				break;
 			}
 			}
@@ -124,7 +131,7 @@ public class Scheduler {
 			{
 				for(int j=0;j<tmp_qs.get(i).size();j++)
 				{
-					add_to_ready(tmp_qs.get(i).get(j));
+					add_to_ready_list(tmp_qs.get(i).get(j));
 				}
 			}
 		}
@@ -147,7 +154,10 @@ public class Scheduler {
 			}
 		}
 		if(first_not_empty != 8 && qs.get(first_not_empty).get(0).pri<pr_rdy.pri)
+		{
+			System.out.println("Znaleziono proces o wyzszym priorytecie. Wykonywanie wywlaszczenia.");
 			return true;
+		}
 		else
 			return false;
 	}
@@ -165,15 +175,19 @@ public class Scheduler {
 			}
 		}
 		if(first_not_empty==8)
-			return false;		//nie udalo sie zmienic kontekstu / brak gotowych procesow
+		{
+			System.out.println("Brak gotowych procesow");
+			return false;	
+		}//nie udalo sie zmienic kontekstu / brak gotowych procesow
 		if(pr_rdy==qs.get(first_not_empty).get(0))
 		{
 			qs.get(first_not_empty).remove(0);
-			add_to_ready(pr_rdy);
+			add_to_ready_list(pr_rdy);
 			pr_rdy = qs.get(first_not_empty).get(0);
 		}
 		else
 			pr_rdy = qs.get(first_not_empty).get(0);
+		System.out.println("Kontekst zmieniono.\nAktualny proces: "+pr_rdy.PID);
 		
 		return true; // udalo sie zmienic kontekst
 	}
