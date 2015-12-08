@@ -17,12 +17,13 @@ public class Interpreter{
 	static int  CPU;
 	
 	boolean exit = false;
-	boolean test = false;
+	static boolean test = false;
 	private int wynik;
 	private int  przelicz;
+	private String Decision;
 	
-	private Scheduler scheduler;
-	private Management management;
+	private static Scheduler scheduler;
+	private static Management management;
 	private MemoryManagement MemManagement;
 	
 	private String cmd = "ml RA,RB";
@@ -390,8 +391,12 @@ public class Interpreter{
 		System.out.println("Stan Interpretera:");
 		System.out.println("RA = " + RA + ", RB = " + RB + ", ZF = " + ZF + ", PC = " + PC + ", CPU = " + CPU);
 		if(!test){
-			System.out.println("ENTER aby kontynuowac");
-			if(System.in.read() == 13);
+			Decision = " ";
+			while(!Decision.equals("")){
+				System.out.println("Podaj komende lub wcisnij ENTER aby kontynuowac");
+				Decision = input.nextLine();
+				FlorekFileSystem.Disk_Command(Decision);
+			}
 		}
 	}
 	
@@ -429,7 +434,7 @@ public class Interpreter{
 			ZF = false;
 	}
 	
-	public void test(){
+	public static void test(){
 		test = true;
 		scheduler.add_to_ready_test(management.fork(management.procesList.get(0)));
 		scheduler.change_context();
