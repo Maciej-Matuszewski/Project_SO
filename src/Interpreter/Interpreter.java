@@ -110,9 +110,10 @@ public class Interpreter{
 						}
 						exit = true;
 						//scheduler.add_to_zombies();
-						management.exit(scheduler.pr_rdy.PID);
+						et();
 						break;
 					case "wt":				//wait()
+						wt();
 						break;
 					case "fm":				//tworzenie nowego pliku o nazwie PID porcesu
 						fm();
@@ -378,8 +379,7 @@ public class Interpreter{
 			System.out.println(cmd + " - jest nierozpoznawalny");
 			error_exit();
 			break;
-		}
-		FlorekFileSystem.main(null);
+		}		
 	}
 	
 	void aktualny_stan() throws IOException{
@@ -388,6 +388,29 @@ public class Interpreter{
 		if(!test){
 			System.out.println("ENTER aby kontynuowac");
 			if(System.in.read() == 13);
+		}
+	}
+	
+	void et()
+	{
+		if(management.exit(scheduler.pr_rdy.PID))
+			scheduler.wakeup(scheduler.pr_rdy.PPID);		
+	}
+	
+	void wt()
+	{
+		int tmp = management.wait(scheduler.pr_rdy);
+		if(tmp == 0)
+		{
+			scheduler.add_to_wait(scheduler.pr_rdy);
+		}
+		else if(tmp == -1)
+		{
+			//obsluga bledu metody wait
+		}
+		else if(tmp > 0)
+		{
+			//tmp posiada pid nieistniejacego juz potomka
 		}
 	}
 	
