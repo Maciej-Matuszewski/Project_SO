@@ -1,9 +1,13 @@
 package pamiec_wirtualna;
 
+<<<<<<< HEAD
 import ZarzadzanieProcesami.Management;
 import ZarzadzanieProcesami.Proces;
+=======
+import zarzadzanie_procesami.*;
 
-import java.nio.CharBuffer;
+>>>>>>> origin/master
+
 import java.util.Arrays;
 
 public class Frame {
