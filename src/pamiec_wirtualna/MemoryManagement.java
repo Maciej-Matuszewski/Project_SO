@@ -8,8 +8,8 @@ import java.util.LinkedList;
 import java.util.Set;
 
 
-import ZarzadzanieProcesami.Management;
-import ZarzadzanieProcesami.Proces;
+import zarzadzanie_procesami.Management;
+import zarzadzanie_procesami.Proces;
 
 
 public class MemoryManagement {

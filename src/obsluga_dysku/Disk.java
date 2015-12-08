@@ -1,6 +1,6 @@
 /******************************************************************/
 /*                     FLOREK FILE SYSTEM v1.0                    */
-/*                     Author: Łukasz Florczak                    */
+/*                     Author: Ĺ�ukasz Florczak                    */
 /*                  Last update: 07.12.2015 10:08                 */
 /******************************************************************/
 package obsluga_dysku;
@@ -9,19 +9,19 @@ import obsluga_dysku.FlorekFileSystem;
 /******************************************************************/
 public class Disk {
     String D_Name;              // nazwa dysku
-    String D_NameFileSystem;    // nazwa zamontowanego systemu plików
+    String D_NameFileSystem;    // nazwa zamontowanego systemu plikĂłw
     int D_Space;                // rozmiar dysku
-    int D_BusySpace;            // zajęte miejsce na dysku
+    int D_BusySpace;            // zajÄ™te miejsce na dysku
     int D_BlockSize;            // rozmiar bloku
-    int D_BlockValue;           // liczba bloków
+    int D_BlockValue;           // liczba blokĂłw
     Block[] D_Block;            // tablica z blokami danych
-    int[] D_BitVector_Block;    // wektor bitowy bloków
-    iNode[] D_iNode;            // tablica z i-węzłami
-    int[] D_BitVector_iNode;    // wektor bitowy i-węzłów
-    int D_MaxDirectBlock;       // liczba bezpośrednich bloków
-    int D_MaxInDirectBlock;     // liczba bloków w bloku pośrednm
+    int[] D_BitVector_Block;    // wektor bitowy blokĂłw
+    iNode[] D_iNode;            // tablica z i-wÄ™zĹ‚ami
+    int[] D_BitVector_iNode;    // wektor bitowy i-wÄ™zĹ‚Ăłw
+    int D_MaxDirectBlock;       // liczba bezpoĹ›rednich blokĂłw
+    int D_MaxInDirectBlock;     // liczba blokĂłw w bloku poĹ›rednm
     int D_MaxFileSize;          // maksymalny rozmiar pliku
-    File D_Catalog;             // katalog główny systemu
+    File D_Catalog;             // katalog gĹ‚Ăłwny systemu
     /**************************************************************/
     Disk(String D_Name, String D_NameFileSystem, int D_Space, int D_BlockSize) {
         this.D_Name                 =   D_Name;
@@ -42,8 +42,8 @@ public class Disk {
             this.D_Block[i] = new Block(this.D_BlockSize, i);
             this.D_iNode[i] = new iNode(this.D_MaxDirectBlock, this.D_MaxInDirectBlock);
             this.D_iNode[i].iNode_Clean();
-            this.D_BitVector_Block[i] = 0; // ustawienie bloków na wolne
-            this.D_BitVector_iNode[i] = 0; // ustawienie i-węzłów na wolne
+            this.D_BitVector_Block[i] = 0; // ustawienie blokĂłw na wolne
+            this.D_BitVector_iNode[i] = 0; // ustawienie i-wÄ™zĹ‚Ăłw na wolne
         }
         this.D_Catalog              =   new File("/", this, 'C', "");
         /**********************************************************/
@@ -84,7 +84,7 @@ public class Disk {
     }
     /**************************************************************/
     void D_ShowBlocksBitVector() {
-        System.out.println("Wektor bitowy bloków:");
+        System.out.println("Wektor bitowy blokĂłw:");
         for(int i = 0; i < this.D_BlockValue; i++) {
             System.out.print(this.D_BitVector_Block[i]);
         }
@@ -92,7 +92,7 @@ public class Disk {
     }
     /**************************************************************/
     void D_ShowiNodesBitVector() {
-        System.out.println("Wektor bitowy i-węzłów:");
+        System.out.println("Wektor bitowy i-wÄ™zĹ‚Ăłw:");
         for(int i = 0; i < this.D_BlockValue; i++) {
             System.out.print(this.D_BitVector_iNode[i]);
         }
@@ -106,7 +106,7 @@ public class Disk {
     }
     /**************************************************************/
     void D_ShowCatalog() {
-        System.out.println("Katalog\t\tPlik\t\tRozmiar\t\ti-Węzeł\tBloki");
+        System.out.println("Katalog\t\tPlik\t\tRozmiar\t\ti-WÄ™zeĹ‚\tBloki");
         System.out.println("ROOT" + "\t\t\t\t\t\t" + this.D_Catalog.F_iNode_Id + "\t" + "0");
         for(int i = 0; i < this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.size(); i++) {
             int hlp = this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_iNode_Id;
@@ -158,10 +158,10 @@ public class Disk {
         File hlp_File = this.D_FindFile(From);
         if(hlp_File != null) {
             hlp_File.F_Name = To;
-            System.out.println("Nazwa pliku została pomyślnie zmieniona!");
+            System.out.println("Nazwa pliku zostaĹ‚a pomyĹ›lnie zmieniona!");
         }
         else {
-            System.out.println("Nie udało się zmienić nazwy pliku, plik nie istnieje!");
+            System.out.println("Nie udaĹ‚o siÄ™ zmieniÄ‡ nazwy pliku, plik nie istnieje!");
         }
     }
     /**************************************************************/
@@ -172,21 +172,21 @@ public class Disk {
             System.out.println(hlp_Content);
         }
         else {
-            System.out.println("Plik o podanej ścieżce nie istnieje!");
+            System.out.println("Plik o podanej Ĺ›cieĹĽce nie istnieje!");
         }
     }
     /**************************************************************/
     void D_Info() {
         System.out.println("Nazwa dysku: \t" + this.D_Name);
-        System.out.println("System plików: \t" + this.D_NameFileSystem);
+        System.out.println("System plikĂłw: \t" + this.D_NameFileSystem);
         System.out.println("Rozmiar dysku: \t" + this.D_Space + "B");
         System.out.println("Rozmiar bloku: \t" + this.D_BlockSize + "B");
         System.out.println("Wolne bloki: \t" + this.D_GetValueOfFreeBlocks());
-        System.out.println("Zajęte bloki: \t" + (this.D_BlockValue - this.D_GetValueOfFreeBlocks()));
-        System.out.println("Wolne i-węzły:  " + this.D_GetValueOfFreeiNodes());
-        System.out.println("Zajęte i-węzły: " + (this.D_BlockValue - this.D_GetValueOfFreeiNodes()));
+        System.out.println("ZajÄ™te bloki: \t" + (this.D_BlockValue - this.D_GetValueOfFreeBlocks()));
+        System.out.println("Wolne i-wÄ™zĹ‚y:  " + this.D_GetValueOfFreeiNodes());
+        System.out.println("ZajÄ™te i-wÄ™zĹ‚y: " + (this.D_BlockValue - this.D_GetValueOfFreeiNodes()));
         System.out.println("Wolne miejsce: \t" + (this.D_Space - this.D_BusySpace) + "B");
-        System.out.println("Zajęte miejsce: " + this.D_BusySpace + "B");
+        System.out.println("ZajÄ™te miejsce: " + this.D_BusySpace + "B");
     }
     /**************************************************************/
     boolean F_CheckFileNames(String F_Name) {
@@ -198,7 +198,7 @@ public class Disk {
         return true;
     }
     /**************************************************************/
-    void BackupProgramFiles() {
+    public void BackupProgramFiles() {
         FlorekFileSystem.Create_File("Program1", "mv RA,01\nmv RB,05\nad RA,RB\nj1 00");
         FlorekFileSystem.Create_File("Program2", "mv RA,05\nmi 50,RA\nmv BR,RA\nml BR,BA \nsb b,01\nj1 25\net");
     }
