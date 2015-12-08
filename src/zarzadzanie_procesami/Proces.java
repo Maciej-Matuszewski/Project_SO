@@ -57,6 +57,7 @@ public class Proces {
 		pri = uspri; //P
 		stan = 1;
 		System.out.println("Powstal: " + this.nazwa + ", Od procesu: " + proces.nazwa);
+		nazwa_pliku = proces.nazwa_pliku;
 		try {
 			new Pipe(proces, this);
 		} catch (Exception e) {
