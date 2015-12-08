@@ -8,9 +8,8 @@ import java.util.LinkedList;
 import java.util.Set;
 
 
-import obsluga_dysku.FlorekFileSystem;
-import zarzadzanie_procesami.Management;
-import zarzadzanie_procesami.Proces;
+import ZarzadzanieProcesami.Management;
+import ZarzadzanieProcesami.Proces;
 
 
 public class MemoryManagement {
@@ -38,26 +37,9 @@ public class MemoryManagement {
 
     public static void main(String[] args){
         MemoryManagement mm = new MemoryManagement();
+        Management.fork();
 
-
-        Proces p = Management.fork();
-
-        FlorekFileSystem.Create_File("Program1", "mv RA,01mv RB,05ad RA,RBj1 00");
-        readProgram("Program1",p.PID);
-
-       /*FlorekFileSystem.Create_File("testowy","mv RA,10ml RA,05sb RA,01");
-        readProgram("testowy",p.PID);
-        System.out.println("czy adres 6 jest w pammieci "+String.valueOf(inMemory(6,p.PID)));
-        System.out.println(readMemory(0,5,p.PID));
-        System.out.println("czy adres 6 jest w pammieci "+String.valueOf(inMemory(6,p.PID)));
-        displayStatus();*/
-
-        /*char[] input = "xD".toCharArray();
-        writeMemory(1,input,2);
-        System.out.println("odczytano: "+String.valueOf(readMemory(1,2,2)));
-        displayStatus();*/
-
-        /*mm.readProgramtTest(1);
+        mm.readProgramtTest(1);
         mm.displayStatus();
 
         System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(1,100,1)));
@@ -72,7 +54,7 @@ public class MemoryManagement {
         readMemory(70,2,1);
         readMemory(90,2,1);
         readMemory(110,2,1);
-        mm.displayStatus();*/
+        mm.displayStatus();
 
         /*System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(64,5,1)));
         mm.displayStatus();
@@ -82,13 +64,10 @@ public class MemoryManagement {
 
 
 
- public  static void readProgram(String programName, int processID) {
+   static void readProgram(String programFile, int processID) {
         char[] bufor = new char[pagesize];
-        /* TODO function_returning_file_content(programFile)*/
-
-        char[] file = FlorekFileSystem.F_Read(programName);
-
-        long length = file.length;
+        char[] file = new char[10]; /* TODO function_returning_file_content(programFile)*/
+        long length = programFile.length();
         double k = (double) length / (double) pagesize;
         Proces pcb = Management.processLookup(processID);
         try {
@@ -104,42 +83,9 @@ public class MemoryManagement {
         } catch (Exception e) {//TODO
         }
     }
-    public static void readProgramtTest(int processID){
-        String s = new String("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuooooooooooooooooooooooooooooooooooooooooooooooooooooooooooodddddddddddddddddddddddddddddddddddddddddddddd");
-        char[] file = s.toCharArray();
-        char[] bufor = new char[pagesize];
-        //!
-        System.out.println("\"FILE\""+String.valueOf(file));
-        System.out.println("niezainicjalizowany bufor:"+String.valueOf(bufor));
-        //!
-        //char[] file = new char[10]; /* TODO function_returning_file_content(programFile)*/
-        long length = file.length;
-        //!
-        System.out.println("length:"+length+" pagesize:"+pagesize);
-        //!
-        double k = (double) length / (double) pagesize;
-        Proces pcb = Management.processLookup(processID);
-        try {
-            for (int i = 0; i < k; i++) {
-                // CharBuffer cb = CharBuffer.wrap(file);
-                // cb.get(bufor, i * pagesize, pagesize);
-                bufor = Arrays.copyOfRange(file,i*pagesize,i*pagesize+pagesize);
-                //!
-                System.out.println("Próba!"+new SwapFileEntry(bufor,i,processID));
-                System.out.println("k: "+k+" i: "+i);
-                System.out.println(bufor);
-                //!
-                swapFile.add(new SwapFileEntry(bufor, i, processID));
-                pcb.ptable.map.put(i, new PageTableEntry(i, 0));
-            }
 
 
-        } catch (Exception e) {//TODO
-        }
-    }
-
-
- public  static int translateAddress(int virtualAddress, int processID) {
+   static int translateAddress(int virtualAddress, int processID) {
 
         Proces pcb = Management.processLookup(processID);
         int paddress;
@@ -153,14 +99,12 @@ public class MemoryManagement {
                 //!
                 SwapFileEntry sfe = new SwapFileEntry(pagenumber,processID);
                 pcb.ptable.map.put(pagenumber,new PageTableEntry(pagenumber,0));
-                swapFile.add(sfe);
 
-                paddress =  translateAddress(virtualAddress,processID);
-                return paddress;
+                translateAddress(virtualAddress,processID);
             }
 
             if (pcb.ptable.map.get(pagenumber).memoryOrSwapFile == 1) { //page in memory
-                paddress = pcb.ptable.map.get(pagenumber).pageSizeUnits*pagesize + offset; //TODO check it
+                paddress = pcb.ptable.map.get(pagenumber).pageSizeUnits + offset; //TODO check it
                 int frN = paddress/pagesize;
                 frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
                 //!
@@ -262,7 +206,7 @@ public class MemoryManagement {
 
 
     //TODO what if the page is in the swapFile
-  public  static char[] readMemory(int virtualAddress, int size, int processID) { //rename to memoryRead ?
+    static char[] readMemory(int virtualAddress, int size, int processID) { //rename to memoryRead ?
         //Proces pcb = Management.processLookup(processID);
 
         if(size>physicalMemory.length){
@@ -317,7 +261,7 @@ public class MemoryManagement {
     }
 
 
-  public static void writeMemory(int virtualAddress, char[] input, int processID) { //rename to memoryRead ?
+   static void writeMemory(int virtualAddress, char[] input, int processID) { //rename to memoryRead ?
         //Proces pcb = Management.processLookup(processID);
 
         int paddress = translateAddress(virtualAddress, processID);
@@ -361,9 +305,6 @@ public class MemoryManagement {
 
 
         }
-      else{
-            overwrite(input,0,physicalMemory,paddress,input.length);
-        }
 
         //overwrite(input,0,physicalMemory,frameNumber*pagesize,input.length);
 
@@ -374,7 +315,7 @@ public class MemoryManagement {
 
     }
 
-  public static void releaseMemory(int processid) {
+   static void releaseMemory(int processid) {
         Proces pcb = Management.processLookup(processid); //will be needed in an indexed swapfile
         for (Frame temp : MemoryManagement.frameTable) {
             //TODO release frames
@@ -408,7 +349,7 @@ public class MemoryManagement {
 
     }
 
-  public static int findVictim(){ //TODO check if f.flags changes inside if statements
+   static int findVictim(){ //TODO check if f.flags changes inside if statements
         byte dirtyUsed = (byte) (dirty|used);
         while(true){
             Frame f = MemoryManagement.frameTable[MemoryManagement.clockHand%frameCount];
@@ -437,7 +378,7 @@ public class MemoryManagement {
         }
     }
 
-   public static int getFreeFrame(){
+    static int getFreeFrame(){
         Iterator<Integer> it = freeFrames.iterator();
         if(it.hasNext()){
             Integer element = it.next();
@@ -447,8 +388,41 @@ public class MemoryManagement {
         else return -1;
     }
 
+   static void readProgramtTest(int processID){
+        String s = new String("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuooooooooooooooooooooooooooooooooooooooooooooooooooooooooooodddddddddddddddddddddddddddddddddddddddddddddd");
+        char[] file = s.toCharArray();
+        char[] bufor = new char[pagesize];
+        //!
+        System.out.println("\"FILE\""+String.valueOf(file));
+        System.out.println("niezainicjalizowany bufor:"+String.valueOf(bufor));
+        //!
+        //char[] file = new char[10]; /* TODO function_returning_file_content(programFile)*/
+        long length = file.length;
+        //!
+        System.out.println("length:"+length+" pagesize:"+pagesize);
+        //!
+        double k = (double) length / (double) pagesize;
+        Proces pcb = Management.processLookup(processID);
+        try {
+            for (int i = 0; i < k; i++) {
+               // CharBuffer cb = CharBuffer.wrap(file);
+               // cb.get(bufor, i * pagesize, pagesize);
+                bufor = Arrays.copyOfRange(file,i*pagesize,i*pagesize+pagesize);
+                //!
+                System.out.println("Próba!"+new SwapFileEntry(bufor,i,processID));
+                System.out.println("k: "+k+" i: "+i);
+                System.out.println(bufor);
+                //!
+                swapFile.add(new SwapFileEntry(bufor, i, processID));
+                pcb.ptable.map.put(i, new PageTableEntry(i, 0));
+            }
 
- public  static void displayStatus (){
+
+        } catch (Exception e) {//TODO
+        }
+    }
+
+   static void displayStatus (){
         if(freeFrames.size()!=frameCount) {
 
         for(Frame temp : MemoryManagement.frameTable){
@@ -496,16 +470,4 @@ public class MemoryManagement {
         }
     }
 
-    public static boolean inMemory(int virtualaddress, int procesID){
-        int pagenumber = virtualaddress/pagesize;
-        if(freeFrames.size()==frameCount){
-            return false;
-        }
-        for(Frame temp : frameTable){
-            if(temp.page == pagenumber){
-                return true;
-            }
-        }
-        return false;
-    }
 }
