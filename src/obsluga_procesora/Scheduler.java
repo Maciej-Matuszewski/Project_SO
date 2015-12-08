@@ -6,9 +6,9 @@ import zarzadzanie_procesami.*;
 
 public class Scheduler {
 		
-	ArrayList<ArrayList<Proces>> qs = new ArrayList<ArrayList<Proces>>(8);
+	static ArrayList<ArrayList<Proces>> qs = new ArrayList<ArrayList<Proces>>(8);
 	ArrayList<Proces> wait_list = new ArrayList<Proces>();
-	boolean[] whichqs = new boolean[8]; //ktore kolejki sa nie puste
+	static boolean[] whichqs = new boolean[8]; //ktore kolejki sa nie puste
 	public int base = 8;
 	public Proces pr_rdy;
 	
@@ -21,13 +21,13 @@ public class Scheduler {
 		}
 	}
 	
-	public void add_to_ready(Proces pr)
+	public static void add_to_ready(Proces pr)
 	{
 		add_to_ready_list(pr);
 		System.out.println("Dodano proces PID: "+pr.PID+" do kolejki procesow gotowych.");
 	}
 	
-	public void add_to_ready_list(Proces pr)
+	public static void add_to_ready_list(Proces pr)
 	{
 		if(qs.get(pr.pri/4).size()>0)
 		{
