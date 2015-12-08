@@ -7,7 +7,7 @@ import Interpreter.Interpreter;
 public class Main {
 	
 	public static void main(String[] args) {
-		FlorekFileSystem.SysDisk.BackupProgramFiles();
+		FlorekFileSystem.SysDisk.BackupProgramFiles(); // inicjalizacja plików z programami ;)
 		try{
 			Interpreter interpreter = new Interpreter();
 			//interpreter.start();
