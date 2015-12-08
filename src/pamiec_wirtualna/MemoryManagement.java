@@ -9,7 +9,7 @@ import java.util.Set;
 
 
 import zarzadzanie_procesami.*;
-
+import obsluga_dysku.FlorekFileSystem;
 
 public class MemoryManagement {
 
@@ -36,9 +36,22 @@ public class MemoryManagement {
 
     public static void main(String[] args){
         MemoryManagement mm = new MemoryManagement();
-        Management.fork();
+        
 
-        mm.readProgramtTest(1);
+        Proces p = Management.fork();
+
+        FlorekFileSystem.Create_File("Program1", "mv RA,01mv RB,05ad RA,RBj1 00");
+        readProgram("Program1",p.PID);
+
+       /*FlorekFileSystem.Create_File("testowy","mv RA,10ml RA,05sb RA,01");
+        readProgram("testowy",p.PID);
+        System.out.println("czy adres 6 jest w pammieci "+String.valueOf(inMemory(6,p.PID)));
+        System.out.println(readMemory(0,5,p.PID));
+        System.out.println("czy adres 6 jest w pammieci "+String.valueOf(inMemory(6,p.PID)));
+        displayStatus();*/
+        
+
+        /*mm.readProgramtTest(1);
         mm.displayStatus();
 
         System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(1,100,1)));
