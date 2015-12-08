@@ -41,12 +41,16 @@ public class MemoryManagement {
 
 
         Proces p = Management.fork();
-        FlorekFileSystem.Create_File("testowy","mv RA,10ml RA,05sb RA,01");
+
+        FlorekFileSystem.Create_File("Program1", "mv RA,01mv RB,05ad RA,RBj1 00");
+        readProgram("Program1",p.PID);
+
+       /*FlorekFileSystem.Create_File("testowy","mv RA,10ml RA,05sb RA,01");
         readProgram("testowy",p.PID);
         System.out.println("czy adres 6 jest w pammieci "+String.valueOf(inMemory(6,p.PID)));
         System.out.println(readMemory(0,5,p.PID));
         System.out.println("czy adres 6 jest w pammieci "+String.valueOf(inMemory(6,p.PID)));
-        displayStatus();
+        displayStatus();*/
 
         /*char[] input = "xD".toCharArray();
         writeMemory(1,input,2);
@@ -156,7 +160,7 @@ public class MemoryManagement {
             }
 
             if (pcb.ptable.map.get(pagenumber).memoryOrSwapFile == 1) { //page in memory
-                paddress = pcb.ptable.map.get(pagenumber).pageSizeUnits + offset; //TODO check it
+                paddress = pcb.ptable.map.get(pagenumber).pageSizeUnits*pagesize + offset; //TODO check it
                 int frN = paddress/pagesize;
                 frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
                 //!

@@ -8,6 +8,7 @@ import obsluga_dysku.FlorekFileSystem;
 import obsluga_procesora.Scheduler;
 import pamiec_wirtualna.MemoryManagement;
 import zarzadzanie_procesami.Management;
+import zarzadzanie_procesami.Proces;
 
 public class Interpreter{
 	static int RA;
@@ -101,10 +102,14 @@ public class Interpreter{
 						j1(arg1);
 						break;
 					case "fk":				//fork()
-						scheduler.add_to_ready(management.fork(scheduler.pr_rdy));
+						Proces tenproces = management.fork(scheduler.pr_rdy);
+						scheduler.add_to_ready(tenproces);
+						management.exec("Program1",tenproces.PID);
+						//scheduler.add_to_ready(management.fork(scheduler.pr_rdy));
+
 						break;
 					case "ex":				//exec()
-						management.exec();
+						//management.exec();
 						break;
 					case "et":				//zakonczenie wykonywania procesu
 						if(test){

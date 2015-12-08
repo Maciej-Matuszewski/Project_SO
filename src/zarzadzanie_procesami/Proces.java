@@ -35,6 +35,7 @@ public class Proces {
 	public int pPC;  //P
 	public boolean pZF;  //P
 	public String nazwa_pliku;
+	public String codeFile;
 	
 	Proces()
 	{

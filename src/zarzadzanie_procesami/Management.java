@@ -1,5 +1,7 @@
 package zarzadzanie_procesami;
 
+import pamiec_wirtualna.MemoryManagement;
+
 import java.awt.List;
 import java.util.ArrayList;
 
@@ -110,9 +112,13 @@ public class Management
 		return false;
 	}
 	
-	public static void exec()
+	public static void exec(String filename, int PID)
 	{
-		System.out.println("Tu b�dzie metoda exec");
+		MemoryManagement.readProgram(filename,PID);
+		Proces temp = Management.processLookup(PID);
+		temp.codeFile = filename;
+
+		
 	}
 	
 	static void ProcessPrint()
