@@ -13,7 +13,7 @@ public class Interpreter{
 	static int RA;
 	static int RB;
 	static int PC;
-	static boolean CF;
+	static boolean ZF;
 	static int  CPU;
 	
 	boolean exit = false;
@@ -52,18 +52,17 @@ public class Interpreter{
 		test();
 		while(true){
 			exit = false;
-			if(!test || scheduler.change_context()){
+			if(test || scheduler.change_context()){
 					// pobranie kontekstu
-				System.out.println("sad");
 				if(!test){
 					RA = scheduler.pr_rdy.pRA;
 					RB = scheduler.pr_rdy.pRB;
 					PC = scheduler.pr_rdy.pPC;
-					CF = scheduler.pr_rdy.pCF;
+					ZF = scheduler.pr_rdy.pZF;
 				}
-				System.out.println(exit+" "+CPU);
 				while(!exit && CPU < 4){
-					
+					/*if(System.in.read() == 27)
+						FlorekFileSystem.cmd();*/
 					if(test){
 						System.out.println("Podaj rozkaz: ");
 						cmd = input.nextLine();
@@ -94,10 +93,10 @@ public class Interpreter{
 					case "ml":				//mnozenie
 						ml(arg1,arg2);
 						break;
-					case "j0":				//jump jezeli CF == false arg1(adres)
+					case "j0":				//jump jezeli ZF == false arg1(adres)
 						j0(arg1);
 						break;
-					case "j1":				//jump jezeli CF == true arg1(adres)
+					case "j1":				//jump jezeli ZF == true arg1(adres)
 						j1(arg1);
 						break;
 					case "fk":				//fork()
@@ -143,7 +142,7 @@ public class Interpreter{
 						System.out.println("Nieznany format liczby");
 						error_exit();
 					}
-					set_CF();
+					set_ZF();
 					CPU++;
 					przelicz++;
 					
@@ -280,12 +279,12 @@ public class Interpreter{
 	}
 	
 	void j0(String arg1){
-		if(CF == false);
+		if(ZF == false);
 		PC = Integer.parseInt(arg1); 
 	}
 	
 	void j1(String arg1){
-		if(CF == true);
+		if(ZF == true);
 		PC = Integer.parseInt(arg1); 
 	}
 
@@ -342,8 +341,7 @@ public class Interpreter{
 	}
 	
 	void fm(){
-		System.out.println(scheduler.pr_rdy.PID);
-		scheduler.pr_rdy.nazwa_pliku = String.valueOf(scheduler.pr_rdy.PID);
+		scheduler.pr_rdy.nazwa_pliku = String.valueOf("plik"+scheduler.pr_rdy.PID);
 		FlorekFileSystem.Create_File(scheduler.pr_rdy.nazwa_pliku, "");
 		PC += 2; //zwiekszenie licznika rozkazow
 	}
@@ -390,7 +388,7 @@ public class Interpreter{
 	
 	void aktualny_stan() throws IOException{
 		System.out.println("Stan Interpretera:");
-		System.out.println("RA = " + RA + ", RB = " + RB + ", CF = " + CF + ", CPU = " + CPU);
+		System.out.println("RA = " + RA + ", RB = " + RB + ", ZF = " + ZF + ", PC = " + PC + ", CPU = " + CPU);
 		if(!test){
 			System.out.println("ENTER aby kontynuowac");
 			if(System.in.read() == 13);
@@ -424,16 +422,17 @@ public class Interpreter{
 		PC += 2; //zwiekszenie licznika rozkazow
 	}
 	
-	void set_CF(){
+	void set_ZF(){
 		if(wynik == 0)
-			CF = true;
+			ZF = true;
 		else 
-			CF = false;
+			ZF = false;
 	}
 	
 	public void test(){
 		test = true;
 		scheduler.add_to_ready_test(management.fork(management.procesList.get(0)));
+		scheduler.change_context();
 		RA = 0;
 		RB = 0;
 		PC = 0;
@@ -444,7 +443,7 @@ public class Interpreter{
 			scheduler.pr_rdy.pRA = RA;
 			scheduler.pr_rdy.pRB = RB;
 			scheduler.pr_rdy.pPC = PC;
-			scheduler.pr_rdy.pCF = CF;
+			scheduler.pr_rdy.pZF = ZF;
 			scheduler.pr_rdy.cpu +=CPU;
 		}
 		CPU = 0;

@@ -33,7 +33,7 @@ public class Proces {
 	public int pRA;  //P
 	public int pRB;  //P
 	public int pPC;  //P
-	public boolean pCF;  //P
+	public boolean pZF;  //P
 	public String nazwa_pliku;
 	
 	Proces()
