@@ -1,12 +1,7 @@
 package pamiec_wirtualna;
 
-<<<<<<< HEAD
-import ZarzadzanieProcesami.Management;
-import ZarzadzanieProcesami.Proces;
-=======
-import zarzadzanie_procesami.*;
 
->>>>>>> origin/master
+import zarzadzanie_procesami.*;
 
 import java.util.Arrays;
 

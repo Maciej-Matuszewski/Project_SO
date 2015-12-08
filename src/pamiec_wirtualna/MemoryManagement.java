@@ -8,8 +8,7 @@ import java.util.LinkedList;
 import java.util.Set;
 
 
-import ZarzadzanieProcesami.Management;
-import ZarzadzanieProcesami.Proces;
+import zarzadzanie_procesami.*;
 
 
 public class MemoryManagement {
@@ -64,7 +63,7 @@ public class MemoryManagement {
 
 
 
-   static void readProgram(String programFile, int processID) {
+   public static void readProgram(String programFile, int processID) {
         char[] bufor = new char[pagesize];
         char[] file = new char[10]; /* TODO function_returning_file_content(programFile)*/
         long length = programFile.length();
@@ -206,7 +205,7 @@ public class MemoryManagement {
 
 
     //TODO what if the page is in the swapFile
-    static char[] readMemory(int virtualAddress, int size, int processID) { //rename to memoryRead ?
+    public static char[] readMemory(int virtualAddress, int size, int processID) { //rename to memoryRead ?
         //Proces pcb = Management.processLookup(processID);
 
         if(size>physicalMemory.length){
@@ -261,7 +260,7 @@ public class MemoryManagement {
     }
 
 
-   static void writeMemory(int virtualAddress, char[] input, int processID) { //rename to memoryRead ?
+   public static void writeMemory(int virtualAddress, char[] input, int processID) { //rename to memoryRead ?
         //Proces pcb = Management.processLookup(processID);
 
         int paddress = translateAddress(virtualAddress, processID);
@@ -422,7 +421,7 @@ public class MemoryManagement {
         }
     }
 
-   static void displayStatus (){
+   public static void displayStatus (){
         if(freeFrames.size()!=frameCount) {
 
         for(Frame temp : MemoryManagement.frameTable){
@@ -469,9 +468,7 @@ public class MemoryManagement {
             dst[dstoffset + i] = source[i + srcoffset];
         }
     }
-
-<<<<<<< HEAD
-=======
+    
     public static boolean inMemory(int virtualaddress, int procesID){
         int pagenumber = virtualaddress/pagesize;
         if(freeFrames.size()==frameCount){
@@ -487,5 +484,4 @@ public class MemoryManagement {
         translateAddress(virtualaddress,procesID);
         return false;
     }
->>>>>>> origin/master
 }
