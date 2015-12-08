@@ -1,16 +1,10 @@
 /******************************************************************/
 /*                     FLOREK FILE SYSTEM v1.0                    */
-/*                     Author: Ĺ�ukasz Florczak                    */
+/*                     Author: Łukasz Florczak                    */
 /*                  Last update: 07.12.2015 10:08                 */
 /******************************************************************/
 package obsluga_dysku;
 import java.util.Scanner;
-
-import Interpreter.Interpreter;
-import obsluga_dysku.FlorekFileSystem;
-import obsluga_procesora.Scheduler;
-import pamiec_wirtualna.MemoryManagement;
-import zarzadzanie_procesami.Management;
 /******************************************************************/
 public class FlorekFileSystem {   
     /****************************************************************/
@@ -40,7 +34,7 @@ public class FlorekFileSystem {
                 }
             }
             else {
-                System.out.println("Plik nie moĹĽe zostaÄ‡ odczytany, gdyĹĽ nie istnieje!");
+                System.out.println("Plik nie moze zostac odczytany, gdyz nie istnieje!");
                 return null;
             }
             return Content;
@@ -83,7 +77,7 @@ public class FlorekFileSystem {
                     SysDisk.D_CleanCatalogEntry(hlp_File.F_Name);
                     SysDisk.D_BitVector_Block[SysDisk.D_iNode[hlp_File.F_iNode_Id].DirBlock[i].B_Id] = 0; // zwalnianie bloku
                     SysDisk.D_iNode[hlp_File.F_iNode_Id].DirBlock[i] = null;
-                    SysDisk.D_BitVector_iNode[hlp_File.F_iNode_Id] = 0; // zwalnianie i-wÄ™zĹ‚a        
+                    SysDisk.D_BitVector_iNode[hlp_File.F_iNode_Id] = 0; // zwalnianie i-węzła        
                 }
             }
             for(int i = 0; i < SysDisk.D_MaxInDirectBlock; i++) {
@@ -94,7 +88,7 @@ public class FlorekFileSystem {
                     SysDisk.D_CleanCatalogEntry(hlp_File.F_Name);
                     SysDisk.D_BitVector_Block[SysDisk.D_iNode[hlp_File.F_iNode_Id].InDirBlock[0][i].B_Id] = 0; // zwalnianie bloku
                     SysDisk.D_iNode[hlp_File.F_iNode_Id].InDirBlock[0][i] = null;
-                    SysDisk.D_BitVector_iNode[hlp_File.F_iNode_Id] = 0; // zwalnianie i-wÄ™zĹ‚a   
+                    SysDisk.D_BitVector_iNode[hlp_File.F_iNode_Id] = 0; // zwalnianie i-węzła   
                 }
             }
             SysDisk.D_BusySpace -= SysDisk.D_iNode[hlp_File.F_iNode_Id].F_Size;
@@ -120,7 +114,7 @@ public class FlorekFileSystem {
                     hlp_File = SysDisk.D_FindFile(Com[1].substring(1));  
                     if(hlp_char == '/') {
                         if(hlp_File != null) {
-                            System.out.println("Plik o podanej nazwie istnieje, czy chcesz go nadpisaÄ‡(stracisz wszystkie informacje w nim zawarte)? T/N");
+                            System.out.println("Plik o podanej nazwie istnieje, czy chcesz go nadpisac(stracisz wszystkie informacje w nim zawarte)? T/N");
                             Decision = YesNo.nextLine();
                             if(Decision.equals("T")) {
                                 F_Delete(hlp_File.F_Name);
@@ -130,10 +124,10 @@ public class FlorekFileSystem {
                                         F_Write(Com[1].substring(1), Com[i] + " ");
                                     }
                                 }
-                                System.out.println("Plik zostaĹ‚ pomyĹ›lnie utworzony!");
+                                System.out.println("Plik zostal pomyslnie utworzony!");
                             }
                             else {
-                                System.out.println("Plik nie zostaĹ‚ utworzony!");
+                                System.out.println("Plik nie zostal utworzony!");
                             }
                         }
                         else {
@@ -145,11 +139,11 @@ public class FlorekFileSystem {
                             }
                             hlp_File = SysDisk.D_FindFile(Com[1].substring(1));
                             if(hlp_File != null)
-                                System.out.println("Plik zostaĹ‚ pomyĹ›lnie utworzony!");
+                                System.out.println("Plik zostal pomyslnie utworzony!");
                         }
                     }
                     else {
-                        System.out.println("Nie rozpoznano Ĺ›cieĹĽki! PamiÄ™taj o '/'!");
+                        System.out.println("Nie rozpoznano sciezki! Pamiętaj o '/'!");
                     }      
                 }
                 else {
@@ -172,7 +166,7 @@ public class FlorekFileSystem {
                         System.out.println("Blok o podanym indeksie nie istnieje!");
                     }
                     else if(BlockNumber == 0) {
-                        System.out.println("Blok zarezerwowany dla katalogu gĹ‚Ăłwnego, nie moĹĽna wyĹ›wietliÄ‡ zawartoĹ›ci!");
+                        System.out.println("Blok zarezerwowany dla katalogu głownego, nie mozna wyswietlic zawartosci!");
                     }
                     else if(BlockNumber > 0 && BlockNumber < SysDisk.D_BlockValue) {
                         SysDisk.D_Block[BlockNumber].B_ShowBlockBytes();
@@ -198,7 +192,7 @@ public class FlorekFileSystem {
                         SysDisk.D_OpenFile(Com[1].substring(1));
                     }
                     else {
-                        System.out.println("Nie rozpoznano Ĺ›cieĹĽki! PamiÄ™taj o '/'!");
+                        System.out.println("Nie rozpoznano scieżki! Pamietaj o '/'!");
                     }
                 }
                 else {
@@ -217,17 +211,17 @@ public class FlorekFileSystem {
                                     F_Write(Com[1].substring(1), Com[i] + " ");
                                 }
                                 else {
-                                    System.out.println("Nie udaĹ‚o siÄ™ zapisaÄ‡ zawartoĹ›ci, brak wolnych blokĂłw lub plik osiÄ…gnÄ…Ĺ‚ maksymalny rozmiar!");
+                                    System.out.println("Nie udalo sie zapisac zawartosci, brak wolnych blokow lub plik osiągnal maksymalny rozmiar!");
                                     break;
                                 }        
                             }   
                         }
                         else {
-                            System.out.println("Nie moĹĽna edytowaÄ‡ pliku! Plik nie istnieje!");
+                            System.out.println("Nie mozna edytowac pliku! Plik nie istnieje!");
                         }
                     }
                     else {
-                        System.out.println("Nie rozpoznano Ĺ›cieĹĽki! PamiÄ™taj o '/'!");
+                        System.out.println("Nie rozpoznano scieżki! Pamietaj o '/'!");
                     }
                 }
                 else {
@@ -242,7 +236,7 @@ public class FlorekFileSystem {
                         System.out.println("Blok o podanym indeksie nie istnieje!");
                     }
                     else if(BlockNumber == 0) {
-                        System.out.println("Blok zarezerwowany dla katalogu gĹ‚Ăłwnego, nie moĹĽna wyĹ›wietliÄ‡ zawartoĹ›ci!");
+                        System.out.println("Blok zarezerwowany dla katalogu głownego, nie mozna wyswietlic zawartosci!");
                     }
                     else if(BlockNumber > 0 && BlockNumber < SysDisk.D_BlockValue) {
                         if(Com.length == 3) {
@@ -271,14 +265,14 @@ public class FlorekFileSystem {
                     File hlp_File = SysDisk.D_FindFile(Com[1].substring(1));
                     if(hlp_char == '/') {
                         if(hlp_File != null) {
-                            System.out.println("Czy na pewno chcesz usunÄ…Ä‡ ten plik? T/N");
+                            System.out.println("Czy na pewno chcesz usunac ten plik? T/N");
                             Decision = YesNo.nextLine();
                             if(Decision.equals("T")) {
                                 F_Delete(hlp_File.F_Name);
-                                System.out.println("Plik zostaĹ‚ usuniÄ™ty!");
+                                System.out.println("Plik zostal usuniety!");
                             }
                             else {
-                                System.out.println("Anulowano usuniÄ™cie pliku!");
+                                System.out.println("Anulowano usuniecie pliku!");
                             }
                         } 
                         else {
@@ -286,7 +280,7 @@ public class FlorekFileSystem {
                         }
                     }
                     else {
-                        System.out.println("Nie rozpoznano Ĺ›cieĹĽki! PamiÄ™taj o '/'!");
+                        System.out.println("Nie rozpoznano sciezki! Pamietaj o '/'!");
                     }
                 }
                 else {
@@ -301,7 +295,7 @@ public class FlorekFileSystem {
                         SysDisk.D_ChangeNameFile(Com[1].substring(1), Com[2]);
                     }
                     else {
-                        System.out.println("Nie rozpoznano Ĺ›cieĹĽki! PamiÄ™taj o '/'!");
+                        System.out.println("Nie rozpoznano sciezki! Pamietaj o '/'!");
                     }                
                 }
                 else {
@@ -313,32 +307,11 @@ public class FlorekFileSystem {
                 SysDisk.BackupProgramFiles();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if(Com[0].equals("i_test")) {
-                Interpreter.test();
-            }
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////
-			else if(Com[0].equals(""));
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else {
                 System.out.println("Nie rozpoznano komendy!");
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
     }
-    /**************************************************************/
-     public static void main(String[] args) { 
-       Scanner Command = new Scanner(System.in);
-       String Decision;
-       
-       Create_File("Program1", "mv RA,01\nmv RB,05\nad RA,RB\nj1 00");
-       Create_File("Program2", "mv RA,05\nmi 50,RA\nmv BR,RA\nml BR,BA \nsb b,01\nj1 25\net");
-       
-       while(true) {
-           System.out.print("Komenda: ");
-           Decision = Command.nextLine(); 
-           if(Decision.equals("ext"))
-               break;
-           Disk_Command(Decision);
-       }       
-    }  
+    /**************************************************************/  
 }
 /******************************************************************/

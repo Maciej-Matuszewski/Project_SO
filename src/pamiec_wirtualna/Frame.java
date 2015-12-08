@@ -1,7 +1,7 @@
 package pamiec_wirtualna;
 
-import ZarzadzanieProcesami.Management;
-import ZarzadzanieProcesami.Proces;
+import zarzadzanie_procesami.Management;
+import zarzadzanie_procesami.Proces;
 
 import java.nio.CharBuffer;
 import java.util.Arrays;

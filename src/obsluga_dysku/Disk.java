@@ -84,7 +84,7 @@ public class Disk {
     }
     /**************************************************************/
     void D_ShowBlocksBitVector() {
-        System.out.println("Wektor bitowy bloków:");
+        System.out.println("Wektor bitowy blokow:");
         for(int i = 0; i < this.D_BlockValue; i++) {
             System.out.print(this.D_BitVector_Block[i]);
         }
@@ -92,7 +92,7 @@ public class Disk {
     }
     /**************************************************************/
     void D_ShowiNodesBitVector() {
-        System.out.println("Wektor bitowy i-węzłów:");
+        System.out.println("Wektor bitowy i-wezlow:");
         for(int i = 0; i < this.D_BlockValue; i++) {
             System.out.print(this.D_BitVector_iNode[i]);
         }
@@ -106,7 +106,7 @@ public class Disk {
     }
     /**************************************************************/
     void D_ShowCatalog() {
-        System.out.println("Katalog\t\tPlik\t\tRozmiar\t\ti-Węzeł\tBloki");
+        System.out.println("Katalog\t\tPlik\t\tRozmiar\t\ti-Wezel\tBloki");
         System.out.println("ROOT" + "\t\t\t\t\t\t" + this.D_Catalog.F_iNode_Id + "\t" + "0");
         for(int i = 0; i < this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.size(); i++) {
             int hlp = this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_iNode_Id;
@@ -158,10 +158,10 @@ public class Disk {
         File hlp_File = this.D_FindFile(From);
         if(hlp_File != null) {
             hlp_File.F_Name = To;
-            System.out.println("Nazwa pliku została pomyślnie zmieniona!");
+            System.out.println("Nazwa pliku zostala pomyslnie zmieniona!");
         }
         else {
-            System.out.println("Nie udało się zmienić nazwy pliku, plik nie istnieje!");
+            System.out.println("Nie udalo sie zmienic nazwy pliku, plik nie istnieje!");
         }
     }
     /**************************************************************/
@@ -172,21 +172,21 @@ public class Disk {
             System.out.println(hlp_Content);
         }
         else {
-            System.out.println("Plik o podanej ścieżce nie istnieje!");
+            System.out.println("Plik o podanej scieżce nie istnieje!");
         }
     }
     /**************************************************************/
     void D_Info() {
         System.out.println("Nazwa dysku: \t" + this.D_Name);
-        System.out.println("System plików: \t" + this.D_NameFileSystem);
+        System.out.println("System plikow: \t" + this.D_NameFileSystem);
         System.out.println("Rozmiar dysku: \t" + this.D_Space + "B");
         System.out.println("Rozmiar bloku: \t" + this.D_BlockSize + "B");
         System.out.println("Wolne bloki: \t" + this.D_GetValueOfFreeBlocks());
-        System.out.println("Zajęte bloki: \t" + (this.D_BlockValue - this.D_GetValueOfFreeBlocks()));
-        System.out.println("Wolne i-węzły:  " + this.D_GetValueOfFreeiNodes());
-        System.out.println("Zajęte i-węzły: " + (this.D_BlockValue - this.D_GetValueOfFreeiNodes()));
+        System.out.println("Zajete bloki: \t" + (this.D_BlockValue - this.D_GetValueOfFreeBlocks()));
+        System.out.println("Wolne i-wezly:  " + this.D_GetValueOfFreeiNodes());
+        System.out.println("Zajete i-wezly: " + (this.D_BlockValue - this.D_GetValueOfFreeiNodes()));
         System.out.println("Wolne miejsce: \t" + (this.D_Space - this.D_BusySpace) + "B");
-        System.out.println("Zajęte miejsce: " + this.D_BusySpace + "B");
+        System.out.println("Zajete miejsce: " + this.D_BusySpace + "B");
     }
     /**************************************************************/
     boolean F_CheckFileNames(String F_Name) {
