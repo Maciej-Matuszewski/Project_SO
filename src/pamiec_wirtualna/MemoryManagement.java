@@ -37,9 +37,12 @@ public class MemoryManagement {
 
     public static void main(String[] args){
         MemoryManagement mm = new MemoryManagement();
-        Management.fork();
+
+
+        System.out.println(Management.fork());
         char[] input = "xD".toCharArray();
-        writeMemory(1,input,1);
+        writeMemory(1,input,2);
+        System.out.println("odczytano: "+String.valueOf(readMemory(1,2,2)));
         displayStatus();
 
         /*mm.readProgramtTest(1);

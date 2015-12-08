@@ -170,17 +170,22 @@ public class Interpreter{
 	}
 
 	void mi(String arg1, String arg2){
-		if (arg1 == "RA"){
+		if (arg1.equals("RA")){
 			//RA = wczytanie z pamieci operacyjnej
-			RA = Integer.parseInt(String.valueOf(MemManagement.readMemory(Integer.parseInt(arg2,16),8,scheduler.pr_rdy.PID)),16);
+
+			RA = Integer.parseInt(String.valueOf(MemManagement.readMemory(Integer.parseInt(arg2,16),2,scheduler.pr_rdy.PID)),16);
+			MemoryManagement.displayStatus();
 		}
-		else if(arg2 == "RB"){
+		else if(arg1.equals("RB")){
 			//RB = wczytanie z pamieci operacyjnej
-			RB = Integer.parseInt(String.valueOf(MemManagement.readMemory(Integer.parseInt(arg2,16),8,scheduler.pr_rdy.PID)),16);
+			RB = Integer.parseInt(String.valueOf(MemManagement.readMemory(Integer.parseInt(arg2,16),2,scheduler.pr_rdy.PID)),16);
+			MemManagement.displayStatus();
 		}
 		else{
 			//zapis do pamieci operacyjnej
+
 			MemManagement.writeMemory(Integer.parseInt(arg1,16), arg2.toCharArray(), scheduler.pr_rdy.PID);
+			MemManagement.displayStatus();
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
 	}

@@ -14,9 +14,9 @@ public class Management
 		procesList.add(proces);
 	}
 	
-	public static void fork()
+	public static Proces fork()
 	{
-		fork(proces);
+		return fork(proces);
 	}
 	
 	public static Proces fork(Proces pro)
