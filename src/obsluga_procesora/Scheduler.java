@@ -48,6 +48,13 @@ public class Scheduler {
 		System.out.println("Dodano proces PID: "+pr.PID+" do kolejki procesow gotowych.");
 	}
 	
+	public void remove(Proces pr)
+	{
+		qs.get(pr.pri/4).remove(pr);
+		if(qs.get(pr.pri/4).size() == 0)
+			whichqs[pr.pri/4]= false;
+	}
+	
 	public void add_to_wait(Proces pr)
 	{
 		int tmp = qs.get(pr.pri/4).indexOf(pr);

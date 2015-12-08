@@ -37,10 +37,10 @@ public class Interpreter{
 		scheduler= new Scheduler();
 		management = new Management();
 		MemManagement = new MemoryManagement();
-		management.fork();
 		//management.fork();
 		//management.fork();
-		scheduler.add_to_ready(management.procesList.get(0));
+		//management.fork();
+		//scheduler.add_to_ready(management.procesList.get(0));
 		//scheduler.add_to_ready(management.procesList.get(1));
 		//scheduler.add_to_ready(management.procesList.get(2));
 		
@@ -51,16 +51,19 @@ public class Interpreter{
 	void start() throws Exception{
 		test();
 		while(true){
+			exit = false;
 			if(scheduler.change_context()){
 					// pobranie kontekstu
+				System.out.println("sad");
 				if(!test){
 					RA = scheduler.pr_rdy.pRA;
 					RB = scheduler.pr_rdy.pRB;
 					PC = scheduler.pr_rdy.pPC;
 					CF = scheduler.pr_rdy.pCF;
 				}
-				
+				System.out.println(exit+" "+CPU);
 				while(!exit && CPU < 4){
+					
 					if(test){
 						System.out.println("Podaj rozkaz: ");
 						cmd = input.nextLine();
@@ -109,7 +112,6 @@ public class Interpreter{
 							System.out.println("Zakonczono testowanie.");
 						}
 						exit = true;
-						//scheduler.add_to_zombies();
 						et();
 						break;
 					case "wt":				//wait()
@@ -147,6 +149,7 @@ public class Interpreter{
 					
 					if(przelicz == 12 && !test){
 						przelicz = 0;
+						System.out.println("Hurra1");
 						if(scheduler.przelicz()){
 							System.out.println("Hurra");
 							break;
@@ -393,8 +396,10 @@ public class Interpreter{
 	
 	void et()
 	{
+		scheduler.pr_rdy.stan = 4;
 		if(management.exit(scheduler.pr_rdy.PID))
-			scheduler.wakeup(scheduler.pr_rdy.PPID);		
+			scheduler.wakeup(scheduler.pr_rdy.PPID);	
+		scheduler.remove(scheduler.pr_rdy);
 	}
 	
 	void wt()
@@ -423,7 +428,7 @@ public class Interpreter{
 	
 	public void test(){
 		test = true;
-		management.fork();
+		scheduler.add_to_ready(management.fork(management.procesList.get(0)));
 		RA = 0;
 		RB = 0;
 		PC = 0;
