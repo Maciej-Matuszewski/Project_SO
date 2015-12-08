@@ -1,4 +1,4 @@
-package Pamiec_wirtualna;
+package pamiec_wirtualna;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;

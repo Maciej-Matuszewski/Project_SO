@@ -1,4 +1,4 @@
-package Pamiec_wirtualna;
+package pamiec_wirtualna;
 
 import ZarzadzanieProcesami.Management;
 import ZarzadzanieProcesami.Proces;
@@ -25,7 +25,7 @@ public class Frame {
     }
 
 
-    Frame(int number, SwapFileEntry s){
+    Frame(int number, pamiec_wirtualna.SwapFileEntry s){
         this.number = number;
         this.page = s.page;
         this.processID = s.processID;

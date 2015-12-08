@@ -1,6 +1,6 @@
 package ZarzadzanieProcesami;
 
-import Pamiec_wirtualna.PageTable;
+import pamiec_wirtualna.PageTable;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package Pamiec_wirtualna;
+package pamiec_wirtualna;
 
 import java.nio.CharBuffer;
 import java.util.Arrays;
@@ -50,6 +50,12 @@ public class MemoryManagement {
         writeMemory(0,testinput.toCharArray(),1);
         mm.displayStatus();
         System.out.println("koniec?");
+        readMemory(50,2,1);
+        readMemory(70,2,1);
+        readMemory(90,2,1);
+        readMemory(110,2,1);
+        mm.displayStatus();
+
         /*System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(64,5,1)));
         mm.displayStatus();
         System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(80,5,1)));
@@ -99,6 +105,8 @@ public class MemoryManagement {
 
             if (pcb.ptable.map.get(pagenumber).memoryOrSwapFile == 1) { //page in memory
                 paddress = pcb.ptable.map.get(pagenumber).pageSizeUnits + offset; //TODO check it
+                int frN = paddress/pagesize;
+                frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
                 //!
                 System.out.println("weszło do ifa1");
                 //!
@@ -125,6 +133,8 @@ public class MemoryManagement {
                             //TODO update page table
                             pcb.ptable.map.put(pagenumber,new PageTableEntry(freeFrameNumber,1));
                             paddress = pcb.ptable.map.get(pagenumber).pageSizeUnits*MemoryManagement.pagesize+offset;//test - result of get() should be the same as f.number
+                            int frN = paddress/pagesize;
+                            frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
                             //!
                             System.out.println("weszło do odpowiedniego ifa(2)");
                             //!
@@ -135,6 +145,9 @@ public class MemoryManagement {
                     frameTable[freeFrameNumber] = new Frame(freeFrameNumber, pagenumber, processID); // TODO PageFault happening
                     pcb.ptable.map.put(pagenumber, new PageTableEntry(freeFrameNumber, 1));
                     paddress = freeFrameNumber*MemoryManagement.pagesize + offset;
+                    int frN = paddress/pagesize;
+                    frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
+                    frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
 
                     return paddress;
                 }
@@ -155,6 +168,7 @@ public class MemoryManagement {
 
             Frame f = frameTable[findVictim()];
 
+            f.flags = (byte) (f.flags|used);
             if((f.flags& mustSave) !=0){
                 f.swap(pagenumber,processID);
                 //TODO update page table
@@ -335,11 +349,21 @@ public class MemoryManagement {
 
     }
 
-   static int findVictim(){
+   static int findVictim(){ //TODO check if f.flags changes inside if statements
         byte dirtyUsed = (byte) (dirty|used);
         while(true){
             Frame f = MemoryManagement.frameTable[MemoryManagement.clockHand%frameCount];
-            if((f.flags&swappable)==0){ //dirty == 0 & used == 0
+
+            if(f.flags==0 || f.flags == 4){
+                return f.number;
+            } else if ((f.flags & dirtyUsed) == 3) {
+
+            }
+            else if((f.flags & dirty) != 0 || (f.flags & used) != 0) {
+                f.flags = (byte) (f.flags&clear);
+            }
+            MemoryManagement.clockHand++;
+            /*if((f.flags&swappable)==0){ //dirty == 0 & used == 0
                 return f.number; //f.number should equal clockHand%frameCount
             }
             else if((f.flags & dirtyUsed) != 0 ) // dirty == 1 & used == 1
@@ -350,7 +374,7 @@ public class MemoryManagement {
             {
                 f.flags = (byte)(f.flags&clear);
             }
-            MemoryManagement.clockHand++;
+            MemoryManagement.clockHand++;*/
         }
     }
 
@@ -365,7 +389,7 @@ public class MemoryManagement {
     }
 
    static void readProgramtTest(int processID){
-        String s = new String("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+        String s = new String("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuooooooooooooooooooooooooooooooooooooooooooooooooooooooooooodddddddddddddddddddddddddddddddddddddddddddddd");
         char[] file = s.toCharArray();
         char[] bufor = new char[pagesize];
         //!
