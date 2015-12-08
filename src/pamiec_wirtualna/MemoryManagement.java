@@ -149,7 +149,7 @@ public class MemoryManagement {
 
             if(pcb.ptable.map.get(pagenumber) == null){
                 //!
-                System.out.println("stronicy nie ma w tabeli stronic");
+               // System.out.println("stronicy nie ma w tabeli stronic");
                 //!
                 SwapFileEntry sfe = new SwapFileEntry(pagenumber,processID);
                 pcb.ptable.map.put(pagenumber,new PageTableEntry(pagenumber,0));
@@ -164,7 +164,7 @@ public class MemoryManagement {
                 int frN = paddress/pagesize;
                 frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
                 //!
-                System.out.println("weszło do ifa1");
+               // System.out.println("weszło do ifa1");
                 //!
                 return paddress;
             }
@@ -176,10 +176,10 @@ public class MemoryManagement {
                     int freeFrameNumber = it.next(); deprecated*/
                     int freeFrameNumber = getFreeFrame();
                     //!
-                    System.out.println("freeframenumber "+freeFrameNumber);
+                   // System.out.println("freeframenumber "+freeFrameNumber);
                     //!
                     /*freeFrames.remove(freeFrameNumber); deprecated*/
-                    System.out.println("szukana strona to:"+pagenumber+"procesu "+processID);
+                   // System.out.println("szukana strona to:"+pagenumber+"procesu "+processID);
                     for(SwapFileEntry temp : swapFile){
                         if(temp.processID == processID && temp.page == pagenumber)
                         {
@@ -192,12 +192,12 @@ public class MemoryManagement {
                             int frN = paddress/pagesize;
                             frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
                             //!
-                            System.out.println("weszło do odpowiedniego ifa(2)");
+                            //System.out.println("weszło do odpowiedniego ifa(2)");
                             //!
                             return paddress;
                         }
                     }
-                    System.out.println("Nie znaleziono szukanego fragmetnu pliku wymiany");
+                   // System.out.println("Nie znaleziono szukanego fragmetnu pliku wymiany");
                     frameTable[freeFrameNumber] = new Frame(freeFrameNumber, pagenumber, processID); // TODO PageFault happening
                     pcb.ptable.map.put(pagenumber, new PageTableEntry(freeFrameNumber, 1));
                     paddress = freeFrameNumber*MemoryManagement.pagesize + offset;
@@ -212,14 +212,14 @@ public class MemoryManagement {
                     pcb.ptable.map.put(pagenumber, new PageTableEntry(pagenumber/*to be changed if switched to iterative swapfile*/, 0));/*integer signyfying that page is in swapfile*/
                     swapFile.add(new SwapFileEntry(pagenumber, processID)); //
                     //!
-                    System.out.println("weszło do ifa2");
+                   // System.out.println("weszło do ifa2");
                     //!
                 }
             //}
 
             //TODO PageFault
             //!
-            System.out.println("Page fault z wymiana");
+           // System.out.println("Page fault z wymiana");
             //!
 
             Frame f = frameTable[findVictim()];
@@ -273,9 +273,9 @@ public class MemoryManagement {
         int paddress = translateAddress(virtualAddress, processID);
         //!
 
-        System.out.println("paddress: "+paddress);
-        System.out.println("znak pod paddress:"+String.valueOf(physicalMemory[paddress]));
-        System.out.println("strona "+paddress/pagesize);
+       // System.out.println("paddress: "+paddress);
+       // System.out.println("znak pod paddress:"+String.valueOf(physicalMemory[paddress]));
+       // System.out.println("strona "+paddress/pagesize);
         //!
         char[] output = new char[size];
 
@@ -302,7 +302,7 @@ public class MemoryManagement {
                 result = result + new String(readMemory(paddress + size - leftToRead, leftToRead, processID));
             }
             //!
-            System.out.println("wynik długiego odczytu (vaddress = "+virtualAddress+": "+result);
+            //System.out.println("wynik długiego odczytu (vaddress = "+virtualAddress+": "+result);
             //!
             output = result.toCharArray();
 
@@ -382,7 +382,7 @@ public class MemoryManagement {
                 boolean sanityCheck = freeFrames.add(temp.number);
                 if (sanityCheck == false) {
                     try {
-                        throw new Exception("Zwalniana ramka znajdowała się na liscie wolnych ramek!");
+                       // throw new Exception("Zwalniana ramka znajdowała się na liscie wolnych ramek!");
                     } catch (Exception e) {
                         System.out.println(e.toString());
                     }
@@ -499,13 +499,16 @@ public class MemoryManagement {
     public static boolean inMemory(int virtualaddress, int procesID){
         int pagenumber = virtualaddress/pagesize;
         if(freeFrames.size()==frameCount){
+            translateAddress(virtualaddress,procesID);
             return false;
         }
         for(Frame temp : frameTable){
+            if(temp == null){break;}
             if(temp.page == pagenumber){
                 return true;
             }
         }
+        translateAddress(virtualaddress,procesID);
         return false;
     }
 }
