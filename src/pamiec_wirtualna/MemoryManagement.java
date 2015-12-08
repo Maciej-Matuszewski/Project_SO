@@ -38,8 +38,11 @@ public class MemoryManagement {
     public static void main(String[] args){
         MemoryManagement mm = new MemoryManagement();
         Management.fork();
+        char[] input = "xD".toCharArray();
+        writeMemory(1,input,1);
+        displayStatus();
 
-        mm.readProgramtTest(1);
+        /*mm.readProgramtTest(1);
         mm.displayStatus();
 
         System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(1,100,1)));
@@ -54,7 +57,7 @@ public class MemoryManagement {
         readMemory(70,2,1);
         readMemory(90,2,1);
         readMemory(110,2,1);
-        mm.displayStatus();
+        mm.displayStatus();*/
 
         /*System.out.println("odczyt pamieci:"+String.valueOf(mm.readMemory(64,5,1)));
         mm.displayStatus();
@@ -99,8 +102,10 @@ public class MemoryManagement {
                 //!
                 SwapFileEntry sfe = new SwapFileEntry(pagenumber,processID);
                 pcb.ptable.map.put(pagenumber,new PageTableEntry(pagenumber,0));
+                swapFile.add(sfe);
 
-                translateAddress(virtualAddress,processID);
+                paddress =  translateAddress(virtualAddress,processID);
+                return paddress;
             }
 
             if (pcb.ptable.map.get(pagenumber).memoryOrSwapFile == 1) { //page in memory
@@ -304,6 +309,9 @@ public class MemoryManagement {
             }
 
 
+        }
+      else{
+            overwrite(input,0,physicalMemory,paddress,input.length);
         }
 
         //overwrite(input,0,physicalMemory,frameNumber*pagesize,input.length);
