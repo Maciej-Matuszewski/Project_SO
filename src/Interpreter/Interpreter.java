@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 
+
 import obsluga_dysku.FlorekFileSystem;
 import obsluga_procesora.Scheduler;
 import pamiec_wirtualna.MemoryManagement;
@@ -22,10 +23,12 @@ public class Interpreter{
 	private int wynik;
 	private int  przelicz;
 	private String Decision;
+	private String tmp;
 	
 	private static Scheduler scheduler;
 	private static Management management;
 	private MemoryManagement MemManagement;
+	Proces tenproces;
 	
 	private String cmd = "ml RA,RB";
 	private String arg1;
@@ -62,7 +65,7 @@ public class Interpreter{
 					PC = scheduler.pr_rdy.pPC;
 					ZF = scheduler.pr_rdy.pZF;
 				}
-				while(!exit && CPU < 4){
+				while(!exit && CPU < 4 && (test || MemManagement.inMemory(PC, scheduler.pr_rdy.PID))){
 					/*if(System.in.read() == 27)
 						FlorekFileSystem.cmd();*/
 					if(test){
@@ -102,14 +105,13 @@ public class Interpreter{
 						j1(arg1);
 						break;
 					case "fk":				//fork()
-						Proces tenproces = management.fork(scheduler.pr_rdy);
+						tenproces = management.fork(scheduler.pr_rdy);
 						scheduler.add_to_ready(tenproces);
 						management.exec("Program1",tenproces.PID);
 						//scheduler.add_to_ready(management.fork(scheduler.pr_rdy));
-
 						break;
 					case "ex":				//exec()
-						//management.exec();
+						
 						break;
 					case "et":				//zakonczenie wykonywania procesu
 						if(test){
@@ -360,13 +362,13 @@ public class Interpreter{
 	void fr(String arg1){
 		try{
 		String tmp = String.valueOf(FlorekFileSystem.F_Read(scheduler.pr_rdy.nazwa_pliku));
-		System.out.println(scheduler.pr_rdy.nazwa_pliku + tmp);
+		System.out.println(tmp);
 		switch(arg1){
 		case "RA":
-			RA = Integer.parseInt(tmp.substring(0, 2),16);
+			RA = Integer.parseInt(tmp.substring(tmp.length()-2, tmp.length()),16);
 			break;
 		case "RB":
-			RB =  Integer.parseInt(tmp.substring(0, 2),16);
+			RB =  Integer.parseInt(tmp.substring(tmp.length()-2, tmp.length()),16);
 			break;
 		default:
 			System.out.println(cmd + " - jest nierozpoznawalny");
@@ -381,13 +383,20 @@ public class Interpreter{
 	}
 	
 	void fw(String arg1){
-		System.out.println("wut");
 		switch(arg1){
 		case "RA":
-			FlorekFileSystem.F_Write(scheduler.pr_rdy.nazwa_pliku, String.valueOf(RA));
+			if(RA < 16)
+				tmp = "0" + String.valueOf(Integer.toHexString(RA));
+			else 
+				tmp = String.valueOf(Integer.toHexString(RA));
+			FlorekFileSystem.F_Write(scheduler.pr_rdy.nazwa_pliku, tmp);
 			break;
 		case "RB":
-			FlorekFileSystem.F_Write(scheduler.pr_rdy.nazwa_pliku, String.valueOf(RB));
+			if(RB < 16)
+				tmp = "0" + String.valueOf(Integer.toHexString(RB));
+			else 
+				tmp = String.valueOf(Integer.toHexString(RB));
+			FlorekFileSystem.F_Write(scheduler.pr_rdy.nazwa_pliku, tmp);
 			break;
 		default:
 			System.out.println(cmd + " - jest nierozpoznawalny");
