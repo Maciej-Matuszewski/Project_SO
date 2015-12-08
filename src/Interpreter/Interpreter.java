@@ -433,7 +433,7 @@ public class Interpreter{
 	
 	public void test(){
 		test = true;
-		scheduler.add_to_ready(management.fork(management.procesList.get(0)));
+		scheduler.add_to_ready_test(management.fork(management.procesList.get(0)));
 		RA = 0;
 		RB = 0;
 		PC = 0;

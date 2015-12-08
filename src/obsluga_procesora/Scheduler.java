@@ -48,6 +48,18 @@ public class Scheduler {
 		System.out.println("Dodano proces PID: "+pr.PID+" do kolejki procesow gotowych.");
 	}
 	
+	
+	public void add_to_ready_test(Proces pr)
+	{
+		pr.pri = 0;
+		pr.uspri = 0;
+		qs.get(0).add(0, pr);
+		pr.stan = 2;
+			
+		whichqs[0] = true;
+		System.out.println("Dodano proces PID: "+pr.PID+" do kolejki procesow gotowych na pozycje pierwsza.");
+	}
+	
 	public void remove(Proces pr)
 	{
 		qs.get(pr.pri/4).remove(pr);
