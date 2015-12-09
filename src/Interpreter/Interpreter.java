@@ -69,7 +69,7 @@ public class Interpreter{
 					}
 					else{
 					cmd = String.valueOf(MemoryManagement.readMemory(PC,8,scheduler.pr_rdy.PID)); //pobranie kolejnego rozkazu
-					MemoryManagement.displayAddressSpace(scheduler.pr_rdy.PID);
+					//MemoryManagement.displayAddressSpace(scheduler.pr_rdy.PID);
 					//Output.write("Aktualny rozkaz: " + cmd);
 					}
 					if(cmd.length() >= 5)
@@ -162,8 +162,8 @@ public class Interpreter{
 						break;
 					default:
 						Output.write(cmd + " - jest nierozpoznawalny");
-						/*if(!test)
-							management.exit();*/
+						if(!test)
+							error_exit();
 						break;
 					}
 					}
@@ -198,8 +198,8 @@ public class Interpreter{
 
 	private void error_exit() {
 		exit = true;
-		if(!test)
-			Management.exit(scheduler.pr_rdy.PID);
+		Output.write("B³ad w kodzie programu! - przerwano wykonywanie");
+		et();
 	}
 
 	void mi(String arg1, String arg2){
@@ -232,7 +232,7 @@ public class Interpreter{
 			}
 			else
 				MemoryManagement.writeMemory(Integer.parseInt(arg1,16), arg2.toCharArray(), scheduler.pr_rdy.PID);
-			MemoryManagement.displayAddressSpace(scheduler.pr_rdy.PID);
+			//MemoryManagement.displayAddressSpace(scheduler.pr_rdy.PID);
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
 	}
