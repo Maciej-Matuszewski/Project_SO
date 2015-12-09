@@ -341,22 +341,27 @@ public class FlorekFileSystem {
                 Management.exec(filename,tenproces.PID);
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
+            else if (Com[0].equals("da")){
+                int pid = Integer.parseInt(Com[1]);
+                MemoryManagement.displayAddressSpace(pid);
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if (Com[0].equals("ds")){
                 MemoryManagement.displayStatus();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if(Com[0].equals("rm")){
+            else if(Com[0].equals("rmem")){
                 int va =Integer.parseInt(Com[1]);
                 int size = Integer.parseInt(Com[2]);
                 int pid = Integer.parseInt(Com[3]);
                 System.out.println(MemoryManagement.readMemory(va,size,pid));
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if(Com[0].equals("wm")){
+            else if(Com[0].equals("wmem")){
                 int va =Integer.parseInt(Com[1]);
                 char[] text = Com[2].toCharArray();
                 int pid = Integer.parseInt(Com[3]);
-                MemoryManagement.displayStatus();
+                MemoryManagement.writeMemory(va,text,pid);
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else {
