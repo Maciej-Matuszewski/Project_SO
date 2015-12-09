@@ -49,14 +49,8 @@ public class Block {
         System.out.println();
     }
     /**************************************************************/
-    void B_ShowBlockContent(int From, int To) {
-        if(From == -1) {
-            From = 0;
-        }
-        if(To == -1 || To > this.B_Size) {
-            To = this.B_PointerToFreeByte;
-        }
-        for(int i = From; i < To; i++) {
+    void B_ShowBlockContent() {
+        for(int i = 0; i < this.B_Size; i++) {
             System.out.print(this.B_Content[i]);
         }
         System.out.println();
