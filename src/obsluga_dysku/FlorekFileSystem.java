@@ -45,7 +45,7 @@ public class FlorekFileSystem {
                 }
             }
             else {
-                System.out.println("Plik nie moze zostac odczytany, gdyz nie istnieje!");
+                Output.write("Plik nie moze zostac odczytany, gdyz nie istnieje!");
                 return null;
             }
             if(From < 0 || From > SysDisk.D_iNode[hlp_File.F_iNode_Id].F_Size || From == -1) {
@@ -133,7 +133,7 @@ public class FlorekFileSystem {
                     hlp_File = SysDisk.D_FindFile(Com[1].substring(1));  
                     if(hlp_char == '/') {
                         if(hlp_File != null) {
-                            System.out.println("Plik o podanej nazwie istnieje, czy chcesz go nadpisac(stracisz wszystkie informacje w nim zawarte)? T/N");
+                            Output.write("Plik o podanej nazwie istnieje, czy chcesz go nadpisac(stracisz wszystkie informacje w nim zawarte)? T/N");
                             Decision = YesNo.nextLine();
                             if(Decision.equals("T")) {
                                 F_Delete(hlp_File.F_Name);
@@ -143,10 +143,10 @@ public class FlorekFileSystem {
                                         F_Write(Com[1].substring(1), Com[i] + " ");
                                     }
                                 }
-                                System.out.println("Plik zostal pomyslnie utworzony!");
+                                Output.write("Plik zostal pomyslnie utworzony!");
                             }
                             else {
-                                System.out.println("Plik nie zostal utworzony!");
+                                Output.write("Plik nie zostal utworzony!");
                             }
                         }
                         else {
@@ -158,15 +158,15 @@ public class FlorekFileSystem {
                             }
                             hlp_File = SysDisk.D_FindFile(Com[1].substring(1));
                             if(hlp_File != null)
-                                System.out.println("Plik zostal pomyslnie utworzony!");
+                                Output.write("Plik zostal pomyslnie utworzony!");
                         }
                     }
                     else {
-                        System.out.println("Nie rozpoznano sciezki! Pamiętaj o '/'!");
+                        Output.write("Nie rozpoznano sciezki! Pamiętaj o '/'!");
                     }      
                 }
                 else {
-                        System.out.println("Nie rozpoznano komendy!");
+                        Output.write("Nie rozpoznano komendy!");
                 }
             }    
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -202,11 +202,11 @@ public class FlorekFileSystem {
                             SysDisk.D_OpenFile(Com[1].substring(1), 0, -1);
                     }
                     else {
-                        System.out.println("Nie rozpoznano scieżki! Pamietaj o '/'!");
+                        Output.write("Nie rozpoznano scieżki! Pamietaj o '/'!");
                     }
                 }
                 else {
-                    System.out.println("Nie rozpoznano komendy!");
+                    Output.write("Nie rozpoznano komendy!");
                 }
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -221,21 +221,21 @@ public class FlorekFileSystem {
                                     F_Write(Com[1].substring(1), Com[i] + " ");
                                 }
                                 else {
-                                    System.out.println("Nie udalo sie zapisac zawartosci, brak wolnych blokow lub plik osiągnal maksymalny rozmiar!");
+                                    Output.write("Nie udalo sie zapisac zawartosci, brak wolnych blokow lub plik osiągnal maksymalny rozmiar!");
                                     break;
                                 }        
                             }   
                         }
                         else {
-                            System.out.println("Nie mozna edytowac pliku! Plik nie istnieje!");
+                            Output.write("Nie mozna edytowac pliku! Plik nie istnieje!");
                         }
                     }
                     else {
-                        System.out.println("Nie rozpoznano scieżki! Pamietaj o '/'!");
+                        Output.write("Nie rozpoznano scieżki! Pamietaj o '/'!");
                     }
                 }
                 else {
-                    System.out.println("Nie rozpoznano komendy!");
+                    Output.write("Nie rozpoznano komendy!");
                 }
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -253,26 +253,26 @@ public class FlorekFileSystem {
                     File hlp_File = SysDisk.D_FindFile(Com[1].substring(1));
                     if(hlp_char == '/') {
                         if(hlp_File != null) {
-                            System.out.println("Czy na pewno chcesz usunac ten plik? T/N");
+                            Output.write("Czy na pewno chcesz usunac ten plik? T/N");
                             Decision = YesNo.nextLine();
                             if(Decision.equals("T")) {
                                 F_Delete(hlp_File.F_Name);
-                                System.out.println("Plik zostal usuniety!");
+                                Output.write("Plik zostal usuniety!");
                             }
                             else {
-                                System.out.println("Anulowano usuniecie pliku!");
+                                Output.write("Anulowano usuniecie pliku!");
                             }
                         } 
                         else {
-                            System.out.println("Plik o podanej nazwie nie istnieje!");
+                            Output.write("Plik o podanej nazwie nie istnieje!");
                         }
                     }
                     else {
-                        System.out.println("Nie rozpoznano sciezki! Pamietaj o '/'!");
+                        Output.write("Nie rozpoznano sciezki! Pamietaj o '/'!");
                     }
                 }
                 else {
-                    System.out.println("Nie rozpoznano komendy!");
+                    Output.write("Nie rozpoznano komendy!");
                 }
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -283,11 +283,11 @@ public class FlorekFileSystem {
                         SysDisk.D_ChangeNameFile(Com[1].substring(1), Com[2]);
                     }
                     else {
-                        System.out.println("Nie rozpoznano sciezki! Pamietaj o '/'!");
+                        Output.write("Nie rozpoznano sciezki! Pamietaj o '/'!");
                     }                
                 }
                 else {
-                    System.out.println("Nie rozpoznano komendy!");
+                    Output.write("Nie rozpoznano komendy!");
                 }
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -337,7 +337,7 @@ public class FlorekFileSystem {
                 int va =Integer.parseInt(Com[1]);
                 int size = Integer.parseInt(Com[2]);
                 int pid = Integer.parseInt(Com[3]);
-                System.out.println(MemoryManagement.readMemory(va,size,pid));
+                Output.write(MemoryManagement.readMemory(va,size,pid));
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("wm")){
@@ -348,7 +348,7 @@ public class FlorekFileSystem {
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else {
-                System.out.println("Nie rozpoznano komendy!");
+                Output.write("Nie rozpoznano komendy!");
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
     }

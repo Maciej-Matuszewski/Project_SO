@@ -4,7 +4,8 @@
 /*                  Last update: 07.12.2015 10:08                 */
 /******************************************************************/
 package obsluga_dysku;
-import java.util.Scanner;
+
+import Interpreter.Output;
 import obsluga_dysku.FlorekFileSystem;
 /******************************************************************/
 public class Disk {
@@ -78,50 +79,50 @@ public class Disk {
     /**************************************************************/
     void D_ShowBlockBytes() {
         for(int i = 1; i < this.D_BlockValue; i++) {
-            System.out.print("Blok nr " + i + ": \t");
+            Output.writeInLine("Blok nr " + i + ": \t");
             this.D_Block[i].B_ShowBlockBytes();
         }
     }
     /**************************************************************/
     void D_ShowBlocksBitVector() {
-        System.out.println("Wektor bitowy blokow:");
+        Output.write("Wektor bitowy blokow:");
         for(int i = 0; i < this.D_BlockValue; i++) {
-            System.out.print(this.D_BitVector_Block[i]);
+            Output.writeInLine(this.D_BitVector_Block[i]+"");
         }
-        System.out.println();
+        Output.write("");
     }
     /**************************************************************/
     void D_ShowiNodesBitVector() {
-        System.out.println("Wektor bitowy i-wezlow:");
+        Output.write("Wektor bitowy i-wezlow:");
         for(int i = 0; i < this.D_BlockValue; i++) {
-            System.out.print(this.D_BitVector_iNode[i]);
+            Output.writeInLine(this.D_BitVector_iNode[i]+"");
         }
-        System.out.println();
+        Output.write("");
     }/**************************************************************/
     void D_ShowBlockContent() {
         for(int i = 1; i < this.D_BlockSize; i++) {
-            System.out.print("Blok nr " + i + ": \t");
+            Output.writeInLine("Blok nr " + i + ": \t");
             this.D_Block[i].B_ShowBlockContent();
         }
     }
     /**************************************************************/
     void D_ShowCatalog() {
-        System.out.println("Katalog\t\tPlik\t\tRozmiar\t\ti-Wezel\tBloki");
-        System.out.println("ROOT" + "\t\t\t\t\t\t" + this.D_Catalog.F_iNode_Id + "\t" + "0");
+        Output.write("Katalog\t\tPlik\t\tRozmiar\t\ti-Wezel\tBloki");
+        Output.write("ROOT" + "\t\t\t\t\t\t" + this.D_Catalog.F_iNode_Id + "\t" + "0");
         for(int i = 0; i < this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.size(); i++) {
             int hlp = this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_iNode_Id;
-            System.out.print("\t\t" + this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_Name + "\t");
+            Output.writeInLine("\t\t" + this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_Name + "\t");
             if(this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_Name.length() < 8) {
-                System.out.print("\t");
+                Output.writeInLine("\t");
             }
-                               System.out.print(this.D_iNode[hlp].F_Size + "B" + "\t\t" + this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_iNode_Id + "\t");
+                               Output.writeInLine(this.D_iNode[hlp].F_Size + "B" + "\t\t" + this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_iNode_Id + "\t");
             for(int j = 0; j < this.D_iNode[hlp].FileBlockIds.length; j++) {
                 if(this.D_iNode[hlp].FileBlockIds[j] != -1) {
-                    System.out.print(this.D_iNode[hlp].FileBlockIds[j]);
-                    System.out.print(" ");
+                    Output.writeInLine(this.D_iNode[hlp].FileBlockIds[j]+"");
+                    Output.writeInLine(" ");
                 }
             }
-            System.out.println();
+            Output.write("");
         }        
     }
     /**************************************************************/
@@ -158,10 +159,10 @@ public class Disk {
         File hlp_File = this.D_FindFile(From);
         if(hlp_File != null) {
             hlp_File.F_Name = To;
-            System.out.println("Nazwa pliku zostala pomyslnie zmieniona!");
+            Output.write("Nazwa pliku zostala pomyslnie zmieniona!");
         }
         else {
-            System.out.println("Nie udalo sie zmienic nazwy pliku, plik nie istnieje!");
+            Output.write("Nie udalo sie zmienic nazwy pliku, plik nie istnieje!");
         }
     }
     /**************************************************************/
@@ -169,24 +170,24 @@ public class Disk {
         File hlp_File = this.D_FindFile(F_Name);
         if(hlp_File != null) {
             char[] hlp_Content = FlorekFileSystem.F_Read(F_Name, From, To);
-            System.out.println(hlp_Content);
+            Output.write(hlp_Content.toString());
         }
         else {
-            System.out.println("Plik o podanej scieżce nie istnieje!");
+            Output.write("Plik o podanej scieżce nie istnieje!");
         }
     }
     /**************************************************************/
     void D_Info() {
-        System.out.println("Nazwa dysku: \t" + this.D_Name);
-        System.out.println("System plikow: \t" + this.D_NameFileSystem);
-        System.out.println("Rozmiar dysku: \t" + this.D_Space + "B");
-        System.out.println("Rozmiar bloku: \t" + this.D_BlockSize + "B");
-        System.out.println("Wolne bloki: \t" + this.D_GetValueOfFreeBlocks());
-        System.out.println("Zajete bloki: \t" + (this.D_BlockValue - this.D_GetValueOfFreeBlocks()));
-        System.out.println("Wolne i-wezly:  " + this.D_GetValueOfFreeiNodes());
-        System.out.println("Zajete i-wezly: " + (this.D_BlockValue - this.D_GetValueOfFreeiNodes()));
-        System.out.println("Wolne miejsce: \t" + (this.D_Space - this.D_BusySpace) + "B");
-        System.out.println("Zajete miejsce: " + this.D_BusySpace + "B");
+        Output.write("Nazwa dysku: \t" + this.D_Name);
+        Output.write("System plikow: \t" + this.D_NameFileSystem);
+        Output.write("Rozmiar dysku: \t" + this.D_Space + "B");
+        Output.write("Rozmiar bloku: \t" + this.D_BlockSize + "B");
+        Output.write("Wolne bloki: \t" + this.D_GetValueOfFreeBlocks());
+        Output.write("Zajete bloki: \t" + (this.D_BlockValue - this.D_GetValueOfFreeBlocks()));
+        Output.write("Wolne i-wezly:  " + this.D_GetValueOfFreeiNodes());
+        Output.write("Zajete i-wezly: " + (this.D_BlockValue - this.D_GetValueOfFreeiNodes()));
+        Output.write("Wolne miejsce: \t" + (this.D_Space - this.D_BusySpace) + "B");
+        Output.write("Zajete miejsce: " + this.D_BusySpace + "B");
     }
     /**************************************************************/
     boolean F_CheckFileNames(String F_Name) {
