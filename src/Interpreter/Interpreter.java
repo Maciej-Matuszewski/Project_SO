@@ -48,8 +48,8 @@ public class Interpreter{
 	
 	void start() throws Exception{
 		//test();
-		System.out.print("Podaj komende: ");
-		Decision = input.nextLine();
+		//System.out.print("Podaj komende: ");
+		Decision = Output.loadCMD("Podaj komende");
 		FlorekFileSystem.Disk_Command(Decision);
 		while(true){
 			exit = false;
@@ -64,13 +64,13 @@ public class Interpreter{
 				while(!exit && CPU < 4 && (test || MemoryManagement.inMemory(PC, scheduler.pr_rdy.PID))){
 					
 					if(test){
-						System.out.println("Podaj rozkaz: ");
-						cmd = input.nextLine();
+						Output.write("Podaj rozkaz: ");
+						cmd = Output.loadCMD("Podaj komende");
 					}
 					else{
 					cmd = String.valueOf(MemoryManagement.readMemory(PC,8,scheduler.pr_rdy.PID)); //pobranie kolejnego rozkazu
 					MemoryManagement.displayAddressSpace(scheduler.pr_rdy.PID);
-					//System.out.println("Aktualny rozkaz: " + cmd);
+					//Output.write("Aktualny rozkaz: " + cmd);
 					}
 					if(cmd.length() >= 5)
 						arg1 = cmd.substring(3, 5);
@@ -131,7 +131,7 @@ public class Interpreter{
 						wyswietl_rozkaz(0);
 						if(test){
 							test = false;
-							System.out.println("Zakonczono testowanie.");
+							Output.write("Zakonczono testowanie.");
 						}
 						exit = true;
 						et();
@@ -161,14 +161,14 @@ public class Interpreter{
 						pw(arg1, arg2);
 						break;
 					default:
-						System.out.println(cmd + " - jest nierozpoznawalny");
+						Output.write(cmd + " - jest nierozpoznawalny");
 						/*if(!test)
 							management.exit();*/
 						break;
 					}
 					}
 					catch(NumberFormatException e){
-						System.out.println("Nieznany format liczby");
+						Output.write("Nieznany format liczby");
 						error_exit();
 					}
 					set_ZF();
@@ -190,7 +190,7 @@ public class Interpreter{
 			else{
 				if(!test)
 					System.out.print("Podaj komende: ");
-				Decision = input.nextLine();
+				Decision = Output.loadCMD("Podaj komende");
 				FlorekFileSystem.Disk_Command(Decision);
 			}
 		}
@@ -251,7 +251,7 @@ public class Interpreter{
 					wynik = RB = Integer.parseInt(arg2, 16);
 				break;
 			default:
-				System.out.println(cmd + " - jest nierozpoznawalny");
+				Output.write(cmd + " - jest nierozpoznawalny");
 				error_exit();
 				break;	
 			}
@@ -275,7 +275,7 @@ public class Interpreter{
 			wynik = RB;
 			break;
 		default:
-			System.out.println(cmd + " - jest nierozpoznawalny");
+			Output.write(cmd + " - jest nierozpoznawalny");
 			error_exit();
 			break;
 		}
@@ -299,7 +299,7 @@ public class Interpreter{
 			wynik = RB;
 			break;
 		default:
-			System.out.println(cmd + " - jest nierozpoznawalny");
+			Output.write(cmd + " - jest nierozpoznawalny");
 			error_exit();
 			break;
 		}
@@ -323,7 +323,7 @@ public class Interpreter{
 			wynik = RB;
 			break;
 		default:
-			System.out.println(cmd + " - jest nierozpoznawalny");
+			Output.write(cmd + " - jest nierozpoznawalny");
 			error_exit();
 			break;
 		}
@@ -354,7 +354,7 @@ public class Interpreter{
 					RB = Integer.parseInt(scheduler.pr_rdy.childPipe.read(),16);
 					break;
 				default:
-					System.out.println(cmd + " - jest nierozpoznawalny");
+					Output.write(cmd + " - jest nierozpoznawalny");
 					error_exit();
 					break;
 			}
@@ -368,7 +368,7 @@ public class Interpreter{
 				RB = Integer.parseInt(scheduler.pr_rdy.pipes.get(Integer.parseInt(arg2,16)).read(),16);
 				break;
 			default:
-				System.out.println(cmd + " - jest nierozpoznawalny");
+				Output.write(cmd + " - jest nierozpoznawalny");
 				error_exit();
 				break;
 			}
@@ -387,7 +387,7 @@ public class Interpreter{
 		}
 		else{
 			if(arg2.equals("RA")){
-				System.out.println("to cos: " + Integer.parseInt(arg1));
+				Output.write("to cos: " + Integer.parseInt(arg1));
 				scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1)).write(Integer.toString(RA));
 			}
 			else if(arg2.equals("RB"))
@@ -407,7 +407,7 @@ public class Interpreter{
 	void fr(String arg1){
 		try{
 		String tmp = String.valueOf(FlorekFileSystem.F_Read(scheduler.pr_rdy.nazwa_pliku,-1,-1));
-		System.out.println(tmp);
+		Output.write(tmp);
 		switch(arg1){
 		case "RA":
 			RA = Integer.parseInt(tmp.substring(tmp.length()-2, tmp.length()),16);
@@ -416,12 +416,12 @@ public class Interpreter{
 			RB =  Integer.parseInt(tmp.substring(tmp.length()-2, tmp.length()),16);
 			break;
 		default:
-			System.out.println(cmd + " - jest nierozpoznawalny");
+			Output.write(cmd + " - jest nierozpoznawalny");
 			error_exit();
 			break;
 		}
 		}catch(Exception e){
-			System.out.println("Plik nie istnieje");
+			Output.write("Plik nie istnieje");
 			error_exit();
 		}
 		PC += 5; //zwiekszenie licznika rozkazow
@@ -444,7 +444,7 @@ public class Interpreter{
 			FlorekFileSystem.F_Write(scheduler.pr_rdy.nazwa_pliku, tmp);
 			break;
 		default:
-			System.out.println(cmd + " - jest nierozpoznawalny");
+			Output.write(cmd + " - jest nierozpoznawalny");
 			error_exit();
 			break;
 		}		
@@ -452,13 +452,14 @@ public class Interpreter{
 	}
 	
 	void aktualny_stan() throws IOException{
-		System.out.println("Stan Interpretera:");
-		System.out.println("RA = " + RA + ", RB = " + RB + ", ZF = " + ZF + ", PC = " + PC + ", CPU = " + CPU);
+		Output.write("Stan Interpretera:");
+		Output.write("RA = " + RA + ", RB = " + RB + ", ZF = " + ZF + ", PC = " + PC + ", CPU = " + CPU);
 		if(!test){
 			Decision = " ";
 			while(!Decision.equals("")){
-				System.out.println("Podaj komende lub wcisnij ENTER aby kontynuowac");
-				Decision = input.nextLine();
+				//Output.write("Podaj komende lub wcisnij ENTER aby kontynuowac");
+				Decision = Output.loadCMD("Podaj komende lub wcisnij ENTER aby kontynuowac");
+				Output.write("");
 				FlorekFileSystem.Disk_Command(Decision);
 			}
 		}
@@ -519,15 +520,15 @@ public class Interpreter{
 	}
 	
 	void wyswietl_rozkaz(int l_arg){
-		System.out.print("Aktualny rozkaz: ");
+		Output.writeInLine("Aktualny rozkaz: ");
 		if(l_arg == 0){
-			System.out.println(cmd.substring(0, 2));
+			Output.write(cmd.substring(0, 2));
 		}
 		if(l_arg == 1){
-			System.out.println(cmd.substring(0, 5));
+			Output.write(cmd.substring(0, 5));
 		}
 		if(l_arg == 2){
-			System.out.println(cmd.substring(0, 8));
+			Output.write(cmd.substring(0, 8));
 		}
 	}
 }
