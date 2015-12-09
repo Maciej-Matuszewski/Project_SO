@@ -383,6 +383,23 @@ public class FlorekFileSystem {
             	Scheduler.show_wait_list();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
+            else if(Com[0].equals("nice")){
+            	int id = Integer.parseInt(Com[1]);
+            	int w_n = Integer.parseInt(Com[2]);
+            	if(Management.processLookup(id) != null)
+            	{
+            		if(w_n>23 || w_n<0)
+            			Output.write("Nie poprawna wartosc parametru nice");
+            		else
+            		{
+            			Management.processLookup(id).nice = w_n;
+            			Output.write("Parametr nice procesu PID: "+id+" zostal zmieniony na: "+w_n+".");
+            		}
+            	}
+            	else
+            		Output.write("Proces o ponadnym PID nie istnieje");
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("shutdown")){
             	Interpreter.shutdown = true;
             	Output.write("\n[SYSTEM ZAKONCZYL PRACE]\n");
