@@ -1,7 +1,9 @@
 package Interpreter;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -9,6 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
@@ -49,7 +53,8 @@ public class Output {
 	private void initialize() {
 		frmOutput = new JFrame();
 		frmOutput.setResizable(false);
-		frmOutput.setTitle("SKOS");
+		frmOutput.setIconImage(Toolkit.getDefaultToolkit().getImage(Interpreter.class.getResource("/Interpreter/iconSmall.png")));
+		frmOutput.setTitle("UPS - UnixoPodobny System");
 		frmOutput.setBounds(100, 100, 643, 510);
 		frmOutput.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmOutput.getContentPane().setLayout(null);
@@ -90,7 +95,8 @@ public class Output {
 		JTextField txt = new JTextField(30);
 		panel.add(lbl);
 		panel.add(txt);
-		int selectedOption = JOptionPane.showOptionDialog(null, panel, "SKOS", JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options , options[0]);
+		ImageIcon icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage(Interpreter.class.getResource("/Interpreter/iconSmall.png")));
+		int selectedOption = JOptionPane.showOptionDialog(null, panel, "UPS", JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, icon, options , options[0]);
 
 		if(selectedOption == 0)
 		{
