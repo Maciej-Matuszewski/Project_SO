@@ -531,7 +531,7 @@ public static void displayAddressSpace(int pid) {
             return false;
         }
         for(Frame temp : frameTable){
-            if(temp == null){break;}
+            if(temp == null){continue;}
             if(temp.page == pagenumber){
                 return true;
             }
