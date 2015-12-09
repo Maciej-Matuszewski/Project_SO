@@ -102,7 +102,7 @@ public static void displayAddressSpace(int pid) {
         char[] bufor = new char[pagesize];
         /* TODO function_returning_file_content(programFile)*/
 
-        char[] file = FlorekFileSystem.F_Read(programName);
+        char[] file = FlorekFileSystem.F_Read(programName,-1,-1);
         if(file==null){
             System.out.println("Proba wczytania nie powiodla sie");
         }

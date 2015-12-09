@@ -69,8 +69,8 @@ public class Interpreter{
 					}
 					else{
 					cmd = String.valueOf(MemoryManagement.readMemory(PC,8,scheduler.pr_rdy.PID)); //pobranie kolejnego rozkazu
-					
-					System.out.println("Aktualny rozkaz: " + cmd);
+					MemoryManagement.displayAddressSpace(scheduler.pr_rdy.PID);
+					//System.out.println("Aktualny rozkaz: " + cmd);
 					}
 					if(cmd.length() >= 5)
 						arg1 = cmd.substring(3, 5);
@@ -81,27 +81,35 @@ public class Interpreter{
 					try{
 					switch(cmd.substring(0, 2)){				//rozpoznawanie rozkazu i jego obsluga
 					case "mi":				//zapisywanie/czytanie z pamieci operacyjnej arg1(rejestr lub adres) arg2(rejestr lub adres)
+						wyswietl_rozkaz(2);
 						mi(arg1,arg2);
 						break;
 					case "mv":				//przypisywanie wartosci do rejestru arg1(rejestr) arg2(wartosc lub rejestr)
+						wyswietl_rozkaz(2);
 						mv(arg1,arg2);
 						break;
 					case "ad":				//dodawanie
+						wyswietl_rozkaz(2);
 						ad(arg1,arg2);
 						break;
 					case "sb":				//odejmowanie
+						wyswietl_rozkaz(2);
 						sb(arg1,arg2);
 						break;
 					case "ml":				//mnozenie
+						wyswietl_rozkaz(2);
 						ml(arg1,arg2);
 						break;
 					case "j0":				//jump jezeli ZF == false arg1(adres)
+						wyswietl_rozkaz(1);
 						j0(arg1);
 						break;
 					case "j1":				//jump jezeli ZF == true arg1(adres)
+						wyswietl_rozkaz(1);
 						j1(arg1);
 						break;
 					case "fk":				//fork()
+						wyswietl_rozkaz(0);
 						/*tenproces = Management.fork(scheduler.pr_rdy);
 						Scheduler.add_to_ready(tenproces);
 						Management.exec("Program1",tenproces.PID);*/
@@ -110,11 +118,13 @@ public class Interpreter{
 						PC += 4;
 						break;
 					case "ex":				//exec()
+						wyswietl_rozkaz(0);
 						MemoryManagement.releaseMemory(scheduler.pr_rdy.PID);
 						Management.exec("Program4", scheduler.pr_rdy.PID);
 						PC = 0;
 						break;
 					case "et":				//zakonczenie wykonywania procesu
+						wyswietl_rozkaz(0);
 						if(test){
 							test = false;
 							System.out.println("Zakonczono testowanie.");
@@ -123,21 +133,27 @@ public class Interpreter{
 						et();
 						break;
 					case "wt":				//wait()
+						wyswietl_rozkaz(0);
 						wt();
 						break;
 					case "fm":				//tworzenie nowego pliku o nazwie PID porcesu
+						wyswietl_rozkaz(0);
 						fm();
 						break;
 					case "fr":				//odczyt z pliku arg1(rejestr)
+						wyswietl_rozkaz(1);
 						fr(arg1);
 						break;
 					case "fw":				//zapis do pliku arg1(rejestr
+						wyswietl_rozkaz(1);
 						fw(arg1);
 						break;
 					case "pr":				//pr rejestr,od PA(rodzic)/nr rury(potomek)
+						wyswietl_rozkaz(2);
 						pr(arg1, arg2);
 						break;
 					case "pw":				//pw PA(rodzic)/nr rury(potomek),rejestr
+						wyswietl_rozkaz(2);
 						pw(arg1, arg2);
 						break;
 					default:
@@ -379,7 +395,7 @@ public class Interpreter{
 	
 	void fr(String arg1){
 		try{
-		String tmp = String.valueOf(FlorekFileSystem.F_Read(scheduler.pr_rdy.nazwa_pliku));
+		String tmp = String.valueOf(FlorekFileSystem.F_Read(scheduler.pr_rdy.nazwa_pliku,-1,-1));
 		System.out.println(tmp);
 		switch(arg1){
 		case "RA":
@@ -489,6 +505,19 @@ public class Interpreter{
 			scheduler.pr_rdy.cpu +=CPU;
 		}
 		CPU = 0;
+	}
+	
+	void wyswietl_rozkaz(int l_arg){
+		System.out.print("Aktualny rozkaz: ");
+		if(l_arg == 0){
+			System.out.println(cmd.substring(0, 2));
+		}
+		if(l_arg == 1){
+			System.out.println(cmd.substring(0, 5));
+		}
+		if(l_arg == 2){
+			System.out.println(cmd.substring(0, 8));
+		}
 	}
 
 }
