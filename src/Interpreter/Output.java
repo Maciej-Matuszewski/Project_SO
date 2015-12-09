@@ -129,6 +129,6 @@ public class Output {
 		    return text;
 		}
 		
-		return null;
+		return "";
 	}
 }
