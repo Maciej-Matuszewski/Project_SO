@@ -64,8 +64,8 @@ public class Interpreter{
 				while(!exit && CPU < 4 && (test || MemoryManagement.inMemory(PC, scheduler.pr_rdy.PID))){
 					
 					if(test){
-						Output.write("Podaj rozkaz: ");
-						cmd = Output.loadCMD("Podaj komende");
+						Output.write("");
+						cmd = Output.loadCMD("Podaj rozkaz");
 					}
 					else{
 					cmd = String.valueOf(MemoryManagement.readMemory(PC,8,scheduler.pr_rdy.PID)); //pobranie kolejnego rozkazu
@@ -331,15 +331,15 @@ public class Interpreter{
 	}
 	
 	void j0(String arg1){
-		if(ZF == true)
-			PC = Integer.parseInt(arg1); 
+		if(ZF == false)
+			PC = Integer.parseInt(arg1,16); 
 		else
 			PC +=5;
 	}
 	
 	void j1(String arg1){
-		if(ZF == false)
-			PC = Integer.parseInt(arg1); 
+		if(ZF == true)
+			PC = Integer.parseInt(arg1,16); 
 		else
 			PC +=5;
 	}
@@ -379,9 +379,9 @@ public class Interpreter{
 	void pw(String arg1, String arg2){
 		if(arg1.equals("PA")){
 			if(arg2.equals("RA"))
-				scheduler.pr_rdy.childPipe.write(Integer.toString(RA));
+				scheduler.pr_rdy.childPipe.write(Integer.toHexString(RA));
 			else if(arg2.equals("RB"))
-				scheduler.pr_rdy.childPipe.write(Integer.toString(RB));
+				scheduler.pr_rdy.childPipe.write(Integer.toHexString(RB));
 			else
 				scheduler.pr_rdy.childPipe.write(arg2);
 		}
