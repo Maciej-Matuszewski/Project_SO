@@ -193,16 +193,18 @@ public class Disk {
     }
     /**************************************************************/
     void D_Info() {
-        Output.write("Nazwa dysku: \t" + this.D_Name);
-        Output.write("System plikow: \t" + this.D_NameFileSystem);
-        Output.write("Rozmiar dysku: \t" + this.D_Space + "B");
-        Output.write("Rozmiar bloku: \t" + this.D_BlockSize + "B");
-        Output.write("Wolne bloki: \t" + this.D_GetValueOfFreeBlocks());
-        Output.write("Zajete bloki: \t" + (this.D_BlockValue - this.D_GetValueOfFreeBlocks()));
-        Output.write("Wolne i-wezly:  " + this.D_GetValueOfFreeiNodes());
-        Output.write("Zajete i-wezly: " + (this.D_BlockValue - this.D_GetValueOfFreeiNodes()));
-        Output.write("Wolne miejsce: \t" + (this.D_Space - this.D_BusySpace) + "B");
-        Output.write("Zajete miejsce: " + this.D_BusySpace + "B");
+    	Output.write("");
+        Output.write("Nazwa dysku:\t" + this.D_Name);
+        Output.write("System plikow:\t" + this.D_NameFileSystem);
+        Output.write("Rozmiar dysku:\t" + this.D_Space + "B");
+        Output.write("Rozmiar bloku:\t" + this.D_BlockSize + "B");
+        Output.write("Wolne bloki:\t" + this.D_GetValueOfFreeBlocks());
+        Output.write("Zajete bloki:\t" + (this.D_BlockValue - this.D_GetValueOfFreeBlocks()));
+        Output.write("Wolne i-wezly:\t" + this.D_GetValueOfFreeiNodes());
+        Output.write("Zajete i-wezly:\t" + (this.D_BlockValue - this.D_GetValueOfFreeiNodes()));
+        Output.write("Wolne miejsce:\t" + (this.D_Space - this.D_BusySpace) + "B");
+        Output.write("Zajete miejsce:\t" + this.D_BusySpace + "B");
+        Output.write("");
     }
     /**************************************************************/
     boolean F_CheckFileNames(String F_Name) {
