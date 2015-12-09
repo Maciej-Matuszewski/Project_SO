@@ -212,6 +212,7 @@ public class Interpreter{
 		else if(arg1.equals("RB")){
 			//RB = wczytanie z pamieci operacyjnej
 			RB = Integer.parseInt(String.valueOf(MemoryManagement.readMemory(Integer.parseInt(arg2,16),2,scheduler.pr_rdy.PID)),16);
+			System.out.println("mimimimi " + RB + " " + arg2);
 			//MemoryManagement.displayStatus();
 		}
 		else{//zapis do pamieci operacyjnej

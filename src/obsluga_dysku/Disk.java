@@ -107,15 +107,15 @@ public class Disk {
     }
     /**************************************************************/
     void D_ShowCatalog() {
-        Output.write("Katalog\t\tPlik\t\tRozmiar\t\ti-Wezel\tBloki");
-        Output.write("ROOT" + "\t\t\t\t\t\t" + this.D_Catalog.F_iNode_Id + "\t" + "0");
+        Output.write("Katalog\t\tPlik\tRozmiar\ti-Wezel\tBloki");
+        Output.write("ROOT" + "\t\t\t\t" + this.D_Catalog.F_iNode_Id + "\t" + "0");
         for(int i = 0; i < this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.size(); i++) {
             int hlp = this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_iNode_Id;
             Output.writeInLine("\t\t" + this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_Name + "\t");
             if(this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_Name.length() < 8) {
                 Output.writeInLine("\t");
             }
-                               Output.writeInLine(this.D_iNode[hlp].F_Size + "B" + "\t\t" + this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_iNode_Id + "\t");
+                               Output.writeInLine(this.D_iNode[hlp].F_Size + "B" + "\t" + this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_iNode_Id + "\t");
             for(int j = 0; j < this.D_iNode[hlp].FileBlockIds.length; j++) {
                 if(this.D_iNode[hlp].FileBlockIds[j] != -1) {
                     Output.writeInLine(this.D_iNode[hlp].FileBlockIds[j]+"");
@@ -203,7 +203,7 @@ public class Disk {
         FlorekFileSystem.Create_File("Program1", "mv RA,01" 
                         + "mv RB,05" 
                         + "ad RA,RB" 
-                        + "j1 00");
+                        + "j0 00");
         FlorekFileSystem.Create_File("Program2", "mv RA,05"
         		+ "mv RB,03"
         		+ "mi A0,RA"
@@ -212,7 +212,7 @@ public class Disk {
         		+ "ml RA,RB"
         		+ "mi RB,AA"
         		+ "sb RB,01"
-        		+ "j1 24"
+        		+ "j0 18"
         		+ "et");
         FlorekFileSystem.Create_File("Program3", "mv RA,05"
         		+ "fk"
