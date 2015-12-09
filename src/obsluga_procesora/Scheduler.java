@@ -6,12 +6,13 @@ import zarzadzanie_procesami.*;
 
 public class Scheduler {
 		
-	static ArrayList<ArrayList<Proces>> qs = new ArrayList<ArrayList<Proces>>(8);
-	ArrayList<Proces> wait_list = new ArrayList<Proces>();
+	static ArrayList<ArrayList<Proces>> qs = new ArrayList<ArrayList<Proces>>(8); // kolejka procesow gotowych
+	static ArrayList<Proces> wait_list = new ArrayList<Proces>(); //kolejka procesow oczekujacych
 	static boolean[] whichqs = new boolean[8]; //ktore kolejki sa nie puste
-	public int base = 8;
-	public Proces pr_rdy;
+	public int base = 8; //baza
+	public Proces pr_rdy; //aktualnie wykonywany proces
 	
+	//Konstruktor
 	public Scheduler()
 	{
 		for(int i=0;i<7;i++)
@@ -21,15 +22,16 @@ public class Scheduler {
 		}
 	}
 	
+	//Dodawanie procesu do kolejki procesow gotowych - do uzytku zewnetrznego
 	public static void add_to_ready(Proces pr)
 	{
 		add_to_ready_list(pr);
 		System.out.println("Dodano proces PID: "+pr.PID+" do kolejki procesow gotowych.");
 	}
-	
+	//Dodawanie procesu do kolejki procesow gotowych - metoda wewnetrzna
 	public static void add_to_ready_list(Proces pr)
 	{
-		if(qs.get(pr.pri/4).size()>0)
+		if(qs.get(pr.pri/4).size()>0) //poszukiwanie miejsca przed procesem o wyzszym priorytecie
 		{
 			boolean add=false;
 			for(int i=0; i<qs.get(pr.pri/4).size();i++)
@@ -54,7 +56,7 @@ public class Scheduler {
 		
 	}
 	
-	
+	//Dodanie procesu testowego na pierwsza pozycje kolejki procesow gotowych
 	public void add_to_ready_test(Proces pr)
 	{
 		pr.pri = 0;
@@ -66,6 +68,7 @@ public class Scheduler {
 		System.out.println("Dodano proces PID: "+pr.PID+" do kolejki procesow gotowych na pozycje pierwsza.");
 	}
 	
+	//Usuwanie procesu z kolejki gotowych
 	public void remove(Proces pr)
 	{
 		qs.get(pr.pri/4).remove(pr);
@@ -73,6 +76,7 @@ public class Scheduler {
 			whichqs[pr.pri/4]= false;
 	}
 	
+	//Dodawanie procesu do kolejki procesow oczekujacych
 	public void add_to_wait(Proces pr)
 	{
 		int tmp = qs.get(pr.pri/4).indexOf(pr);
@@ -81,6 +85,7 @@ public class Scheduler {
 		pr.stan=3;
 	}
 	
+	//wybudzanie procesu
 	public void wakeup(int PID)
 	{
 		for(Proces temp : wait_list){
@@ -93,12 +98,12 @@ public class Scheduler {
 			}
 	}
 	
-	
+	//Metoda przeliczajaca priorytet
 	public boolean przelicz()  
 	{
-		ArrayList<ArrayList<Proces>> tmp_qs = new ArrayList<ArrayList<Proces>>(8);
+		ArrayList<ArrayList<Proces>> tmp_qs = new ArrayList<ArrayList<Proces>>(8); //tymczasowa kolejka procesow gotowych
 		System.out.println("Przeliczanie priorytetu");
-		for(int i=0;i<7;i++)
+		for(int i=0;i<7;i++) //wlasciwe przeliczanie priorytetow
 		{
 			if(whichqs[i])
 			{
@@ -110,21 +115,21 @@ public class Scheduler {
 				}
 			}
 		}
-		for(int i=0;i<8;i++){
+		for(int i=0;i<8;i++) //tymczasowe przeniesienie procesow do dodatkowej kolejki
+		{
 			tmp_qs.add(i, new ArrayList<Proces>());
 			if(whichqs[i] == true)
 			for(int j=0;j<qs.get(i).size();j++)
-				tmp_qs.get(i).add(qs.get(i).get(j));
-			
+				tmp_qs.get(i).add(qs.get(i).get(j));	
 		}
 
-
-		for(int i=0;i<7;i++)
+		
+		for(int i=0;i<7;i++) //wyczyszczenie kolejki glownej
 		{
 			qs.get(i).clear();
 		}
 
-		for(int i=0;i<7;i++)
+		for(int i=0;i<7;i++) //uporzadkowanie procesow w glownej kolejce
 		{
 			
 			if(whichqs[i] == true)
@@ -136,7 +141,7 @@ public class Scheduler {
 			}
 		}
 		
-		for(int i=0;i<7;i++)
+		for(int i=0;i<7;i++) //aktualizacja tablicy wskazujacej na niepuste kolejki
 		{
 			if(qs.get(i).size()>0)
 				whichqs[i] = true;
@@ -145,7 +150,7 @@ public class Scheduler {
 		}
 		
 		int first_not_empty=8;
-		for(int i=0;i<8;i++)
+		for(int i=0;i<8;i++) //szukanie pozycji procesu o najwyzszym priorytecie
 		{
 			if(whichqs[i] == true)
 			{
@@ -153,8 +158,8 @@ public class Scheduler {
 				break;
 			}
 		}
-		if(first_not_empty != 8 && qs.get(first_not_empty).get(0).pri<pr_rdy.pri)
-		{
+		if(first_not_empty != 8 && qs.get(first_not_empty).get(0).pri<pr_rdy.pri) 
+		{ //Wywlaszczenie jesli odnaleziony proces ma wyzszy priorytet niz proces aktualny
 			System.out.println("Znaleziono proces o wyzszym priorytecie. Wykonywanie wywlaszczenia.");
 			return true;
 		}
@@ -162,11 +167,12 @@ public class Scheduler {
 			return false;
 	}
 	
+	//Metoda zmieniajaca kontekst
 	public boolean change_context()
 	{
 		System.out.println("Zmiana kontekstu");
 		int first_not_empty=8;
-		for(int i=0;i<8;i++)
+		for(int i=0;i<8;i++) //Odszukanie procesu o najwyzszym priorytecie
 		{
 			if(whichqs[i] == true)
 			{
@@ -174,12 +180,12 @@ public class Scheduler {
 				break;
 			}
 		}
-		if(first_not_empty==8)
+		if(first_not_empty==8) //nie udalo sie zmienic kontekstu / brak gotowych procesow
 		{
 			System.out.println("Brak gotowych procesow");
 			return false;	
-		}//nie udalo sie zmienic kontekstu / brak gotowych procesow
-		if(pr_rdy==qs.get(first_not_empty).get(0))
+		}
+		if(pr_rdy==qs.get(first_not_empty).get(0)) //Zmiana wykonywanego procesu
 		{
 			qs.get(first_not_empty).remove(0);
 			add_to_ready_list(pr_rdy);
@@ -191,4 +197,40 @@ public class Scheduler {
 		
 		return true; // udalo sie zmienic kontekst
 	}
+	
+	//Metoda wyswietlajaca aktualny stan kolejki procesow gotowych
+	public static void show_ready_list()
+	{
+		System.out.println("Wypisanie kolejki procesow gotowych");
+		for(int i=0;i<7;i++)
+		{
+			System.out.println("Kolejka "+(i*4)+"-"+(i*4+3)+":");
+			if(whichqs[i])
+			{
+				for(Proces temp: qs.get(i))
+				{
+					System.out.println("Proces PID: "+temp.PID+" pri: "+temp.pri+" uspri: "+temp.uspri+" CPU: "+temp.cpu);
+				}
+			}
+			else
+				System.out.println("---PUSTA---");
+		}
+	}
+	
+	//Metoda wyswietlajaca aktualny stan kolejki procesow oczekujacych
+		public static void show_wait_list()
+		{
+			System.out.println("Wypisanie kolejki procesow oczekujacych");
+				if(wait_list.size()>0)
+				{
+					for(Proces temp: wait_list)
+					{
+						System.out.println("Proces PID: "+temp.PID+" pri: "+temp.pri+" uspri: "+temp.uspri+" CPU: "+temp.cpu);
+					}
+				}
+				else
+					System.out.println("---PUSTA---");
+		}
+	
+	
 }
