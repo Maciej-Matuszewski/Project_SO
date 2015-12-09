@@ -217,7 +217,7 @@ public class Disk {
     }
     /**************************************************************/
     public void BackupProgramFiles() {
-        FlorekFileSystem.Create_File("Program1", "m v RA,01" 
+        FlorekFileSystem.Create_File("Program1", "mv RA,01" 
                         + "mv RB,05" 
                         + "ad RA,RB" 
                         + "j0 00");

@@ -202,7 +202,7 @@ public class Interpreter{
 
 	private void error_exit() {
 		exit = true;
-		Output.write("B³ad w kodzie programu! - przerwano wykonywanie");
+		Output.write("Blad w kodzie programu! - przerwano wykonywanie");
 		et();
 	}
 
