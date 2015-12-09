@@ -326,7 +326,8 @@ public static void displayAddressSpace(int pid) {
                 leftToRead = leftToRead - pagesize;
             }
             if (leftToRead > 0){
-                result = result + new String(readMemory(paddress + size - leftToRead, leftToRead, processID));
+                //result = result + new String(readMemory(paddress + size - leftToRead, leftToRead, processID));
+                result = result + new String(readMemory(translateAddress(virtualAddress+size-leftToRead,processID), leftToRead, processID));
             }
             //!
             //System.out.println("wynik długiego odczytu (vaddress = "+virtualAddress+": "+result);
