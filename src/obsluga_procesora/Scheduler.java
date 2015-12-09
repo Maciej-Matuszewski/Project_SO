@@ -2,6 +2,7 @@ package obsluga_procesora;
 import java.util.ArrayList;
 
 import zarzadzanie_procesami.*;
+import Interpreter.Output;
 
 
 public class Scheduler {
@@ -26,7 +27,7 @@ public class Scheduler {
 	public static void add_to_ready(Proces pr)
 	{
 		add_to_ready_list(pr);
-		System.out.println("Dodano proces PID: "+pr.PID+" do kolejki procesow gotowych.");
+		Output.write("Dodano proces PID: "+pr.PID+" do kolejki procesow gotowych.");
 	}
 	//Dodawanie procesu do kolejki procesow gotowych - metoda wewnetrzna
 	public static void add_to_ready_list(Proces pr)
@@ -65,7 +66,7 @@ public class Scheduler {
 		pr.stan = 2;
 			
 		whichqs[0] = true;
-		System.out.println("Dodano proces PID: "+pr.PID+" do kolejki procesow gotowych na pozycje pierwsza.");
+		Output.write("Dodano proces PID: "+pr.PID+" do kolejki procesow gotowych na pozycje pierwsza.");
 	}
 	
 	//Usuwanie procesu z kolejki gotowych
@@ -90,7 +91,7 @@ public class Scheduler {
 	{
 		for(Proces temp : wait_list){
 			if(temp.PID == PID){
-				System.out.println("Proces PID: "+temp.PID+" zostal obudzony.");
+				Output.write("Proces PID: "+temp.PID+" zostal obudzony.");
 				add_to_ready(temp);
 				wait_list.remove(temp);	
 				break;
@@ -102,7 +103,7 @@ public class Scheduler {
 	public boolean przelicz()  
 	{
 		ArrayList<ArrayList<Proces>> tmp_qs = new ArrayList<ArrayList<Proces>>(8); //tymczasowa kolejka procesow gotowych
-		System.out.println("Przeliczanie priorytetu");
+		Output.write("Przeliczanie priorytetu");
 		for(int i=0;i<7;i++) //wlasciwe przeliczanie priorytetow
 		{
 			if(whichqs[i])
@@ -160,7 +161,7 @@ public class Scheduler {
 		}
 		if(first_not_empty != 8 && qs.get(first_not_empty).get(0).pri<pr_rdy.pri) 
 		{ //Wywlaszczenie jesli odnaleziony proces ma wyzszy priorytet niz proces aktualny
-			System.out.println("Znaleziono proces o wyzszym priorytecie. Wykonywanie wywlaszczenia.");
+			Output.write("Znaleziono proces o wyzszym priorytecie. Wykonywanie wywlaszczenia.");
 			return true;
 		}
 		else
@@ -170,7 +171,7 @@ public class Scheduler {
 	//Metoda zmieniajaca kontekst
 	public boolean change_context()
 	{
-		System.out.println("Zmiana kontekstu");
+		Output.write("Zmiana kontekstu");
 		int first_not_empty=8;
 		for(int i=0;i<8;i++) //Odszukanie procesu o najwyzszym priorytecie
 		{
@@ -182,7 +183,7 @@ public class Scheduler {
 		}
 		if(first_not_empty==8) //nie udalo sie zmienic kontekstu / brak gotowych procesow
 		{
-			System.out.println("Brak gotowych procesow");
+			Output.write("Brak gotowych procesow");
 			return false;	
 		}
 		if(pr_rdy==qs.get(first_not_empty).get(0)) //Zmiana wykonywanego procesu
@@ -193,7 +194,7 @@ public class Scheduler {
 		}
 		else
 			pr_rdy = qs.get(first_not_empty).get(0);
-		System.out.println("Kontekst zmieniono.\nAktualny proces: "+pr_rdy.PID);
+		Output.write("Kontekst zmieniono.\nAktualny proces: "+pr_rdy.PID);
 		
 		return true; // udalo sie zmienic kontekst
 	}
@@ -201,35 +202,35 @@ public class Scheduler {
 	//Metoda wyswietlajaca aktualny stan kolejki procesow gotowych
 	public static void show_ready_list()
 	{
-		System.out.println("Wypisanie kolejki procesow gotowych");
+		Output.write("Wypisanie kolejki procesow gotowych");
 		for(int i=0;i<7;i++)
 		{
-			System.out.println("Kolejka "+(i*4)+"-"+(i*4+3)+":");
+			Output.write("Kolejka "+(i*4)+"-"+(i*4+3)+":");
 			if(whichqs[i])
 			{
 				for(Proces temp: qs.get(i))
 				{
-					System.out.println("Proces PID: "+temp.PID+" pri: "+temp.pri+" uspri: "+temp.uspri+" CPU: "+temp.cpu);
+					Output.write("Proces PID: "+temp.PID+" pri: "+temp.pri+" uspri: "+temp.uspri+" CPU: "+temp.cpu);
 				}
 			}
 			else
-				System.out.println("---PUSTA---");
+				Output.write("---PUSTA---");
 		}
 	}
 	
 	//Metoda wyswietlajaca aktualny stan kolejki procesow oczekujacych
 		public static void show_wait_list()
 		{
-			System.out.println("Wypisanie kolejki procesow oczekujacych");
+			Output.write("Wypisanie kolejki procesow oczekujacych");
 				if(wait_list.size()>0)
 				{
 					for(Proces temp: wait_list)
 					{
-						System.out.println("Proces PID: "+temp.PID+" pri: "+temp.pri+" uspri: "+temp.uspri+" CPU: "+temp.cpu);
+						Output.write("Proces PID: "+temp.PID+" pri: "+temp.pri+" uspri: "+temp.uspri+" CPU: "+temp.cpu);
 					}
 				}
 				else
-					System.out.println("---PUSTA---");
+					Output.write("---PUSTA---");
 		}
 	
 	
