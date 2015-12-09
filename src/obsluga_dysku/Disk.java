@@ -158,7 +158,6 @@ public class Disk {
     void D_ChangeNameFile(String From, String To) {
         File hlp_File = this.D_FindFile(From);
         File hlp_File2 = this.D_FindFile(To);
-        Scanner YesNo = new Scanner(System.in);
         String Decision;
         if(hlp_File != null) {
         	if(hlp_File2 == null) {
