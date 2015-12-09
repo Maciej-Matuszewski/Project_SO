@@ -51,6 +51,6 @@ public class SwapFileEntry {
 
     @Override
     public String toString() {
-        return new String("Fragment pliku wymiany(proces: "+this.processID+"strona: "+this.page+"):"+String.valueOf(this.data));
+        return new String("Fragment pliku wymiany(proces: "+this.processID+" strona: "+this.page+"):"+String.valueOf(this.data));
     }
 }
