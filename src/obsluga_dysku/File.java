@@ -1,24 +1,26 @@
 /******************************************************************/
 /*                     FLOREK FILE SYSTEM v1.0                    */
-/*                     Author: Łukasz Florczak                    */
+/*                     Author: Ĺ�ukasz Florczak                    */
 /*                    Created: 02.11.2015 09:54                   */
 /*                  Last update: 07.12.2015 10:08                 */
 /******************************************************************/
 package obsluga_dysku;
 import java.util.ArrayList;
 import java.util.List;
+
+import Interpreter.Output;
 import obsluga_dysku.FlorekFileSystem;
 /******************************************************************/
 public class File {
     String F_Name;      // nazwa pliku
-    int F_iNode_Id;     // identyfikator i-węzła
+    int F_iNode_Id;     // identyfikator i-wÄ™zĹ‚a
     /**************************************************************/
     File(String F_Name, Disk SysDisk, char F_Type, String Content) {
         int hlp_Block = SysDisk.D_GetFreeBlock();
         int hlp_iNode = SysDisk.D_GetFreeiNode();
          
         if(F_Type != 'C') {
-            File hlp_File = SysDisk.D_FindFile(F_Name); //obsługa nadpisania pliku
+            File hlp_File = SysDisk.D_FindFile(F_Name); //obsĹ‚uga nadpisania pliku
             if(hlp_File != null) {
                 FlorekFileSystem.F_Delete(F_Name);
             }
@@ -41,7 +43,7 @@ public class File {
                     SysDisk.D_Block[hlp_Block].CatalogEntry = new ArrayList<File>();
                     /**********************************************************/
                     for(int i = 0; i < SysDisk.D_BlockSize; i++) {
-                        SysDisk.D_iNode[hlp_iNode].DirBlock[0].B_Bytes[i] = 1; // blokuje cały blok
+                        SysDisk.D_iNode[hlp_iNode].DirBlock[0].B_Bytes[i] = 1; // blokuje caĹ‚y blok
                         SysDisk.D_BusySpace++;
                     }
                     /******************************************************/
@@ -65,7 +67,7 @@ public class File {
         for(int i = 0; i < SysDisk.D_MaxDirectBlock; i++) {
             if(SysDisk.D_iNode[this.F_iNode_Id].DirBlock[i] == null) {
                 if(SysDisk.D_GetFreeBlock() != -1) {
-                    SysDisk.D_iNode[this.F_iNode_Id].DirBlock[i] = SysDisk.D_Block[SysDisk.D_GetFreeBlock()]; // wpis nowego bloku do i-węzła
+                    SysDisk.D_iNode[this.F_iNode_Id].DirBlock[i] = SysDisk.D_Block[SysDisk.D_GetFreeBlock()]; // wpis nowego bloku do i-wÄ™zĹ‚a
                     SysDisk.D_iNode[this.F_iNode_Id].iNode_AddBlockId(SysDisk.D_Block[SysDisk.D_GetFreeBlock()].B_Id);
                     hlp_Block = SysDisk.D_Block[SysDisk.D_GetFreeBlock()];
                     SysDisk.D_BitVector_Block[SysDisk.D_GetFreeBlock()] = 1;
@@ -75,7 +77,7 @@ public class File {
                     return null;
                 }
             }
-            else if(!SysDisk.D_iNode[this.F_iNode_Id].DirBlock[i].B_BlockIsFull()) /* jeżeli nie w pełni zapełniony*/ {
+            else if(!SysDisk.D_iNode[this.F_iNode_Id].DirBlock[i].B_BlockIsFull()) /* jeĹĽeli nie w peĹ‚ni zapeĹ‚niony*/ {
                 return SysDisk.D_iNode[this.F_iNode_Id].DirBlock[i];
             }
         }
@@ -83,7 +85,7 @@ public class File {
             if(SysDisk.D_iNode[this.F_iNode_Id].InDirBlock[0][i] == null) {
                 if(SysDisk.D_GetFreeBlock() != -1) {
                     SysDisk.D_iNode[this.F_iNode_Id].iNode_AddBlockId(SysDisk.D_Block[SysDisk.D_GetFreeBlock()].B_Id);
-                    SysDisk.D_iNode[this.F_iNode_Id].InDirBlock[0][i] = SysDisk.D_Block[SysDisk.D_GetFreeBlock()]; // wpis nowego bloku do i-węzła
+                    SysDisk.D_iNode[this.F_iNode_Id].InDirBlock[0][i] = SysDisk.D_Block[SysDisk.D_GetFreeBlock()]; // wpis nowego bloku do i-wÄ™zĹ‚a
                     hlp_Block = SysDisk.D_Block[SysDisk.D_GetFreeBlock()];
                     SysDisk.D_BitVector_Block[SysDisk.D_GetFreeBlock()] = 1;
                     return hlp_Block;
@@ -92,11 +94,11 @@ public class File {
                     return null;
                 }
             }
-            else if(!SysDisk.D_iNode[this.F_iNode_Id].InDirBlock[0][i].B_BlockIsFull()) /* jeżeli nie w pełni zapełniony*/ {
+            else if(!SysDisk.D_iNode[this.F_iNode_Id].InDirBlock[0][i].B_BlockIsFull()) /* jeĹĽeli nie w peĹ‚ni zapeĹ‚niony*/ {
                 return SysDisk.D_iNode[this.F_iNode_Id].InDirBlock[0][i];
             }
         }
-        return null; // w przypadku braku wolnych bloków
+        return null; // w przypadku braku wolnych blokĂłw
     }
     /**************************************************************/
 }

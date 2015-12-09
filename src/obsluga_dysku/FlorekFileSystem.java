@@ -12,6 +12,7 @@ import java.util.Scanner;
 
 import obsluga_procesora.Scheduler;
 import Interpreter.Interpreter;
+import Interpreter.Output;
 /******************************************************************/
 public class FlorekFileSystem {   
     /****************************************************************/
@@ -341,7 +342,7 @@ public class FlorekFileSystem {
                 int va =Integer.parseInt(Com[1]);
                 int size = Integer.parseInt(Com[2]);
                 int pid = Integer.parseInt(Com[3]);
-                Output.write(MemoryManagement.readMemory(va,size,pid));
+                Output.write(String.valueOf(MemoryManagement.readMemory(va,size,pid)));
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("wmem")){
