@@ -18,8 +18,9 @@ public class Interpreter{
 	static boolean ZF;
 	static int  CPU;
 	
+	public static boolean shutdown = false;
 	boolean exit = false;
-	static boolean test = false;
+	public static boolean test = false;
 	private int wynik;
 	private int  przelicz;
 	private String Decision;
@@ -51,7 +52,7 @@ public class Interpreter{
 		//System.out.print("Podaj komende: ");
 		Decision = Output.loadCMD("Podaj komende");
 		FlorekFileSystem.Disk_Command(Decision);
-		while(true){
+		while(!shutdown){
 			exit = false;
 			if(test || scheduler.change_context()){
 					// pobranie kontekstu
@@ -61,7 +62,7 @@ public class Interpreter{
 					PC = scheduler.pr_rdy.pPC;
 					ZF = scheduler.pr_rdy.pZF;
 				}
-				while(!exit && CPU < 4 && (test || MemoryManagement.inMemory(PC, scheduler.pr_rdy.PID))){
+				while(!exit && CPU < 4 && (test || MemoryManagement.inMemory(PC, scheduler.pr_rdy.PID)) && !shutdown){
 					
 					if(test){
 						Output.write("");
@@ -120,12 +121,14 @@ public class Interpreter{
 						break;
 					case "ex":				//exec()
 						wyswietl_rozkaz(0);
-						MemoryManagement.releaseMemory(scheduler.pr_rdy.PID);
-						tmp = Management.processLookup(scheduler.pr_rdy.PID).codeFile;
-						// nr = Integer.valueOf(tmp.substring(7,8)) + 1;
-						tmp = "Program"+(Integer.valueOf(tmp.substring(7,8)) + 1);
-						Management.exec(tmp, scheduler.pr_rdy.PID);
-						PC = 0;
+						if(!test){
+							MemoryManagement.releaseMemory(scheduler.pr_rdy.PID);
+							tmp = Management.processLookup(scheduler.pr_rdy.PID).codeFile;
+							// nr = Integer.valueOf(tmp.substring(7,8)) + 1;
+							tmp = "Program"+(Integer.valueOf(tmp.substring(7,8)) + 1);
+							Management.exec(tmp, scheduler.pr_rdy.PID);
+							PC = 0;
+						}
 						break;
 					case "et":				//zakonczenie wykonywania procesu
 						wyswietl_rozkaz(0);
@@ -181,7 +184,8 @@ public class Interpreter{
 							break;
 						}
 					}
-					aktualny_stan();
+					if(!shutdown)
+						aktualny_stan();
 				}
 				//zwrot kontekstu
 				

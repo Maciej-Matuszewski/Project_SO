@@ -337,30 +337,16 @@ public class FlorekFileSystem {
 			else if(Com[0].equals("")) {
 			//pusty ENTER - kontynuacja wykonywania procesu
 			}
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////
-			else if(Com[0].equals("run_pr1")) {
-				Proces tenproces = Management.fork(Management.processLookup(1));
-				Scheduler.add_to_ready(tenproces);
-				Management.exec("Program1",tenproces.PID);
-			}
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////
-			else if(Com[0].equals("run_pr2")) {
-				Proces tenproces = Management.fork(Management.processLookup(1));
-				Scheduler.add_to_ready(tenproces);
-				Management.exec("Program2",tenproces.PID);
-			}
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////
-			else if(Com[0].equals("run_pr3")) {
-				Proces tenproces = Management.fork(Management.processLookup(1));
-				Scheduler.add_to_ready(tenproces);
-				Management.exec("Program3",tenproces.PID);
-			}
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("run")) {//NIEPRZETESTOWANE JESZCZE
                 String filename = Com[1];
-                Proces tenproces = Management.fork();
-                Scheduler.add_to_ready(tenproces);
-                Management.exec(filename,tenproces.PID);
+                if(F_Read(filename, -1, -1) != null){
+	                Proces tenproces = Management.fork();
+	                Scheduler.add_to_ready(tenproces);
+	                Management.exec(filename,tenproces.PID);
+                }
+                else
+                	Output.write("Podany plik nie istnieje.");
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if (Com[0].equals("ds")){
@@ -392,6 +378,10 @@ public class FlorekFileSystem {
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("shw")){
             	Scheduler.show_wait_list();
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////
+            else if(Com[0].equals("shutdown")){
+            	Interpreter.shutdown = true;
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else {
