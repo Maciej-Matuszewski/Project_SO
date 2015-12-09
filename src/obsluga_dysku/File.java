@@ -15,23 +15,21 @@ public class File {
     String F_Name;      // nazwa pliku
     int F_iNode_Id;     // identyfikator i-wÄ™zĹ‚a
     /**************************************************************/
-    File(String F_Name, Disk SysDisk, char F_Type, String Content) {
+        File(String F_Name, Disk SysDisk, char F_Type, String Content) {
         int hlp_Block = SysDisk.D_GetFreeBlock();
         int hlp_iNode = SysDisk.D_GetFreeiNode();
          
+        if(F_Name.length() > 8) {
+        	F_Name = F_Name.substring(0, 7);
+        }
         if(F_Type != 'C') {
             File hlp_File = SysDisk.D_FindFile(F_Name); //obsĹ‚uga nadpisania pliku
             if(hlp_File != null) {
                 FlorekFileSystem.F_Delete(F_Name);
             }
         }
-            if(hlp_Block != -1 && hlp_iNode != -1) {
-                if(F_Name.length() > 8) {
-                    this.F_Name = F_Name.substring(0, 7);
-                }
-                else {
-                    this.F_Name = F_Name;
-                }
+            if(hlp_Block != -1 && hlp_iNode != -1) {   
+                this.F_Name = F_Name;
                 this.F_iNode_Id = hlp_iNode;
                 SysDisk.D_iNode[hlp_iNode].F_Type[0] = F_Type;
                 SysDisk.D_iNode[hlp_iNode].DirBlock[0] = SysDisk.D_Block[hlp_Block];
