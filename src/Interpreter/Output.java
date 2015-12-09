@@ -1,10 +1,14 @@
 package Interpreter;
 import java.awt.EventQueue;
+import java.awt.GridLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
@@ -80,6 +84,22 @@ public class Output {
 	}
 	
 	public static String loadCMD(String title){
-		return JOptionPane.showInputDialog(title);
+		//JOptionPane.showInputDialog(null, title, "SKOS", 1, null, null, null);
+
+		String[] options = {"OK"};
+		JPanel panel = new JPanel(new GridLayout(2, 1));
+		JLabel lbl = new JLabel(title+"\n");
+		JTextField txt = new JTextField(30);
+		panel.add(lbl);
+		panel.add(txt);
+		int selectedOption = JOptionPane.showOptionDialog(null, panel, "SKOS", JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options , options[0]);
+
+		if(selectedOption == 0)
+		{
+		    String text = txt.getText();
+		    return text;
+		}
+		
+		return null;
 	}
 }
