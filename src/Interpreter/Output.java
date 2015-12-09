@@ -15,6 +15,8 @@ import javax.swing.JTextField;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import java.awt.Color;
+import java.awt.Font;
 
 public class Output {
 	
@@ -67,6 +69,9 @@ public class Output {
 		tabbedPane.addTab("Output", null, scrollPane, null);
 		
 		outputArea = new JTextArea();
+		outputArea.setFont(new Font("Lucida Sans Typewriter", Font.BOLD, 15));
+		outputArea.setForeground(new Color(0, 255, 0));
+		outputArea.setBackground(new Color(47, 79, 79));
 		outputArea.setWrapStyleWord(true);
 		outputArea.setLineWrap(true);
 		outputArea.setEditable(false);
@@ -74,18 +79,34 @@ public class Output {
 	}
 	
 	public static void write(String text){
-		outputArea.setText(outputArea.getText() + text +"\n");
+
+		for (int i = 0; i< text.length();i++){
+			outputArea.setText(outputArea.getText() + text.charAt(i));
+			try {
+			    Thread.sleep(5);
+			} catch(InterruptedException ex) {
+			}
+		}
+
+		outputArea.setText(outputArea.getText() + "\n");
 		scrollToBottom();
 	}
 	
 	public static void writeInLine(String text){
-		outputArea.setText(outputArea.getText() + text);
+		for (int i = 0; i< text.length();i++){
+			outputArea.setText(outputArea.getText() + text.charAt(i));
+			try {
+			    Thread.sleep(5);
+			} catch(InterruptedException ex) {
+			}
+		}
+		//outputArea.setText(outputArea.getText() + text);
 		scrollToBottom();
 	}
 	
 	public static void scrollToBottom(){
 		try {
-		    Thread.sleep(100);
+		    Thread.sleep(50);
 		} catch(InterruptedException ex) {
 		}
 		JScrollBar vertical = scrollPane.getVerticalScrollBar();
