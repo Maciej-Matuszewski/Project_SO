@@ -84,6 +84,10 @@ public class Output {
 	}
 	
 	public static void scrollToBottom(){
+		try {
+		    Thread.sleep(100);
+		} catch(InterruptedException ex) {
+		}
 		JScrollBar vertical = scrollPane.getVerticalScrollBar();
 		vertical.setValue( vertical.getMaximum() );
 	}
