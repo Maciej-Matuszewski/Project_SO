@@ -121,6 +121,16 @@ public class FlorekFileSystem {
         File hlp_File = new File(F_Name, SysDisk, 'F', Content);
     }
     /**************************************************************/
+    public static boolean StringIsNumber(String hlp) {
+        for(int i = 0; i < hlp.length(); i++) {
+            if(hlp.charAt(i) != '0' && hlp.charAt(i) != '1' && hlp.charAt(i) != '2' && hlp.charAt(i) != '3' && hlp.charAt(i) != '4' 
+                    && hlp.charAt(i) != '5' && hlp.charAt(i) != '6' && hlp.charAt(i) != '7' && hlp.charAt(i) != '8' && hlp.charAt(i) != '9') {
+                return false;
+            }
+        }
+        return true;
+    } 
+    /**************************************************************/
     public static void Disk_Command(String Command) {
         Scanner YesNo = new Scanner(System.in);
         String Decision;
@@ -191,23 +201,46 @@ public class FlorekFileSystem {
                 SysDisk.D_ShowBlocksBitVector();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if(Com[0].equals("opn")) {
+	    else if(Com[0].equals("opn")) {
                 if(Com.length > 1) {
+                    int hlp;
+                    int hlp2;
                     char hlp_char = Com[1].charAt(0);
                     if(hlp_char == '/') {
-                        if(Com.length == 3) 
-                            SysDisk.D_OpenFile(Com[1].substring(1), Integer.parseInt(Com[2]), -1);
-                        else if(Com.length == 4) 
-                            SysDisk.D_OpenFile(Com[1].substring(1), Integer.parseInt(Com[2]), Integer.parseInt(Com[3]));
-                        else 
+                        if(Com.length == 3) {
+                            if(StringIsNumber(Com[2])) {
+                                hlp = Integer.parseInt(Com[2]);
+                            }
+                            else {
+                                hlp = 0;
+                            }
+                            SysDisk.D_OpenFile(Com[1].substring(1), hlp, -1);
+                        }
+                        else if(Com.length == 4) {
+                            if(StringIsNumber(Com[2])) {
+                                hlp = Integer.parseInt(Com[2]);
+                            }
+                            else {
+                                hlp = 0;
+                            }
+                            if(StringIsNumber(Com[3])) {
+                                hlp2 = Integer.parseInt(Com[3]);   
+                            }
+                            else {
+                                hlp2 = -1;
+                            }
+                            SysDisk.D_OpenFile(Com[1].substring(1), hlp, hlp2);
+                        }
+                        else {
                             SysDisk.D_OpenFile(Com[1].substring(1), 0, -1);
+                        }
                     }
                     else {
-                        Output.write("Nie rozpoznano scieżki! Pamietaj o '/'!");
+                        System.out.println("Nie rozpoznano scieżki! Pamietaj o '/'!");
                     }
                 }
                 else {
-                    Output.write("Nie rozpoznano komendy!");
+                    System.out.println("Nie rozpoznano komendy!");
                 }
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
