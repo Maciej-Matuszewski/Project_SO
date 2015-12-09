@@ -323,7 +323,7 @@ public class FlorekFileSystem {
 			}
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("run")) {//NIEPRZETESTOWANE JESZCZE
-                String filename = Com[0];
+                String filename = Com[1];
                 Proces tenproces = Management.fork();
                 Scheduler.add_to_ready(tenproces);
                 Management.exec(filename,tenproces.PID);
@@ -333,14 +333,18 @@ public class FlorekFileSystem {
                 MemoryManagement.displayStatus();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if(Com[0].equals("rm")){
+            else if (Com[0].equals("da")){ //do usuniecia z wersji finalnej!
+                MemoryManagement.displayAddressSpace(3);
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////
+            else if(Com[0].equals("rmem")){
                 int va =Integer.parseInt(Com[1]);
                 int size = Integer.parseInt(Com[2]);
                 int pid = Integer.parseInt(Com[3]);
                 Output.write(MemoryManagement.readMemory(va,size,pid));
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if(Com[0].equals("wm")){
+            else if(Com[0].equals("wmem")){
                 int va =Integer.parseInt(Com[1]);
                 char[] text = Com[2].toCharArray();
                 int pid = Integer.parseInt(Com[3]);

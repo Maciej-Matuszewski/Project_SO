@@ -291,10 +291,10 @@ public static void displayAddressSpace(int pid) {
     public  static char[] readMemory(int virtualAddress, int size, int processID) { //rename to memoryRead ?
         //Proces pcb = Management.processLookup(processID);
 
-        if(size>physicalMemory.length){
+        /*if(size>physicalMemory.length){
             String wynik = new String("Argument size większy od rozmiaru fizycznej pamięci ("+physicalMemory.length+")");
             return wynik.toCharArray() ;
-        }
+        }*/
 
         int paddress = translateAddress(virtualAddress, processID);
         //!
@@ -308,7 +308,7 @@ public static void displayAddressSpace(int pid) {
 
         //int index = paddress & 0b00110000 * 16 + paddress & 0b00001111;
 
-        int offset = paddress % pagesize;
+        int offset = virtualAddress % pagesize;
 
         if(offset+size>pagesize) {
             int leftToRead = size;
@@ -332,7 +332,7 @@ public static void displayAddressSpace(int pid) {
             }
             if (leftToRead > 0){
                 //result = result + new String(readMemory(paddress + size - leftToRead, leftToRead, processID));
-                result = result + new String(readMemory(translateAddress(virtualAddress+size-leftToRead,processID), leftToRead, processID));
+                result = result + new String(readMemory(virtualAddress+size-leftToRead, leftToRead, processID));
             }
             //!
             //System.out.println("wynik długiego odczytu (vaddress = "+virtualAddress+": "+result);
