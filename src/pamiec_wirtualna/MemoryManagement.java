@@ -44,6 +44,7 @@ public class MemoryManagement {
 
         FlorekFileSystem.Create_File("Program1", "mv RA,01mv RB,05ad RA,RBj1 00");
         readProgram("Program1",p.PID);
+        readMemory(2,2,p.PID);
 
        /*FlorekFileSystem.Create_File("testowy","mv RA,10ml RA,05sb RA,01");
         readProgram("testowy",p.PID);
