@@ -10,6 +10,7 @@ public class Main {
 		FlorekFileSystem.SysDisk.BackupProgramFiles(); // inicjalizacja plików z programami ;)
 		try{
 			Interpreter interpreter = new Interpreter();
+			
 			//interpreter.start();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

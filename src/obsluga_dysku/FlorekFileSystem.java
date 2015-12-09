@@ -315,7 +315,7 @@ public class FlorekFileSystem {
             }
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////
 			else if(Com[0].equals("i_test")) {
-			Interpreter.test();
+				Interpreter.test();
 			}
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////
 			else if(Com[0].equals("")) {
@@ -323,9 +323,15 @@ public class FlorekFileSystem {
 			}
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////
 			else if(Com[0].equals("run_pr1")) {
-			Proces tenproces = Management.fork(Management.processLookup(1));
-			Scheduler.add_to_ready(tenproces);
-			Management.exec("Program1",tenproces.PID);
+				Proces tenproces = Management.fork(Management.processLookup(1));
+				Scheduler.add_to_ready(tenproces);
+				Management.exec("Program1",tenproces.PID);
+			}
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////
+			else if(Com[0].equals("run_pr2")) {
+				Proces tenproces = Management.fork(Management.processLookup(1));
+				Scheduler.add_to_ready(tenproces);
+				Management.exec("Program2",tenproces.PID);
 			}
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if (Com[0].equals("ds")){

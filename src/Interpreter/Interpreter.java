@@ -69,6 +69,7 @@ public class Interpreter{
 					}
 					else{
 					cmd = String.valueOf(MemoryManagement.readMemory(PC,8,scheduler.pr_rdy.PID)); //pobranie kolejnego rozkazu
+					
 					System.out.println("Aktualny rozkaz: " + cmd);
 					}
 					if(cmd.length() >= 5)
@@ -175,17 +176,30 @@ public class Interpreter{
 			//RA = wczytanie z pamieci operacyjnej
 
 			RA = Integer.parseInt(String.valueOf(MemoryManagement.readMemory(Integer.parseInt(arg2,16),2,scheduler.pr_rdy.PID)),16);
-			MemoryManagement.displayStatus();
+			//MemoryManagement.displayStatus();
 		}
 		else if(arg1.equals("RB")){
 			//RB = wczytanie z pamieci operacyjnej
 			RB = Integer.parseInt(String.valueOf(MemoryManagement.readMemory(Integer.parseInt(arg2,16),2,scheduler.pr_rdy.PID)),16);
-			MemoryManagement.displayStatus();
+			//MemoryManagement.displayStatus();
 		}
-		else{
-			//zapis do pamieci operacyjnej
-
-			MemoryManagement.writeMemory(Integer.parseInt(arg1,16), arg2.toCharArray(), scheduler.pr_rdy.PID);
+		else{//zapis do pamieci operacyjnej
+			if (arg2.equals("RA")){
+				if(RA < 16)
+					tmp = "0" + String.valueOf(Integer.toHexString(RA));
+				else
+					tmp = String.valueOf(Integer.toHexString(RA));
+				MemoryManagement.writeMemory(Integer.parseInt(arg1,16), tmp.toCharArray(), scheduler.pr_rdy.PID);
+			}
+			else if(arg2.equals("RB")){
+				if(RB < 16)
+					tmp = "0" + String.valueOf(Integer.toHexString(RB));
+				else
+					tmp = String.valueOf(Integer.toHexString(RB));
+				MemoryManagement.writeMemory(Integer.parseInt(arg1,16), tmp.toCharArray(), scheduler.pr_rdy.PID);
+			}
+			else
+				MemoryManagement.writeMemory(Integer.parseInt(arg1,16), arg2.toCharArray(), scheduler.pr_rdy.PID);
 			MemoryManagement.displayStatus();
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -286,13 +300,17 @@ public class Interpreter{
 	}
 	
 	void j0(String arg1){
-		if(ZF == false);
-		PC = Integer.parseInt(arg1); 
+		if(ZF == true)
+			PC = Integer.parseInt(arg1); 
+		else
+			PC +=5;
 	}
 	
 	void j1(String arg1){
-		if(ZF == true);
-		PC = Integer.parseInt(arg1); 
+		if(ZF == false)
+			PC = Integer.parseInt(arg1); 
+		else
+			PC +=5;
 	}
 
 	void pr(String arg1, String arg2) throws Exception{
