@@ -5,6 +5,8 @@ import pamiec_wirtualna.MemoryManagement;
 import java.awt.List;
 import java.util.ArrayList;
 
+import Interpreter.Output;
+
 public class Management 
 {	
 	public static ArrayList<Proces> procesList = new ArrayList<>();
@@ -46,16 +48,16 @@ public class Management
 					int tmp_pid = temp.PID;
 					zombies_list.remove(temp);
 					kill(tmp_pid);
-					System.out.println("Proces "+temp.PID+" zostal usuniety przez proces macierzysty "+pr.PID+".");
+					Output.write("Proces "+temp.PID+" zostal usuniety przez proces macierzysty "+pr.PID+".");
 					return tmp_pid; // zwrot pid procesu zakonczonego
 				}	
 			}
-			System.out.println("Proces "+pr.PID+" oczekuje na zakonczenie jednego z potomkow.");
+			Output.write("Proces "+pr.PID+" oczekuje na zakonczenie jednego z potomkow.");
 			return 0; // doda ojca do listy wait w scheduler
 		}
 		else
 		{
-			System.out.println("Blad metody wait(). Proces "+pr.PID+" nie posiada potomkow!");
+			Output.write("Blad metody wait(). Proces "+pr.PID+" nie posiada potomkow!");
 			return -1; // nie jest ojcem nie moze wykonac wait
 		}
 	}
@@ -125,12 +127,10 @@ public class Management
 	
 	static void ProcessPrint()
 	{
-		System.out.print("Name\t\t" + "PID\t" + "PPID\t" + "Priorytet\t" + "Stan");
-		System.out.println("");
+		Output.write("Name\t\t" + "PID\t" + "PPID\t" + "Priorytet\t" + "Stan");
 		for(int i=0; i<procesList.size(); i++)
 		{
-			System.out.print(procesList.get(i).nazwa +"\t"+ procesList.get(i).PID +"\t" + procesList.get(i).PPID + "\t" +  procesList.get(i).pri + "\t\t" + procesList.get(i).stan);
-			System.out.println("");
+			Output.write(procesList.get(i).nazwa +"\t"+ procesList.get(i).PID +"\t" + procesList.get(i).PPID + "\t" +  procesList.get(i).pri + "\t\t" + procesList.get(i).stan);
 		}
 		
 	}

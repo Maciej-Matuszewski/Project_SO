@@ -1,6 +1,9 @@
 package zarzadzanie_procesami;
 
 import java.util.Random;
+
+import Interpreter.Output;
+
 import java.util.ArrayList;
 
 import komunikacja_miedzy_procesami.Pipe;
@@ -45,7 +48,7 @@ public class Proces {
 		pri = 0; //P
 		uspri = 0; //P
 		stan = 0;
-		System.out.println("Powstal proces systemowy - root(Init)");
+		Output.write("Powstal proces systemowy - root(Init)");
 	}
 	
 	Proces(Proces proces)
@@ -62,13 +65,12 @@ public class Proces {
 		pPC = proces.pPC;
 		pZF = proces.pZF;
 		
-		System.out.println("Powstal: " + this.nazwa + ", Od procesu: " + proces.nazwa);
+		Output.write("Powstal: " + this.nazwa + ", Od procesu: " + proces.nazwa);
 		nazwa_pliku = proces.nazwa_pliku;
 		try {
 			new Pipe(proces, this);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Output.write("Error: " + e.getMessage());
 		}
 	}
 	
