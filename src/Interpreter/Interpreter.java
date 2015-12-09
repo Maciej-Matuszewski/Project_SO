@@ -192,8 +192,8 @@ public class Interpreter{
 				wywlaszczenie();
 			}
 			else{
-				if(!test)
-					System.out.print("Podaj komende: ");
+				//if(!test)
+					//System.out.print("Podaj komende: ");
 				Decision = Output.loadCMD("Podaj komende");
 				FlorekFileSystem.Disk_Command(Decision);
 			}
