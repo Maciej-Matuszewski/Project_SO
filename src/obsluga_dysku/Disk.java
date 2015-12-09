@@ -213,6 +213,19 @@ public class Disk {
         		+ "sb RB,01"
         		+ "j1 24"
         		+ "et");
+        FlorekFileSystem.Create_File("Program3", "mv RA,05"
+        		+ "fk"
+        		+ "ex"
+        		+ "pw 00,RA"
+        		+ "wt"
+        		+ "pr RB,00"
+        		+ "fm"
+        		+ "fw RB"
+        		+ "et");
+        FlorekFileSystem.Create_File("Program4", "pr RA,PA"
+        		+ "ad RA,A0"
+        		+ "pw PA,RA"
+        		+ "et");
     }
     /**************************************************************/
 }

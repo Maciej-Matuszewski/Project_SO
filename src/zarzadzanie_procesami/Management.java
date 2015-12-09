@@ -25,6 +25,8 @@ public class Management
 	{
 		Proces proces = new Proces(pro);
 		procesList.add(proces);
+		if(pro.PID != 1)
+			exec(pro.codeFile,proces.PID); // wojtas
 		return proces;
 	}
 	

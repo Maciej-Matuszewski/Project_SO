@@ -105,10 +105,14 @@ public class Interpreter{
 						/*tenproces = Management.fork(scheduler.pr_rdy);
 						Scheduler.add_to_ready(tenproces);
 						Management.exec("Program1",tenproces.PID);*/
+						scheduler.pr_rdy.pPC = PC;
 						Scheduler.add_to_ready(Management.fork(scheduler.pr_rdy));
+						PC += 4;
 						break;
 					case "ex":				//exec()
-						
+						MemoryManagement.releaseMemory(scheduler.pr_rdy.PID);
+						Management.exec("Program4", scheduler.pr_rdy.PID);
+						PC = 0;
 						break;
 					case "et":				//zakonczenie wykonywania procesu
 						if(test){
@@ -331,10 +335,10 @@ public class Interpreter{
 		else{
 			switch(arg1){
 			case "RA":
-				RA = Integer.parseInt(scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1,16)).read(),16);
+				RA = Integer.parseInt(scheduler.pr_rdy.pipes.get(Integer.parseInt(arg2,16)).read(),16);
 				break;
 			case "RB":
-				RB = Integer.parseInt(scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1,16)).read(),16);
+				RB = Integer.parseInt(scheduler.pr_rdy.pipes.get(Integer.parseInt(arg2,16)).read(),16);
 				break;
 			default:
 				System.out.println(cmd + " - jest nierozpoznawalny");
@@ -355,8 +359,10 @@ public class Interpreter{
 				scheduler.pr_rdy.childPipe.write(arg2);
 		}
 		else{
-			if(arg2.equals("RA"))
+			if(arg2.equals("RA")){
+				System.out.println("to cos: " + Integer.parseInt(arg1));
 				scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1)).write(Integer.toString(RA));
+			}
 			else if(arg2.equals("RB"))
 				scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1)).write(Integer.toString(RB));
 			else

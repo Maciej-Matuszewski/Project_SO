@@ -333,6 +333,12 @@ public class FlorekFileSystem {
 				Scheduler.add_to_ready(tenproces);
 				Management.exec("Program2",tenproces.PID);
 			}
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////
+			else if(Com[0].equals("run_pr3")) {
+				Proces tenproces = Management.fork(Management.processLookup(1));
+				Scheduler.add_to_ready(tenproces);
+				Management.exec("Program3",tenproces.PID);
+			}
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if (Com[0].equals("ds")){
                 MemoryManagement.displayStatus();

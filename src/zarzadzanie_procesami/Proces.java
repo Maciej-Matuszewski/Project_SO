@@ -57,6 +57,14 @@ public class Proces {
 		uspri = 8+nice; //P
 		pri = uspri; //P
 		stan = 1;
+		pRA = proces.pRA;
+		pRB = proces.pRB;
+		if(proces.pPC != 0)
+			pPC = proces.pPC + 2;
+		else
+			pPC = proces.pPC;
+		pZF = proces.pZF;
+		
 		System.out.println("Powstal: " + this.nazwa + ", Od procesu: " + proces.nazwa);
 		nazwa_pliku = proces.nazwa_pliku;
 		try {
