@@ -70,8 +70,8 @@ public class Output {
 		
 		outputArea = new JTextArea();
 		outputArea.setFont(new Font("Courier", Font.BOLD, 15));
-		outputArea.setForeground(new Color(0, 255, 0));
-		outputArea.setBackground(new Color(47, 79, 79));
+		outputArea.setForeground(new Color(0, 250, 154));
+		outputArea.setBackground(new Color(0, 0, 0));
 		outputArea.setWrapStyleWord(true);
 		outputArea.setLineWrap(true);
 		outputArea.setEditable(false);
