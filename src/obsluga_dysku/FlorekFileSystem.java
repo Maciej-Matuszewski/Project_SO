@@ -154,7 +154,12 @@ public class FlorekFileSystem {
                                 Create_File(Com[1].substring(1), "");
                                 if(Com.length > 2) {
                                     for(int i = 2; i < Com.length; i++) {
-                                        F_Write(Com[1].substring(1), Com[i] + " ");
+                                    	if(SysDisk.D_iNode[hlp_File.F_iNode_Id].F_Size  < SysDisk.D_MaxFileSize)
+                                    		F_Write(Com[1].substring(1), Com[i] + " ");
+                                    	else {
+                                    		Output.write("Nie udalo sie zapisac zawartosci, brak wolnych blokow lub plik osiągnal maksymalny rozmiar!");
+                                        	break;	
+                                    	}
                                     }
                                 }
                                 Output.write("Plik zostal pomyslnie utworzony!");
@@ -164,10 +169,18 @@ public class FlorekFileSystem {
                             }
                         }
                         else {
-                            hlp_File = new File(Com[1].substring(1), SysDisk, 'F', "");
+                            if(Com[1].length() < 9)
+                            	hlp_File = new File(Com[1].substring(1, Com[1].length()), SysDisk, 'F', "");
+                            else 
+                            	hlp_File = new File(Com[1].substring(1, 9), SysDisk, 'F', "");
                             if(Com.length > 2) {
                                 for(int i = 2; i < Com.length; i++) {
-                                    F_Write(Com[1].substring(1), Com[i] + " ");
+                                	if(SysDisk.D_iNode[hlp_File.F_iNode_Id].F_Size  < SysDisk.D_MaxFileSize)
+                                		F_Write(Com[1].substring(1), Com[i] + " ");
+                                	else {
+                                		Output.write("Nie udalo sie zapisac zawartosci, brak wolnych blokow lub plik osiągnal maksymalny rozmiar!");
+                                    	break;	
+                                	}
                                 }
                             }
                             hlp_File = SysDisk.D_FindFile(Com[1].substring(1));
@@ -182,7 +195,7 @@ public class FlorekFileSystem {
                 else {
                         Output.write("Nie rozpoznano komendy!");
                 }
-            }    
+            }       
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("sba")) {
                 SysDisk.D_ShowBlockBytes();
