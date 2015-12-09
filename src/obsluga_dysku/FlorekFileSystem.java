@@ -236,11 +236,11 @@ public class FlorekFileSystem {
                         }
                     }
                     else {
-                        System.out.println("Nie rozpoznano scieżki! Pamietaj o '/'!");
+                        Output.write("Nie rozpoznano scieżki! Pamietaj o '/'!");
                     }
                 }
                 else {
-                    System.out.println("Nie rozpoznano komendy!");
+                    Output.write("Nie rozpoznano komendy!");
                 }
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
