@@ -14,9 +14,9 @@ public class PipeField {
 	public String read() throws Exception{
 		if(pipe.pipeListToChild.size()>0){
 			String temp = pipe.pipeListToChild.get(0);
-			Output.write("Proces potomka: "+pipe.child.PID+" odczytał dane od procesu rodzica: "+pipe.parent.PID+" o treści: \""+temp+"\"");
+			Output.write("Proces potomka: "+pipe.child.PID+" odczytal dane od procesu rodzica: "+pipe.parent.PID+" o tresci: \""+temp+"\"");
 			pipe.pipeListToChild.remove(0);
-			Output.write("Dane przeznaczone dla procesu potomka: "+pipe.child.PID+" o treści: \""+temp+"\" zostały usunięte z pipe");
+			Output.write("Dane przeznaczone dla procesu potomka: "+pipe.child.PID+" o tresci: \""+temp+"\" zostaly usuniete z pipe");
 			return temp;
 		}
 		throw new Exception("Kolejka jest pusta");
@@ -24,7 +24,7 @@ public class PipeField {
 	
 	public int write(String data){
 		pipe.pipeListToParrent.add(data);
-		Output.write("Proces potomka: "+pipe.child.PID+" zapisał dane dla procesu rodzica: "+pipe.parent.PID+" o treści: \""+data+"\"");
+		Output.write("Proces potomka: "+pipe.child.PID+" zapisal dane dla procesu rodzica: "+pipe.parent.PID+" o tresci: \""+data+"\"");
 		return 0;
 	}
 	

@@ -26,15 +26,15 @@ public class Pipe {
 	public void write(String data){
 		this.pipeListToChild.add(data);
 
-		Output.write("Proces rodzica: "+parent.PID+" zapisał dane dla procesu potomka: "+child.PID+" o treści: \""+data+"\"");
+		Output.write("Proces rodzica: "+parent.PID+" zapisal dane dla procesu potomka: "+child.PID+" o tresci: \""+data+"\"");
 	}
 	
 	public String read() throws Exception{
 		if(this.pipeListToParrent.size()>0){
 			String temp = this.pipeListToParrent.get(0);
-			Output.write("Proces rodzica: "+parent.PID+" odczytał dane od procesu potomka: "+child.PID+" o treści: \""+temp+"\"");
+			Output.write("Proces rodzica: "+parent.PID+" odczytal dane od procesu potomka: "+child.PID+" o tresci: \""+temp+"\"");
 			this.pipeListToParrent.remove(0);
-			Output.write("Dane przeznaczone dla procesu rodzica: "+parent.PID+" o treści: \""+temp+"\" zostały usunięte z pipe");
+			Output.write("Dane przeznaczone dla procesu rodzica: "+parent.PID+" o tresci: \""+temp+"\" zostaly usuniete z pipe");
 			return temp;
 		}
 		throw new Exception("Kolejka jest pusta");
@@ -45,7 +45,7 @@ public class Pipe {
 		for(int i = 0; i < parent.pipes.size();i++){
 			if(parent.pipes.get(i).equals(this)){
 				parent.pipes.remove(i);
-				Output.write("Zamknięto pipe pomiedzy procesem rodzica: "+parent.PID+" a procesem potomka: "+child.PID);
+				Output.write("Zamknieto pipe pomiedzy procesem rodzica: "+parent.PID+" a procesem potomka: "+child.PID);
 				break;
 			}
 		}
