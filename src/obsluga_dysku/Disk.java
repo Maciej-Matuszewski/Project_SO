@@ -157,9 +157,21 @@ public class Disk {
     /**************************************************************/
     void D_ChangeNameFile(String From, String To) {
         File hlp_File = this.D_FindFile(From);
+        File hlp_File2 = this.D_FindFile(To);
+        Scanner YesNo = new Scanner(System.in);
+        String Decision;
         if(hlp_File != null) {
-            hlp_File.F_Name = To;
+        	if(hlp_File2 == null) {
+        		hlp_File.F_Name = To;	
+        	}
+        	else {
+                Decision = Decision = Output.loadCMD("Plik o podanej nazwie istnieje, czy chcesz go nadpisac(stracisz wszystkie informacje w nim zawarte)? T/N");
+                if(Decision.equals("T")) {
+                    FlorekFileSystem.F_Delete(To);
+                    hlp_File.F_Name = To;   
+                }  
             Output.write("Nazwa pliku zostala pomyslnie zmieniona!");
+        	}
         }
         else {
             Output.write("Nie udalo sie zmienic nazwy pliku, plik nie istnieje!");
