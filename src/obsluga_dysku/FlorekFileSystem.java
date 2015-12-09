@@ -385,7 +385,7 @@ public class FlorekFileSystem {
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("shutdown")){
             	Interpreter.shutdown = true;
-            	Output.write("System zakonczyl prace.");
+            	Output.write("\n[SYSTEM ZAKONCZYL PRACE]\n");
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else {
