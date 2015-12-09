@@ -56,7 +56,7 @@ public class File {
                 /**********************************************************/
             }
             else {
-                System.out.println("Nie udalo sie stworzyc plikow, brak wolnego miejsca na dysku!");
+                Output.write("Nie udalo sie stworzyc plikow, brak wolnego miejsca na dysku!");
             }        
     }
     /**************************************************************/
