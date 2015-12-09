@@ -113,13 +113,15 @@ public class Interpreter{
 						/*tenproces = Management.fork(scheduler.pr_rdy);
 						Scheduler.add_to_ready(tenproces);
 						Management.exec("Program1",tenproces.PID);*/
+						PC += 2;
 						scheduler.pr_rdy.pPC = PC;
 						Scheduler.add_to_ready(Management.fork(scheduler.pr_rdy));
-						PC += 4;
+						PC += 2;
 						break;
 					case "ex":				//exec()
 						wyswietl_rozkaz(0);
 						MemoryManagement.releaseMemory(scheduler.pr_rdy.PID);
+						//String nazwa = scheduler.pr_rdy.
 						Management.exec("Program4", scheduler.pr_rdy.PID);
 						PC = 0;
 						break;
@@ -180,7 +182,14 @@ public class Interpreter{
 					aktualny_stan();
 				}
 				//zwrot kontekstu
+				
 				wywlaszczenie();
+			}
+			else{
+				if(!test)
+					System.out.print("Podaj komende: ");
+				Decision = input.nextLine();
+				FlorekFileSystem.Disk_Command(Decision);
 			}
 		}
 	}

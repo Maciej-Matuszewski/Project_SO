@@ -59,10 +59,7 @@ public class Proces {
 		stan = 1;
 		pRA = proces.pRA;
 		pRB = proces.pRB;
-		if(proces.pPC != 0)
-			pPC = proces.pPC + 2;
-		else
-			pPC = proces.pPC;
+		pPC = proces.pPC;
 		pZF = proces.pZF;
 		
 		System.out.println("Powstal: " + this.nazwa + ", Od procesu: " + proces.nazwa);
