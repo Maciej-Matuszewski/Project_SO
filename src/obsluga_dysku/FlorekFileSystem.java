@@ -17,16 +17,20 @@ public class FlorekFileSystem {
     /****************************************************************/
     public static Disk SysDisk = new Disk("Dysk Systemowy", "Florek File System", 1024, 32); 
     /****************************************************************/
-    public static char[] F_Read(String F_Name) {
+    public static char[] F_Read(String F_Name, int From, int To) {
         File hlp_File = SysDisk.D_FindFile(F_Name);
+        char[] hlp;
+        String h_String;
+                
         if(hlp_File != null) {
-            char[] Content = new char[SysDisk.D_iNode[hlp_File.F_iNode_Id].F_Size];
+            //char[] Content = new char[SysDisk.D_iNode[hlp_File.F_iNode_Id].F_Size];
+            String Content = "";
             int k = 0;
             if(SysDisk.D_BitVector_iNode[hlp_File.F_iNode_Id] == 1) {
                 for(int i = 0; i < SysDisk.D_MaxDirectBlock; i++) {
                     if(SysDisk.D_iNode[hlp_File.F_iNode_Id].DirBlock[i] != null) {
                         for(int j = 0; j < SysDisk.D_iNode[hlp_File.F_iNode_Id].DirBlock[i].B_PointerToFreeByte; j++) {
-                            Content[k] = SysDisk.D_iNode[hlp_File.F_iNode_Id].DirBlock[i].B_Content[j];
+                            Content += SysDisk.D_iNode[hlp_File.F_iNode_Id].DirBlock[i].B_Content[j];
                             k++;
                         }
                     }
@@ -34,7 +38,7 @@ public class FlorekFileSystem {
                 for(int i = 0; i < SysDisk.D_MaxInDirectBlock; i++) {
                     if(SysDisk.D_iNode[hlp_File.F_iNode_Id].InDirBlock[0][i] != null) {
                         for(int j = 0; j < SysDisk.D_iNode[hlp_File.F_iNode_Id].InDirBlock[0][i].B_PointerToFreeByte; j++) {
-                            Content[k] = SysDisk.D_iNode[hlp_File.F_iNode_Id].InDirBlock[0][i].B_Content[j];
+                            Content += SysDisk.D_iNode[hlp_File.F_iNode_Id].InDirBlock[0][i].B_Content[j];
                             k++;
                         }
                     }
@@ -44,7 +48,15 @@ public class FlorekFileSystem {
                 System.out.println("Plik nie moze zostac odczytany, gdyz nie istnieje!");
                 return null;
             }
-            return Content;
+            if(From < 0 || From > SysDisk.D_iNode[hlp_File.F_iNode_Id].F_Size || From == -1) {
+                From = 0;
+            }
+            if(To < 0 || To > SysDisk.D_iNode[hlp_File.F_iNode_Id].F_Size || To == -1) {
+                To = SysDisk.D_iNode[hlp_File.F_iNode_Id].F_Size;
+            }
+            h_String = Content.substring(From, To);
+            hlp = h_String.toCharArray();
+            return hlp;
         }
         return null;
     }
@@ -84,7 +96,7 @@ public class FlorekFileSystem {
                     SysDisk.D_CleanCatalogEntry(hlp_File.F_Name);
                     SysDisk.D_BitVector_Block[SysDisk.D_iNode[hlp_File.F_iNode_Id].DirBlock[i].B_Id] = 0; // zwalnianie bloku
                     SysDisk.D_iNode[hlp_File.F_iNode_Id].DirBlock[i] = null;
-                    SysDisk.D_BitVector_iNode[hlp_File.F_iNode_Id] = 0; // zwalnianie i-wÄ™zĹ‚a        
+                    SysDisk.D_BitVector_iNode[hlp_File.F_iNode_Id] = 0; // zwalnianie i-węzła        
                 }
             }
             for(int i = 0; i < SysDisk.D_MaxInDirectBlock; i++) {
@@ -95,7 +107,7 @@ public class FlorekFileSystem {
                     SysDisk.D_CleanCatalogEntry(hlp_File.F_Name);
                     SysDisk.D_BitVector_Block[SysDisk.D_iNode[hlp_File.F_iNode_Id].InDirBlock[0][i].B_Id] = 0; // zwalnianie bloku
                     SysDisk.D_iNode[hlp_File.F_iNode_Id].InDirBlock[0][i] = null;
-                    SysDisk.D_BitVector_iNode[hlp_File.F_iNode_Id] = 0; // zwalnianie i-wÄ™zĹ‚a   
+                    SysDisk.D_BitVector_iNode[hlp_File.F_iNode_Id] = 0; // zwalnianie i-węzła   
                 }
             }
             SysDisk.D_BusySpace -= SysDisk.D_iNode[hlp_File.F_iNode_Id].F_Size;
@@ -150,7 +162,7 @@ public class FlorekFileSystem {
                         }
                     }
                     else {
-                        System.out.println("Nie rozpoznano sciezki! PamiÄ™taj o '/'!");
+                        System.out.println("Nie rozpoznano sciezki! Pamiętaj o '/'!");
                     }      
                 }
                 else {
@@ -167,21 +179,7 @@ public class FlorekFileSystem {
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("sbc")) {
-                if(Com.length > 1) {
-                    int BlockNumber = Integer.parseInt(Com[1]);
-                    if((BlockNumber > SysDisk.D_BlockValue - 1) || (BlockNumber < 0)) {
-                        System.out.println("Blok o podanym indeksie nie istnieje!");
-                    }
-                    else if(BlockNumber == 0) {
-                        System.out.println("Blok zarezerwowany dla katalogu gĹ‚ownego, nie mozna wyswietlic zawartosci!");
-                    }
-                    else if(BlockNumber > 0 && BlockNumber < SysDisk.D_BlockValue) {
-                        SysDisk.D_Block[BlockNumber].B_ShowBlockBytes();
-                    }   
-                }
-                else {
-                    System.out.println("Nie rozpoznano komendy!");
-                }
+                SysDisk.D_ShowBlockContent();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("siv")) {
@@ -196,10 +194,15 @@ public class FlorekFileSystem {
                 if(Com.length > 1) {
                     char hlp_char = Com[1].charAt(0);
                     if(hlp_char == '/') {
-                        SysDisk.D_OpenFile(Com[1].substring(1));
+                        if(Com.length == 3) 
+                            SysDisk.D_OpenFile(Com[1].substring(1), Integer.parseInt(Com[2]), -1);
+                        else if(Com.length == 4) 
+                            SysDisk.D_OpenFile(Com[1].substring(1), Integer.parseInt(Com[2]), Integer.parseInt(Com[3]));
+                        else 
+                            SysDisk.D_OpenFile(Com[1].substring(1), 0, -1);
                     }
                     else {
-                        System.out.println("Nie rozpoznano scieĹĽki! Pamietaj o '/'!");
+                        System.out.println("Nie rozpoznano scieżki! Pamietaj o '/'!");
                     }
                 }
                 else {
@@ -218,7 +221,7 @@ public class FlorekFileSystem {
                                     F_Write(Com[1].substring(1), Com[i] + " ");
                                 }
                                 else {
-                                    System.out.println("Nie udalo sie zapisac zawartosci, brak wolnych blokow lub plik osiÄ…gnal maksymalny rozmiar!");
+                                    System.out.println("Nie udalo sie zapisac zawartosci, brak wolnych blokow lub plik osiągnal maksymalny rozmiar!");
                                     break;
                                 }        
                             }   
@@ -228,7 +231,7 @@ public class FlorekFileSystem {
                         }
                     }
                     else {
-                        System.out.println("Nie rozpoznano scieĹĽki! Pamietaj o '/'!");
+                        System.out.println("Nie rozpoznano scieżki! Pamietaj o '/'!");
                     }
                 }
                 else {
@@ -237,29 +240,7 @@ public class FlorekFileSystem {
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("scb")) {
-                if(Com.length > 1) {
-                    int BlockNumber = Integer.parseInt(Com[1]);
-                    if((BlockNumber > SysDisk.D_BlockValue - 1) || (BlockNumber < 0)) {
-                        System.out.println("Blok o podanym indeksie nie istnieje!");
-                    }
-                    else if(BlockNumber == 0) {
-                        System.out.println("Blok zarezerwowany dla katalogu gĹ‚ownego, nie mozna wyswietlic zawartosci!");
-                    }
-                    else if(BlockNumber > 0 && BlockNumber < SysDisk.D_BlockValue) {
-                        if(Com.length == 3) {
-                            SysDisk.D_Block[BlockNumber].B_ShowBlockContent(Integer.parseInt(Com[2]), -1);
-                        }
-                        else if(Com.length == 4) {
-                            SysDisk.D_Block[BlockNumber].B_ShowBlockContent(Integer.parseInt(Com[2]), Integer.parseInt(Com[3]));
-                        }
-                        else {
-                            SysDisk.D_Block[BlockNumber].B_ShowBlockContent(-1, -1);
-                        }
-                    }   
-                }
-                else {
-                    System.out.println("Nie rozpoznano komendy!");
-                }
+                SysDisk.D_ShowBlockContent();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("inf")) {
@@ -313,6 +294,7 @@ public class FlorekFileSystem {
             else if(Com[0].equals("bcp")) {
                 SysDisk.BackupProgramFiles();
             }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////
 			else if(Com[0].equals("i_test")) {
 				Interpreter.test();
