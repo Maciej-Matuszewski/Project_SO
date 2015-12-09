@@ -69,7 +69,7 @@ public class Output {
 		tabbedPane.addTab("Output", null, scrollPane, null);
 		
 		outputArea = new JTextArea();
-		outputArea.setFont(new Font("Lucida Sans Typewriter", Font.BOLD, 15));
+		outputArea.setFont(new Font("Courier", Font.BOLD, 15));
 		outputArea.setForeground(new Color(0, 255, 0));
 		outputArea.setBackground(new Color(47, 79, 79));
 		outputArea.setWrapStyleWord(true);
