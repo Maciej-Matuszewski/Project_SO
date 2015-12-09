@@ -5,9 +5,12 @@
 /******************************************************************/
 package obsluga_dysku;
 import pamiec_wirtualna.MemoryManagement;
+import zarzadzanie_procesami.Management;
+import zarzadzanie_procesami.Proces;
 
 import java.util.Scanner;
 
+import obsluga_procesora.Scheduler;
 import Interpreter.Interpreter;
 /******************************************************************/
 public class FlorekFileSystem {   
@@ -312,11 +315,23 @@ public class FlorekFileSystem {
             }
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////
 			else if(Com[0].equals("i_test")) {
-			Interpreter.test();
+				Interpreter.test();
 			}
 			//////////////////////////////////////////////////////////////////////////////////////////////////////////
 			else if(Com[0].equals("")) {
 			//pusty ENTER - kontynuacja wykonywania procesu
+			}
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////
+			else if(Com[0].equals("run_pr1")) {
+				Proces tenproces = Management.fork(Management.processLookup(1));
+				Scheduler.add_to_ready(tenproces);
+				Management.exec("Program1",tenproces.PID);
+			}
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////
+			else if(Com[0].equals("run_pr2")) {
+				Proces tenproces = Management.fork(Management.processLookup(1));
+				Scheduler.add_to_ready(tenproces);
+				Management.exec("Program2",tenproces.PID);
 			}
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if (Com[0].equals("ds")){

@@ -286,10 +286,16 @@ public class MemoryManagement {
 
             String result = new String(readMemory(virtualAddress, pagesize - offset, processID)); //read till the end of current frame
             leftToRead = leftToRead - (pagesize - offset);
-            if(paddress+leftToRead>physicalMemory.length){
+            //if(paddress+leftToRead>physicalMemory.length){
+/*            if(translateAddress(virtualAddress+leftToRead-1,processID)>physicalMemory.length){
                 String napis = new String("Przekroczono zakres tablicy");
+                //!
+               MemoryManagement.displayStatus();
+               int VA = translateAddress(virtualAddress+leftToRead-1,processID);
+               System.out.println(VA+"VA <- PA:"+translateAddress(virtualAddress+leftToRead-1,processID)); 
+                //!
                 return napis.toCharArray();
-            }
+            }*/
             int wholePages = leftToRead / pagesize;
             for (int i = 0; i < wholePages; i++) {
                 result = result + new String(readMemory(virtualAddress + i*pagesize - offset, pagesize, processID)); //chyba i powinno zaczynać od 1
@@ -413,6 +419,7 @@ public class MemoryManagement {
             if(f.flags==0 || f.flags == 4){
                 return f.number;
             } else if ((f.flags & dirtyUsed) == 3) {
+            	f.flags = (byte)(f.flags&5);
 
             }
             else if((f.flags & dirty) != 0 || (f.flags & used) != 0) {

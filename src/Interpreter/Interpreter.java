@@ -47,7 +47,10 @@ public class Interpreter{
 	}
 	
 	void start() throws Exception{
-		test();
+		//test();
+		System.out.print("Podaj komende: ");
+		Decision = input.nextLine();
+		FlorekFileSystem.Disk_Command(Decision);
 		while(true){
 			exit = false;
 			if(test || scheduler.change_context()){
@@ -59,14 +62,14 @@ public class Interpreter{
 					ZF = scheduler.pr_rdy.pZF;
 				}
 				while(!exit && CPU < 4 && (test || MemoryManagement.inMemory(PC, scheduler.pr_rdy.PID))){
-					/*if(System.in.read() == 27)
-						FlorekFileSystem.cmd();*/
+					
 					if(test){
 						System.out.println("Podaj rozkaz: ");
 						cmd = input.nextLine();
 					}
 					else{
 					cmd = String.valueOf(MemoryManagement.readMemory(PC,8,scheduler.pr_rdy.PID)); //pobranie kolejnego rozkazu
+					
 					System.out.println("Aktualny rozkaz: " + cmd);
 					}
 					if(cmd.length() >= 5)
@@ -99,10 +102,10 @@ public class Interpreter{
 						j1(arg1);
 						break;
 					case "fk":				//fork()
-						tenproces = Management.fork(scheduler.pr_rdy);
-						scheduler.add_to_ready(tenproces);
-						Management.exec("Program1",tenproces.PID);
-						//scheduler.add_to_ready(management.fork(scheduler.pr_rdy));
+						/*tenproces = Management.fork(scheduler.pr_rdy);
+						Scheduler.add_to_ready(tenproces);
+						Management.exec("Program1",tenproces.PID);*/
+						Scheduler.add_to_ready(Management.fork(scheduler.pr_rdy));
 						break;
 					case "ex":				//exec()
 						
@@ -150,9 +153,7 @@ public class Interpreter{
 					
 					if(przelicz == 12 && !test){
 						przelicz = 0;
-						System.out.println("Hurra1");
 						if(scheduler.przelicz()){
-							System.out.println("Hurra");
 							break;
 						}
 					}
@@ -175,17 +176,30 @@ public class Interpreter{
 			//RA = wczytanie z pamieci operacyjnej
 
 			RA = Integer.parseInt(String.valueOf(MemoryManagement.readMemory(Integer.parseInt(arg2,16),2,scheduler.pr_rdy.PID)),16);
-			MemoryManagement.displayStatus();
+			//MemoryManagement.displayStatus();
 		}
 		else if(arg1.equals("RB")){
 			//RB = wczytanie z pamieci operacyjnej
 			RB = Integer.parseInt(String.valueOf(MemoryManagement.readMemory(Integer.parseInt(arg2,16),2,scheduler.pr_rdy.PID)),16);
-			MemoryManagement.displayStatus();
+			//MemoryManagement.displayStatus();
 		}
-		else{
-			//zapis do pamieci operacyjnej
-
-			MemoryManagement.writeMemory(Integer.parseInt(arg1,16), arg2.toCharArray(), scheduler.pr_rdy.PID);
+		else{//zapis do pamieci operacyjnej
+			if (arg2.equals("RA")){
+				if(RA < 16)
+					tmp = "0" + String.valueOf(Integer.toHexString(RA));
+				else
+					tmp = String.valueOf(Integer.toHexString(RA));
+				MemoryManagement.writeMemory(Integer.parseInt(arg1,16), tmp.toCharArray(), scheduler.pr_rdy.PID);
+			}
+			else if(arg2.equals("RB")){
+				if(RB < 16)
+					tmp = "0" + String.valueOf(Integer.toHexString(RB));
+				else
+					tmp = String.valueOf(Integer.toHexString(RB));
+				MemoryManagement.writeMemory(Integer.parseInt(arg1,16), tmp.toCharArray(), scheduler.pr_rdy.PID);
+			}
+			else
+				MemoryManagement.writeMemory(Integer.parseInt(arg1,16), arg2.toCharArray(), scheduler.pr_rdy.PID);
 			MemoryManagement.displayStatus();
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
@@ -286,13 +300,17 @@ public class Interpreter{
 	}
 	
 	void j0(String arg1){
-		if(ZF == false);
-		PC = Integer.parseInt(arg1); 
+		if(ZF == true)
+			PC = Integer.parseInt(arg1); 
+		else
+			PC +=5;
 	}
 	
 	void j1(String arg1){
-		if(ZF == true);
-		PC = Integer.parseInt(arg1); 
+		if(ZF == false)
+			PC = Integer.parseInt(arg1); 
+		else
+			PC +=5;
 	}
 
 	void pr(String arg1, String arg2) throws Exception{
