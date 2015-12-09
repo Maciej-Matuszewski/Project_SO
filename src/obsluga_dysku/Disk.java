@@ -168,12 +168,16 @@ public class Disk {
     /**************************************************************/
     void D_OpenFile(String F_Name, int From, int To) {
         File hlp_File = this.D_FindFile(F_Name);
+        String hlp = "";
         if(hlp_File != null) {
             char[] hlp_Content = FlorekFileSystem.F_Read(F_Name, From, To);
-            Output.write(hlp_Content.toString());
+            for(int i = 0; i < hlp_Content.length; i++) {
+                hlp += hlp_Content[i]; 
+            } 
+            Output.write(hlp);
         }
         else {
-            Output.write("Plik o podanej scieżce nie istnieje!");
+        	Output.write("Plik o podanej scieżce nie istnieje!");
         }
     }
     /**************************************************************/
