@@ -350,6 +350,7 @@ public class Interpreter{
 	}
 
 	void pr(String arg1, String arg2) throws Exception{
+		try{
 		if(arg2.equals("PA")){
 			switch(arg1){
 				case "RA":
@@ -377,6 +378,10 @@ public class Interpreter{
 				error_exit();
 				break;
 			}
+		}
+		}catch(Exception e){
+			Output.write("Dana rura nie istnieje");
+			error_exit();
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
 	}
