@@ -287,8 +287,8 @@ public class FlorekFileSystem {
                     File hlp_File = SysDisk.D_FindFile(Com[1].substring(1));
                     if(hlp_char == '/') {
                         if(hlp_File != null) {
-                            Output.write("Czy na pewno chcesz usunac ten plik? T/N");
-                            Decision = YesNo.nextLine();
+                        	Decision = Output.loadCMD("Czy na pewno chcesz usunac ten plik? T/N");
+                            //Decision = YesNo.nextLine();
                             if(Decision.equals("T")) {
                                 F_Delete(hlp_File.F_Name);
                                 Output.write("Plik zostal usuniety!");
