@@ -369,19 +369,19 @@ public class FlorekFileSystem {
                 MemoryManagement.displayStatus();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if (Com[0].equals("da")){
+            else if (Com[0].equals("da")&& Com.length==2){
                 int pid = Integer.parseInt(Com[1]);
                 MemoryManagement.displayAddressSpace(pid);
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if(Com[0].equals("rmem")){
+            else if(Com[0].equals("rmem")&& Com.length==4){
                 int va =Integer.parseInt(Com[1]);
                 int size = Integer.parseInt(Com[2]);
                 int pid = Integer.parseInt(Com[3]);
                 Output.write(String.valueOf(MemoryManagement.readMemory(va,size,pid)));
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if(Com[0].equals("wmem")){
+            else if(Com[0].equals("wmem") && Com.length==4){
                 int va =Integer.parseInt(Com[1]);
                 char[] text = Com[2].toCharArray();
                 int pid = Integer.parseInt(Com[3]);
@@ -396,7 +396,12 @@ public class FlorekFileSystem {
             	Scheduler.show_wait_list();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if(Com[0].equals("nice")){
+            else if(Com[0].equals("shp")){
+            	Management.ProcessPrint();
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////
+            else if(Com[0].equals("nice") && Com.length==3){
+            	//if()
             	int id = Integer.parseInt(Com[1]);
             	int w_n = Integer.parseInt(Com[2]);
             	if(Management.processLookup(id) != null)
@@ -417,6 +422,7 @@ public class FlorekFileSystem {
             	Interpreter.shutdown = true;
             	Output.write("\n[SYSTEM ZAKONCZYL PRACE]\n");
             }
+            
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else {
                 Output.write("Nie rozpoznano komendy!");

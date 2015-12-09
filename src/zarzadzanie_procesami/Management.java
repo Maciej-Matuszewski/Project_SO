@@ -126,12 +126,12 @@ public class Management
 		
 	}
 	
-	static void ProcessPrint()
+	static public void ProcessPrint()
 	{
-		Output.write("Name\t\t" + "PID\t" + "PPID\t" + "Priorytet\t" + "Stan");
+		Output.write("Name\t" + "PID\t" + "PPID\t" + "Pri\t" + "Stan");
 		for(int i=0; i<procesList.size(); i++)
 		{
-			Output.write(procesList.get(i).nazwa +"\t"+ procesList.get(i).PID +"\t" + procesList.get(i).PPID + "\t" +  procesList.get(i).pri + "\t\t" + procesList.get(i).stan);
+			Output.write(procesList.get(i).nazwa +"\t"+ procesList.get(i).PID +"\t" + procesList.get(i).PPID + "\t" +  procesList.get(i).pri + "\t" + procesList.get(i).stan);
 		}
 		
 	}
