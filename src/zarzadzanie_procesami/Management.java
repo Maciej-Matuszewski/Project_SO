@@ -1,11 +1,12 @@
 package zarzadzanie_procesami;
 
 import pamiec_wirtualna.MemoryManagement;
+import Interpreter.*;
 
 import java.awt.List;
 import java.util.ArrayList;
 
-import Interpreter.Output;
+
 
 public class Management 
 {	
@@ -27,7 +28,7 @@ public class Management
 	{
 		Proces proces = new Proces(pro);
 		procesList.add(proces);
-		if(pro.PID != 1)
+		if(pro.PID != 1 && !Interpreter.test)
 			exec(pro.codeFile,proces.PID); // wojtas
 		return proces;
 	}

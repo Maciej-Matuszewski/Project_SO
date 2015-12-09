@@ -141,7 +141,7 @@ public class FlorekFileSystem {
                 File hlp_File;
                 if(Com.length > 1) {
                     char hlp_char = Com[1].charAt(0);
-                    hlp_File = SysDisk.D_FindFile(Com[1].substring(1));  
+                    hlp_File = SysDisk.D_FindFile(Com[1].substring(1,9));  
                     if(hlp_char == '/') {
                         if(hlp_File != null) {
                         	Decision = Output.loadCMD("Plik o podanej nazwie istnieje, czy chcesz go nadpisac(stracisz wszystkie informacje w nim zawarte)? T/N");
@@ -337,30 +337,16 @@ public class FlorekFileSystem {
 			else if(Com[0].equals("")) {
 			//pusty ENTER - kontynuacja wykonywania procesu
 			}
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////
-			else if(Com[0].equals("run_pr1")) {
-				Proces tenproces = Management.fork(Management.processLookup(1));
-				Scheduler.add_to_ready(tenproces);
-				Management.exec("Program1",tenproces.PID);
-			}
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////
-			else if(Com[0].equals("run_pr2")) {
-				Proces tenproces = Management.fork(Management.processLookup(1));
-				Scheduler.add_to_ready(tenproces);
-				Management.exec("Program2",tenproces.PID);
-			}
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////
-			else if(Com[0].equals("run_pr3")) {
-				Proces tenproces = Management.fork(Management.processLookup(1));
-				Scheduler.add_to_ready(tenproces);
-				Management.exec("Program3",tenproces.PID);
-			}
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("run")) {//NIEPRZETESTOWANE JESZCZE
                 String filename = Com[1];
-                Proces tenproces = Management.fork();
-                Scheduler.add_to_ready(tenproces);
-                Management.exec(filename,tenproces.PID);
+                if(F_Read(filename, -1, -1) != null){
+	                Proces tenproces = Management.fork();
+	                Scheduler.add_to_ready(tenproces);
+	                Management.exec(filename,tenproces.PID);
+                }
+                else
+                	Output.write("Podany plik nie istnieje.");
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if (Com[0].equals("ds")){
@@ -392,6 +378,10 @@ public class FlorekFileSystem {
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("shw")){
             	Scheduler.show_wait_list();
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////
+            else if(Com[0].equals("shutdown")){
+            	Interpreter.shutdown = true;
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else {
