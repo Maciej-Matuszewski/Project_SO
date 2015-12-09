@@ -79,10 +79,11 @@ public class FlorekFileSystem {
                        hlp_Block.B_PointerToFreeByte++;
                    }
                    else {
+                	   Output.write("Brak wolnych blokow lub plik osiagnal maksymalny rozmiar!");
                        break;
                    }
                }
-            }  
+            }
         }
     }
     /**************************************************************/
