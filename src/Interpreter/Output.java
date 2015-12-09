@@ -3,13 +3,8 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
-
-import java.awt.Color;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
@@ -18,6 +13,8 @@ public class Output {
 	private JFrame frmOutput;
 
 	private static JTextArea outputArea;
+	private JTabbedPane tabbedPane;
+	private static JScrollPane scrollPane;
 	
 	/**
 	 * Launch the application.
@@ -48,14 +45,17 @@ public class Output {
 	private void initialize() {
 		frmOutput = new JFrame();
 		frmOutput.setResizable(false);
-		frmOutput.setTitle("Output");
+		frmOutput.setTitle("SKOS");
 		frmOutput.setBounds(100, 100, 643, 510);
 		frmOutput.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmOutput.getContentPane().setLayout(null);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(6, 6, 631, 476);
-		frmOutput.getContentPane().add(scrollPane);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setBounds(0, 0, 643, 488);
+		frmOutput.getContentPane().add(tabbedPane);
+		
+		scrollPane = new JScrollPane();
+		tabbedPane.addTab("Output", null, scrollPane, null);
 		
 		outputArea = new JTextArea();
 		outputArea.setWrapStyleWord(true);
@@ -66,10 +66,17 @@ public class Output {
 	
 	public static void write(String text){
 		outputArea.setText(outputArea.getText() + text +"\n");
+		scrollToBottom();
 	}
 	
 	public static void writeInLine(String text){
 		outputArea.setText(outputArea.getText() + text);
+		scrollToBottom();
+	}
+	
+	public static void scrollToBottom(){
+		JScrollBar vertical = scrollPane.getVerticalScrollBar();
+		vertical.setValue( vertical.getMaximum() );
 	}
 	
 	public static String loadCMD(String title){
