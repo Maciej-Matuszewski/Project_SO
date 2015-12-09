@@ -112,9 +112,9 @@ public class Disk {
         for(int i = 0; i < this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.size(); i++) {
             int hlp = this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_iNode_Id;
             Output.writeInLine("\t\t" + this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_Name + "\t");
-            if(this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_Name.length() < 8) {
+           /* if(this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_Name.length() < 8) {
                 Output.writeInLine("\t");
-            }
+            }*/
                                Output.writeInLine(this.D_iNode[hlp].F_Size + "B" + "\t" + this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_iNode_Id + "\t");
             for(int j = 0; j < this.D_iNode[hlp].FileBlockIds.length; j++) {
                 if(this.D_iNode[hlp].FileBlockIds[j] != -1) {
