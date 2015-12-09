@@ -144,8 +144,8 @@ public class FlorekFileSystem {
                     hlp_File = SysDisk.D_FindFile(Com[1].substring(1));  
                     if(hlp_char == '/') {
                         if(hlp_File != null) {
-                            Output.write("Plik o podanej nazwie istnieje, czy chcesz go nadpisac(stracisz wszystkie informacje w nim zawarte)? T/N");
-                            Decision = YesNo.nextLine();
+                        	Decision = Output.loadCMD("Plik o podanej nazwie istnieje, czy chcesz go nadpisac(stracisz wszystkie informacje w nim zawarte)? T/N");
+                            //Decision = YesNo.nextLine();
                             if(Decision.equals("T")) {
                                 F_Delete(hlp_File.F_Name);
                                 Create_File(Com[1].substring(1), "");
