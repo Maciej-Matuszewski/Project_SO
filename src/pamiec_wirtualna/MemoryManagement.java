@@ -243,6 +243,11 @@ public static void displayAddressSpace(int pid) {
             //!
             int victimframe = findVictim();
             Frame f = frameTable[victimframe];
+            Proces victimpcb = Management.processLookup(f.processID);
+            //victimpcb.ptable.map.put(victimpcb.ptable.map.get(f.page),victimpcb.ptable.)
+            PageTableEntry replacement = victimpcb.ptable.map.get(f.page);
+            replacement.memoryOrSwapFile = 0;
+            victimpcb.ptable.map.put(f.page,replacement);
 
             f.flags = (byte) (f.flags|used);
             if((f.flags& mustSave) !=0){
