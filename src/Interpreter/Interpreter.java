@@ -121,8 +121,10 @@ public class Interpreter{
 					case "ex":				//exec()
 						wyswietl_rozkaz(0);
 						MemoryManagement.releaseMemory(scheduler.pr_rdy.PID);
-						//String nazwa = scheduler.pr_rdy.
-						Management.exec("Program4", scheduler.pr_rdy.PID);
+						tmp = Management.processLookup(scheduler.pr_rdy.PID).codeFile;
+						// nr = Integer.valueOf(tmp.substring(7,8)) + 1;
+						tmp = "Program"+(Integer.valueOf(tmp.substring(7,8)) + 1);
+						Management.exec(tmp, scheduler.pr_rdy.PID);
 						PC = 0;
 						break;
 					case "et":				//zakonczenie wykonywania procesu
@@ -528,5 +530,4 @@ public class Interpreter{
 			System.out.println(cmd.substring(0, 8));
 		}
 	}
-
 }
