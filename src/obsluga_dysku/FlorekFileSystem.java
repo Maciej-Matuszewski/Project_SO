@@ -334,8 +334,9 @@ public class FlorekFileSystem {
                 MemoryManagement.displayStatus();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if (Com[0].equals("da")){ //do usuniecia z wersji finalnej!
-                MemoryManagement.displayAddressSpace(3);
+            else if (Com[0].equals("da")){
+                int pid = Integer.parseInt(Com[1]);
+                MemoryManagement.displayAddressSpace(pid);
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("rmem")){
