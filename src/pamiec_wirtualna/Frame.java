@@ -85,7 +85,23 @@ public class Frame {
 
         content = Arrays.copyOfRange(MemoryManagement.physicalMemory,this.number*MemoryManagement.pagesize,this.number*MemoryManagement.pagesize+MemoryManagement.pagesize);
 
-        String s = new String("======="+"\n"+"Ramka numer " + this.number + " (strona:" + this.page + " proces:" + this.processID+"\n"+"Zawartość:\n"+String.valueOf(content)+"\n"+"=======");
+        String s = new String("======="+"\n"+"Ramka numer " + this.number + " (strona: " + this.page + " proces: " + this.processID);
+        //String fstring = new String(Integer.toString((int)flags));
+        String fstring = Integer.toBinaryString((int) flags);
+        s=s+"ustawione flagi: ";
+        if(fstring.substring(fstring.length()-2)=="11"){
+           s=s+" bit odwolania, bit brudny";
+        }
+        else if(fstring.substring(fstring.length()-2)=="01"){
+            s=s+"bit brudny";
+        }
+        else if(fstring.substring(fstring.length()-2)=="10"){
+            s=s+"odwolania";
+        }
+        else {
+            s=s+"zadna flaga nie jest ustawiona";
+        }
+        s = s+")\n"+" Zawartość: \n"+String.valueOf(content)+"\n"+"=======";
         return s;
     }
 }

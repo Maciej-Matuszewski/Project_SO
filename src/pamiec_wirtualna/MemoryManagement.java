@@ -42,9 +42,11 @@ public class MemoryManagement {
 
         Proces p = Management.fork();
 
-        FlorekFileSystem.Create_File("Program1", "mv RA,01mv RB,05ad RA,RBj1 00");
+        FlorekFileSystem.Create_File("Program1", "mv RA,01mv RB,05ad RA,RBj1 00uuuuuuuuuuuuuuuuuuooooooooooooooooooooaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeiiiiiiiiiiiiiiiiiiiii");
         readProgram("Program1",p.PID);
         readMemory(2,2,p.PID);
+        readMemory(60,10,p.PID);
+        displayAddressSpace(p.PID);
 
        /*FlorekFileSystem.Create_File("testowy","mv RA,10ml RA,05sb RA,01");
         readProgram("testowy",p.PID);
@@ -77,13 +79,34 @@ public class MemoryManagement {
         mm.displayStatus();*/
     }
 
-
+public static void displayAddressSpace(int pid) {
+    Proces pcb = Management.processLookup(pid);
+    int max = pcb.ptable.getHighestPage();
+    for(int i =0;i<=max;i++){
+        for(Frame temp : frameTable){
+            if(temp==null){continue;}
+            if(temp.processID == pid && temp.page==i){
+                System.out.println(temp);
+            }
+        }
+        for(SwapFileEntry tempsf: swapFile){
+            if(tempsf==null){continue;}
+            if(tempsf.processID == pid && tempsf.page == i) {
+                System.out.println(tempsf);
+            }
+        }
+    }
+}
 
     public  static void readProgram(String programName, int processID) {
         char[] bufor = new char[pagesize];
         /* TODO function_returning_file_content(programFile)*/
 
         char[] file = FlorekFileSystem.F_Read(programName);
+        if(file.length==0 || file==null){
+            System.out.println("Proba wczytania nie powiodla sie");
+        }
+
 
         long length = file.length;
         double k = (double) length / (double) pagesize;
