@@ -4,7 +4,8 @@
 /*                  Last update: 07.12.2015 10:08                 */
 /******************************************************************/
 package obsluga_dysku;
-import java.util.Scanner;
+
+import Interpreter.Output;
 import obsluga_dysku.FlorekFileSystem;
 /******************************************************************/
 public class Disk {
@@ -86,17 +87,17 @@ public class Disk {
     void D_ShowBlocksBitVector() {
         Output.write("Wektor bitowy blokow:");
         for(int i = 0; i < this.D_BlockValue; i++) {
-            Output.writeInLine(this.D_BitVector_Block[i]);
+            Output.writeInLine(this.D_BitVector_Block[i]+"");
         }
-        Output.write();
+        Output.write("");
     }
     /**************************************************************/
     void D_ShowiNodesBitVector() {
         Output.write("Wektor bitowy i-wezlow:");
         for(int i = 0; i < this.D_BlockValue; i++) {
-            Output.writeInLine(this.D_BitVector_iNode[i]);
+            Output.writeInLine(this.D_BitVector_iNode[i]+"");
         }
-        Output.write();
+        Output.write("");
     }/**************************************************************/
     void D_ShowBlockContent() {
         for(int i = 1; i < this.D_BlockSize; i++) {
@@ -117,11 +118,11 @@ public class Disk {
                                Output.writeInLine(this.D_iNode[hlp].F_Size + "B" + "\t\t" + this.D_iNode[this.D_Catalog.F_iNode_Id].DirBlock[0].CatalogEntry.get(i).F_iNode_Id + "\t");
             for(int j = 0; j < this.D_iNode[hlp].FileBlockIds.length; j++) {
                 if(this.D_iNode[hlp].FileBlockIds[j] != -1) {
-                    Output.writeInLine(this.D_iNode[hlp].FileBlockIds[j]);
+                    Output.writeInLine(this.D_iNode[hlp].FileBlockIds[j]+"");
                     Output.writeInLine(" ");
                 }
             }
-            Output.write();
+            Output.write("");
         }        
     }
     /**************************************************************/
@@ -169,7 +170,7 @@ public class Disk {
         File hlp_File = this.D_FindFile(F_Name);
         if(hlp_File != null) {
             char[] hlp_Content = FlorekFileSystem.F_Read(F_Name, From, To);
-            Output.write(hlp_Content);
+            Output.write(hlp_Content.toString());
         }
         else {
             Output.write("Plik o podanej scieżce nie istnieje!");

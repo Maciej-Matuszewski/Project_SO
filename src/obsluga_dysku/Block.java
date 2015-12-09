@@ -6,6 +6,8 @@
 package obsluga_dysku;
 import java.util.ArrayList;
 import java.util.List;
+
+import Interpreter.Output;
 /******************************************************************/
 public class Block {
     int B_Id;
@@ -44,16 +46,16 @@ public class Block {
     /**************************************************************/
     void B_ShowBlockBytes() {
         for(int i = 0; i < this.B_Size; i++) {
-            Output.writeInLine(this.B_Bytes[i]);
+            Output.writeInLine(this.B_Bytes[i]+"");
         }
-        Output.write();
+        Output.write("");
     }
     /**************************************************************/
     void B_ShowBlockContent() {
         for(int i = 0; i < this.B_Size; i++) {
-            Output.writeInLine(this.B_Content[i]);
+            Output.writeInLine(this.B_Content[i]+"");
         }
-        Output.write();
+        Output.write("");
     }
     /**************************************************************/
 }

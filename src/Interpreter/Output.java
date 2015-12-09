@@ -84,8 +84,6 @@ public class Output {
 	}
 	
 	public static String loadCMD(String title){
-		//JOptionPane.showInputDialog(null, title, "SKOS", 1, null, null, null);
-
 		String[] options = {"OK"};
 		JPanel panel = new JPanel(new GridLayout(2, 1));
 		JLabel lbl = new JLabel(title+"\n");
