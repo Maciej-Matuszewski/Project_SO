@@ -184,8 +184,8 @@ public class Interpreter{
 							break;
 						}
 					}
-					if(!shutdown)
-						aktualny_stan();
+					
+					aktualny_stan();
 				}
 				//zwrot kontekstu
 				
@@ -461,7 +461,7 @@ public class Interpreter{
 		Output.write("RA = " + RA + ", RB = " + RB + ", ZF = " + ZF + ", PC = " + PC + ", CPU = " + CPU);
 		if(!test){
 			Decision = " ";
-			while(!Decision.equals("")){
+			while(!Decision.equals("") && !shutdown){
 				//Output.write("Podaj komende lub wcisnij ENTER aby kontynuowac");
 				Decision = Output.loadCMD("Podaj komende lub wcisnij ENTER aby kontynuowac");
 				Output.write("");
