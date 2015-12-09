@@ -200,7 +200,7 @@ public class Interpreter{
 			}
 			else
 				MemoryManagement.writeMemory(Integer.parseInt(arg1,16), arg2.toCharArray(), scheduler.pr_rdy.PID);
-			MemoryManagement.displayStatus();
+			MemoryManagement.displayAddressSpace(scheduler.pr_rdy.PID);
 		}
 		PC += 8; //zwiekszenie licznika rozkazow
 	}

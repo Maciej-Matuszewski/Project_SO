@@ -239,10 +239,10 @@ public static void displayAddressSpace(int pid) {
 
             //TODO PageFault
             //!
-            // System.out.println("Page fault z wymiana");
+            System.out.println("Konieczna wymiana ramki");
             //!
-
-            Frame f = frameTable[findVictim()];
+            int victimframe = findVictim();
+            Frame f = frameTable[victimframe];
 
             f.flags = (byte) (f.flags|used);
             if((f.flags& mustSave) !=0){
@@ -258,6 +258,7 @@ public static void displayAddressSpace(int pid) {
                     if(temp.processID == processID && temp.page == pagenumber)
                     {
                         f = new Frame(f.number,temp);
+                        frameTable[victimframe]=f;
                         //TODO update page table
                         pcb.ptable.map.put(pagenumber,new PageTableEntry(f.number,1));
                         paddress = pcb.ptable.map.get(pagenumber).pageSizeUnits*MemoryManagement.pagesize+offset;//test - result of get() should be the same as f.number
