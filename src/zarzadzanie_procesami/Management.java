@@ -36,6 +36,7 @@ public class Management
 	static void kill(int pid)
 	{
 		procesList.remove(FindProces(pid));
+		Output.write("Proces PID: "+pid+" zostal usuniety z listy procesow");
 	}
 	
 	public int wait(Proces pr)
