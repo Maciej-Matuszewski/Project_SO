@@ -20,7 +20,7 @@ public class File {
         int hlp_iNode = SysDisk.D_GetFreeiNode();
          
         if(F_Name.length() > 8) {
-        	F_Name = F_Name.substring(0, 7);
+        	F_Name = F_Name.substring(0, 8);
         }
         if(F_Type != 'C') {
             File hlp_File = SysDisk.D_FindFile(F_Name); //obsĹ‚uga nadpisania pliku
