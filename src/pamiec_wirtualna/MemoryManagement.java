@@ -38,7 +38,7 @@ public class MemoryManagement {
     //enum location {file, mem}//TODO
 
     public static void main(String[] args){
-        MemoryManagement mm = new MemoryManagement();
+        //MemoryManagement mm = new MemoryManagement();
 
 
         Proces p = Management.fork();
@@ -289,9 +289,13 @@ public static void displayAddressSpace(int pid) {
 
     public static void releaseMemory(int processid) {
         Proces pcb = Management.processLookup(processid); //will be needed in an indexed swapfile
+        Output.write("Zwalnianie pamieci");
         for (Frame temp : MemoryManagement.frameTable) {
             //TODO release frames
             if (temp.processID == processid) {
+                int frameToBeReleased = temp.number;
+
+                frameTable[frameToBeReleased] = new Frame();
                 boolean sanityCheck = freeFrames.add(temp.number);
                 if (sanityCheck == false) {
                     try {
@@ -327,6 +331,9 @@ public static void displayAddressSpace(int pid) {
         Output.write("Stan poczatkowy:");
         for(int i = 0;i<frameCount;i++){
             Output.write(frameTable[i].toString());
+            if(MemoryManagement.clockHand == i){
+                Output.write("Na powyzsza ramke wskazuje wskazowka zegara");
+            }
         }
         Output.write("________________________________");
 

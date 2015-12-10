@@ -370,6 +370,19 @@ public class FlorekFileSystem {
                 	Output.write("Podany plik nie istnieje.");
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
+            else if(Com[0].equals("testread")) {//NIEPRZETESTOWANE JESZCZE
+                String filename = Com[1];
+                if(F_Read(filename, -1, -1) != null){
+                    Proces tenproces = Management.fork();
+                    Output.write("ID procesu testowego: "+tenproces.PID);
+                    MemoryManagement.readProgram(filename,tenproces.PID);
+                    //Scheduler.add_to_ready(tenproces);
+                    //Management.exec(filename,tenproces.PID);
+                }
+                else
+                    Output.write("Podany plik nie istnieje.");
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if (Com[0].equals("ds")){
                 MemoryManagement.displayStatus();
             }

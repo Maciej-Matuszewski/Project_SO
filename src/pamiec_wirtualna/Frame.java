@@ -23,6 +23,9 @@ public class Frame {
 
     }
 
+    Frame(int number){
+
+    }
 
     Frame(int number, pamiec_wirtualna.SwapFileEntry s){
         if(s==null){
