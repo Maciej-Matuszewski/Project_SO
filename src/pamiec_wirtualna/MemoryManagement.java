@@ -81,6 +81,10 @@ public class MemoryManagement {
 
 public static void displayAddressSpace(int pid) {
     Proces pcb = Management.processLookup(pid);
+    if(pcb == null){
+        Output.write("Nie znaleziono szukanego procesu.");
+        return;
+    }
     int max = pcb.ptable.getHighestPage();
     for(int i =0;i<=max;i++){
         for(Frame temp : frameTable){
