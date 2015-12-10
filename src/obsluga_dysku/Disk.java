@@ -244,7 +244,7 @@ public class Disk {
         		+ "ad RA,A0"
         		+ "pw PA,RA"
         		+ "et");
-        FlorekFileSystem.Create_File("Program5", "mv RA,ff"
+       /* FlorekFileSystem.Create_File("Program5", "mv RA,ff"
         		+ "fm"
         		+ "fw RA"
         		+ "fk"
@@ -254,7 +254,7 @@ public class Disk {
         FlorekFileSystem.Create_File("Program6", "fr RA"
         		+ "sb RA,f0"
         		+ "fw RA"
-        		+ "et");
+        		+ "et");*/
     }
     /**************************************************************/
 }

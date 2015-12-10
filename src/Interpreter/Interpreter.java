@@ -126,6 +126,7 @@ public class Interpreter{
 						wyswietl_rozkaz(0);
 						if(!test){
 							MemoryManagement.releaseMemory(scheduler.pr_rdy.PID);
+							//scheduler.pr_rdy.ptable.map.clear(); // czyszczenie pamieci procesu
 							tmp = Management.processLookup(scheduler.pr_rdy.PID).codeFile;
 							// nr = Integer.valueOf(tmp.substring(7,8)) + 1;
 							tmp = "Program"+(Integer.valueOf(tmp.substring(7,8)) + 1);

@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class PageTable {
 
-    HashMap<Integer,PageTableEntry> map = new HashMap<Integer,PageTableEntry>();
+    public HashMap<Integer,PageTableEntry> map = new HashMap<Integer,PageTableEntry>();
 
     public int getHighestPage(){
         int max = 0;
