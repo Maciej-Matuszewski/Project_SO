@@ -171,7 +171,7 @@ public class Scheduler {
 	//Metoda zmieniajaca kontekst
 	public boolean change_context()
 	{
-		Output.write("Zmiana kontekstu");
+		Output.write("Proba zmiany kontekstu");
 		int first_not_empty=8;
 		for(int i=0;i<8;i++) //Odszukanie procesu o najwyzszym priorytecie
 		{

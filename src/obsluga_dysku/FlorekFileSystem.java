@@ -370,15 +370,29 @@ public class FlorekFileSystem {
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if (Com[0].equals("da")&& Com.length==2){
-                int pid = Integer.parseInt(Com[1]);
-                MemoryManagement.displayAddressSpace(pid);
+            	try
+            	{
+            		int pid = Integer.parseInt(Com[1]);
+            		MemoryManagement.displayAddressSpace(pid);
+            	}
+            	catch(NumberFormatException e)
+            	{
+            		Output.write("Niepoprawny format parametru.");
+            	}
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("rmem")&& Com.length==4){
-                int va =Integer.parseInt(Com[1]);
-                int size = Integer.parseInt(Com[2]);
-                int pid = Integer.parseInt(Com[3]);
-                Output.write(String.valueOf(MemoryManagement.readMemory(va,size,pid)));
+            	try
+            	{
+            		int va =Integer.parseInt(Com[1]);
+            		int size = Integer.parseInt(Com[2]);
+            		int pid = Integer.parseInt(Com[3]);
+            		Output.write(String.valueOf(MemoryManagement.readMemory(va,size,pid)));
+            	}
+            	catch(NumberFormatException e)
+            	{
+            		Output.write("Niepoprawny format parametru.");
+            	}
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("wmem") && Com.length==4){
@@ -388,34 +402,41 @@ public class FlorekFileSystem {
                 MemoryManagement.displayStatus();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if(Com[0].equals("shr")){
+            else if(Com[0].equals("shr")){ //wypisywanie kolejki procesow gotowych
             	Scheduler.show_ready_list();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if(Com[0].equals("shw")){
+            else if(Com[0].equals("shw")){ //wypisywanie kolejki procesow oczekujacych
             	Scheduler.show_wait_list();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if(Com[0].equals("shp")){
+            else if(Com[0].equals("shp")){ //wypisywanie listy procesow
             	Management.ProcessPrint();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("nice") && Com.length==3){
-            	//if()
-            	int id = Integer.parseInt(Com[1]);
-            	int w_n = Integer.parseInt(Com[2]);
-            	if(Management.processLookup(id) != null)
-            	{
-            		if(w_n>23 || w_n<0)
-            			Output.write("Nie poprawna wartosc parametru nice");
-            		else
-            		{
-            			Management.processLookup(id).nice = w_n;
-            			Output.write("Parametr nice procesu PID: "+id+" zostal zmieniony na: "+w_n+".");
-            		}
-            	}
-            	else
-            		Output.write("Proces o ponadnym PID nie istnieje");
+            	int id=0, w_n=0;
+           		try
+           		{
+           			id = Integer.parseInt(Com[1]);
+           			w_n = Integer.parseInt(Com[2]);
+           			if(Management.processLookup(id) != null)
+                	{
+                		if(w_n>23 || w_n<0)
+                			Output.write("Nie poprawna wartosc parametru nice");
+                		else
+                		{
+                			Management.processLookup(id).nice = w_n;
+                			Output.write("Parametr nice procesu PID: "+id+" zostal zmieniony na: "+w_n+".");
+                		}
+                	}
+                	else
+                		Output.write("Proces o ponadnym PID nie istnieje");
+           		}
+           		catch(NumberFormatException e){
+           			Output.write("Niepoprawny format parametrow");
+           		}
+            	
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("shutdown")){
