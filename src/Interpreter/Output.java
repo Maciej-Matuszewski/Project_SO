@@ -69,13 +69,14 @@ public class Output {
 		tabbedPane.addTab("Output", null, scrollPane, null);
 		
 		outputArea = new JTextArea();
-		outputArea.setFont(new Font("Courier", Font.BOLD, 15));
 		outputArea.setForeground(new Color(0, 250, 154));
 		outputArea.setBackground(new Color(0, 0, 0));
 		outputArea.setWrapStyleWord(true);
 		outputArea.setLineWrap(true);
 		outputArea.setEditable(false);
 		scrollPane.setViewportView(outputArea);
+		
+		outputArea.setText("++++++++++++++++++++=+=++++++++++++++++++++++++++++++++++++++++++++++++++++MMZZZZZZOMN\n=======+++++++==MMMNM=+++++++++++++++++++++++++++++++++++++++++++++++++++=MMZZZZZZNM\n+++MMMMMM++=MMMMNOOZM=+++++++++=+=MMMMM~+++++++++++++++++++=+++++++++=MNZZZZZZNM\nMOZZZZZZZ8M=~MZZZZZZZZN=+++=~MMMMMN8ZZZZZ8MM~=++++++=MMMMMMMMMMM=++=MOZZZZZZMM\n=MZZZZZZZZZM==MZZZZZZZZNMMMNDZZZZZZZZZZZZZZZZNM+++=MMNZOZOZZZZZZMM++++MZZZZZZZMD++\nMZZZZZZZZZM+=MZZZZZZZOMNZZZZZZZZZZZZZZZZZZZZOMM=~M8$ZZZZZZZZZZZM~++++++NMZZZZZZOM~+\nMNZZZZZZZZM=+MDZZZZZZZNNZZZZZZZZZZZZZZZZZZZZODMMNZZZZZZZZZZZZZNM=+++++MMZZZZZZOM=+\nMNZZZZZZZZM=+=MZZZZZZZDMOZZZZZZZZZONDZZZZZZZZZZZZZZZZZZDNNN8ZZMM+++++MNZZZZZZZM=++\nMMZZZZZZZZM=++MOZZZZZZOMNOZZZZZZNMM=MMZZZZZZZZZZZZZZOMMM===MMMM~+++MZZZZZZ$DZ+++\n~MZZZZZZZZM=++M8ZZZZZZZMNZZZZZZZM=+++MOZZZZZZZZZZZZ$N=++++++++++++++++MZZZZZZZN=++++\n=MZZZZZZZZN=++MMZZZZZZZMMZZZZZZZM+++=MOZZZZZZZZZZZZZZMMMMMM~=++++++~MZZZZZZZM=++++\n=MZZZZZZZZN=++MMZZZZZZZMMOZZZZZOM==MMDZZZZZZONDZZZZZZZZZZONMMM=++~NZZZZZZZM=++++\n~MZZZZZZZZN=++=MMZZZZZZMMOZZZZZZM~MDZZZZZZZZM=MM8ZZZZZZZZZZZZZNMM++8NZZZZZZDM++++\n=MZZZZZZZZN=++=MMZZZZZZ8MNZZZZZZZOZZZZZZZZOM=++~MNZZZZZZZZZZZZZ$8M=~NZZZZZONM+++++\n+MZZZZZZZZN=++=MMZZZZZZOMMZZZZZZZZZZZZZZZMM~+++==~MMM8ZZZZZZZZZZZM==MOOZZZZMO++++\n=MZZZZZZZZOM+++MNZZZZZZZNMZZZZZZZZZZZZO8M~++++++++++===MMNZZZZZZZMM==~===MMM=+++++\n+~NZZZZZZZZMM=MMZZZZZZZZNMZZZZZZZZZZONMM++++++++++++++++=MNZZZZZZMM====+++++=+++++\n+~MZZZZZZZZZNMNZOZZZZZZ8MMZZZZZZZZ8MMM==++++++===~=++++=~MNZZZZZZ8M++MMMMM8=++++++\n==MOZZZZZZZZZZZZZZZZZZZM=~MZZZZZZMM+++++++++++=MNNMMMMMMNZZZZZZZZZ+ZZZZZZZM~++++++\n++MMZZZZZZZZZZZZZZZZZOM~+~NZZZZZZMM+++++++++++=MZZZZZZZZZZZZZZZ8MM+++ZZZZZZM=+++++++\n++=MMZZZZZZZZZZZZZZZNM=++=MZZZZZZNM+++++++++++~NZZZZZZZZZZZZZZDM:+++++ZZZZZZM=+++++++\n++++~MNZZZOZ$ZZZZNMM~+++++MOZZZZZNM+++++++++=MMZZZZZZZZZZZZ8NM==+++=MMMMMM=+++++++\n+++++=~MMMMMMMMM===+++++++MMZZZZZDM=++++++++++~MMMMMMNNMMMM===++++++==+=+++++++++\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n++++Burdelak+++++++Florczak++++Belka+++++Kot+++++++++++++++++++++++++++++++++++++++++++++++\n++++++++++++++++Maleszczuk++++++++++Matuszewski+++++++++++++++++++++++++++++++++++++++++++\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
 	}
 	
 	public static void write(String text){
