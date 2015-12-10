@@ -117,6 +117,15 @@ public class FlorekFileSystem {
         }
     }
     /**************************************************************/
+    public static int File_Size(String F_Name) {
+    	File hlp_File = SysDisk.D_FindFile(F_Name);
+    	if(hlp_File != null) {
+    		return SysDisk.D_iNode[hlp_File.F_iNode_Id].F_Size;
+    	}
+    	
+    	return -1;
+    }
+    /**************************************************************/
     public static void Create_File(String F_Name, String Content) {
         File hlp_File = new File(F_Name, SysDisk, 'F', Content);
     }

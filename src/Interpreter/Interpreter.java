@@ -397,7 +397,6 @@ public class Interpreter{
 		}
 		else{
 			if(arg2.equals("RA")){
-				Output.write("to cos: " + Integer.parseInt(arg1));
 				scheduler.pr_rdy.pipes.get(Integer.parseInt(arg1)).write(Integer.toString(RA));
 			}
 			else if(arg2.equals("RB"))
