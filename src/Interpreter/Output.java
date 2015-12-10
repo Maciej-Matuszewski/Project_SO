@@ -76,8 +76,6 @@ public class Output {
 		outputArea.setLineWrap(true);
 		outputArea.setEditable(false);
 		scrollPane.setViewportView(outputArea);
-		
-		outputArea.setText(":::    ::: :::::::::   ::::::::  :::\n:+:    :+: :+:    :+: :+:    :+: :+:\n+:+    +:+ +:+    +:+ +:+        +:+\n+#+    +:+ +#++:++#+  +#++:++#++ +#+\n+#+    +#+ +#+               +#+ +#+\n#+#    #+# #+#        #+#    #+#    \n ########  ###         ########  ### \n\n\n:::    ::: :::::::::: :::        :::        :::::::: \n:+:    :+: :+:        :+:        :+:       :+:    :+:\n+:+    +:+ +:+        +:+        +:+       +:+    +:+\n+#++:++#++ +#++:++#   +#+        +#+       +#+    +:+\n+#+    +#+ +#+        +#+        +#+       +#+    +#+\n#+#    #+# #+#        #+#        #+#       #+#    #+#\n###    ### ########## ########## ########## ########  \n\n\n\n");
 	}
 	
 	public static void write(String text){
