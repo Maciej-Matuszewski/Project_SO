@@ -291,6 +291,9 @@ public static void displayAddressSpace(int pid) {
         Proces pcb = Management.processLookup(processid); //will be needed in an indexed swapfile
         Output.write("Zwalnianie pamieci");
         for (Frame temp : MemoryManagement.frameTable) {
+
+            if(temp == null){continue;}
+
             //TODO release frames
             if (temp.processID == processid) {
                 int frameToBeReleased = temp.number;
@@ -546,10 +549,22 @@ public static int newAddress (int vaddress,int pid) {
         Frame victimFrame = frameTable[victimnumber];
 
         Proces victimpcb = Management.processLookup(victimFrame.processID);
+        if(victimpcb == null){
+            swapFile.add(new SwapFileEntry(victimFrame));
+            temp = victimFrame.page;
 
+            Frame newFrame = new Frame(victimnumber,getSFE(vaddress,pid));
+            frameTable[victimnumber]=newFrame;
+            Proces newpcb =Management.processLookup(newFrame.processID); //newpcb == pcb?
+            int newtemp = newFrame.page;
+            newpcb.ptable.map.put(newFrame.page,new PageTableEntry(newFrame.number,1));
+            return newFrame.number*pagesize+offset;
+
+        }
 
         swapFile.add(new SwapFileEntry(victimFrame));
         temp = victimFrame.page;
+
         victimpcb.ptable.map.put(victimFrame.page,new PageTableEntry(temp,0));
 
         Frame newFrame = new Frame(victimnumber,getSFE(vaddress,pid));

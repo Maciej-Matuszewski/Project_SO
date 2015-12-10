@@ -19,9 +19,8 @@ public class Frame {
     // used = 0b0000000000000010 = 2
     // hastToBeSaved = 0b0000000000000100 = 4
 
-    Frame(){
+    Frame(){}
 
-    }
 
     Frame(int number){
 
