@@ -323,8 +323,16 @@ public static void displayAddressSpace(int pid) {
 
     public static int findVictim(){ //TODO check if f.flags changes inside if statements
         byte dirtyUsed = (byte) (dirty|used);
+
+        Output.write("Stan poczatkowy:");
+        for(int i = 0;i<frameCount;i++){
+            Output.write(frameTable[i].toString());
+        }
+        Output.write("________________________________");
+
         while(true){
             Frame f = MemoryManagement.frameTable[MemoryManagement.clockHand%frameCount];
+
             Output.write(f.toString());
 
             if(f.flags==0 || f.flags == 4){
@@ -338,6 +346,7 @@ public static void displayAddressSpace(int pid) {
                 f.flags = (byte) (f.flags&clear);
             }
             MemoryManagement.clockHand++;
+            MemoryManagement.clockHand=MemoryManagement.clockHand % 4;
             /*if((f.flags&swappable)==0){ //dirty == 0 & used == 0
                 return f.number; //f.number should equal clockHand%frameCount
             }

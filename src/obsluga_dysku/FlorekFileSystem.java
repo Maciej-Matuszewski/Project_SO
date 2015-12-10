@@ -395,6 +395,7 @@ public class FlorekFileSystem {
                 int va =Integer.parseInt(Com[1]);
                 char[] text = Com[2].toCharArray();
                 int pid = Integer.parseInt(Com[3]);
+                MemoryManagement.writeMemory(va,text,pid);
                 MemoryManagement.displayStatus();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
