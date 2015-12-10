@@ -25,6 +25,7 @@ public class Interpreter{
 	private int  przelicz;
 	private String Decision;
 	private String tmp;
+	boolean brak_stronicy = false;
 	
 	private static Scheduler scheduler;
 	private static Management management;
@@ -64,8 +65,7 @@ public class Interpreter{
 					PC = scheduler.pr_rdy.pPC;
 					ZF = scheduler.pr_rdy.pZF;
 				}
-				while(!exit && CPU < 4 && (test || MemoryManagement.inMemory(PC, scheduler.pr_rdy.PID)) && !shutdown){
-					
+				while(!shutdown && !brak_stronicy && !exit && CPU < 4 && (test || MemoryManagement.inMemory(PC, scheduler.pr_rdy.PID))){
 					if(test){
 						Output.write("");
 						cmd = Output.loadCMD("Podaj rozkaz");
@@ -188,11 +188,11 @@ public class Interpreter{
 							break;
 						}
 					}
-					
-					aktualny_stan();
+					if(!brak_stronicy)
+						aktualny_stan();
 				}
 				//zwrot kontekstu
-				
+				brak_stronicy = false;
 				wywlaszczenie();
 			}
 			else{
@@ -201,6 +201,7 @@ public class Interpreter{
 				Decision = Output.loadCMD("Podaj komende");
 				FlorekFileSystem.Disk_Command(Decision);
 			}
+			
 		}
 	}
 	
@@ -223,38 +224,45 @@ public class Interpreter{
 	}
 
 	void mi(String arg1, String arg2){
-		if (arg1.equals("RA")){
-			//RA = wczytanie z pamieci operacyjnej
-
-			RA = Integer.parseInt(String.valueOf(MemoryManagement.readMemory(Integer.parseInt(arg2,16),2,scheduler.pr_rdy.PID)),16);
-			//MemoryManagement.displayStatus();
+		if(arg1.equals("RA") || arg1.equals("RB")){
+			brak_stronicy = !MemoryManagement.inMemory(Integer.parseInt(arg2,16), scheduler.pr_rdy.PID);
 		}
-		else if(arg1.equals("RB")){
-			//RB = wczytanie z pamieci operacyjnej
-			RB = Integer.parseInt(String.valueOf(MemoryManagement.readMemory(Integer.parseInt(arg2,16),2,scheduler.pr_rdy.PID)),16);
-			System.out.println("mimimimi " + RB + " " + arg2);
-			//MemoryManagement.displayStatus();
+		else{
+			brak_stronicy = !MemoryManagement.inMemory(Integer.parseInt(arg1,16), scheduler.pr_rdy.PID);
 		}
-		else{//zapis do pamieci operacyjnej
-			if (arg2.equals("RA")){
-				if(RA < 16)
-					tmp = "0" + String.valueOf(Integer.toHexString(RA));
-				else
-					tmp = String.valueOf(Integer.toHexString(RA));
-				MemoryManagement.writeMemory(Integer.parseInt(arg1,16), tmp.toCharArray(), scheduler.pr_rdy.PID);
+		if(!brak_stronicy){
+			if (arg1.equals("RA")){
+				//RA = wczytanie z pamieci operacyjnej
+	
+				RA = Integer.parseInt(String.valueOf(MemoryManagement.readMemory(Integer.parseInt(arg2,16),2,scheduler.pr_rdy.PID)),16);
+				//MemoryManagement.displayStatus();
 			}
-			else if(arg2.equals("RB")){
-				if(RB < 16)
-					tmp = "0" + String.valueOf(Integer.toHexString(RB));
-				else
-					tmp = String.valueOf(Integer.toHexString(RB));
-				MemoryManagement.writeMemory(Integer.parseInt(arg1,16), tmp.toCharArray(), scheduler.pr_rdy.PID);
+			else if(arg1.equals("RB")){
+				//RB = wczytanie z pamieci operacyjnej
+				RB = Integer.parseInt(String.valueOf(MemoryManagement.readMemory(Integer.parseInt(arg2,16),2,scheduler.pr_rdy.PID)),16);
+				//MemoryManagement.displayStatus();
 			}
-			else
-				MemoryManagement.writeMemory(Integer.parseInt(arg1,16), arg2.toCharArray(), scheduler.pr_rdy.PID);
-			//MemoryManagement.displayAddressSpace(scheduler.pr_rdy.PID);
+			else{//zapis do pamieci operacyjnej
+				if (arg2.equals("RA")){
+					if(RA < 16)
+						tmp = "0" + String.valueOf(Integer.toHexString(RA));
+					else
+						tmp = String.valueOf(Integer.toHexString(RA));
+					MemoryManagement.writeMemory(Integer.parseInt(arg1,16), tmp.toCharArray(), scheduler.pr_rdy.PID);
+				}
+				else if(arg2.equals("RB")){
+					if(RB < 16)
+						tmp = "0" + String.valueOf(Integer.toHexString(RB));
+					else
+						tmp = String.valueOf(Integer.toHexString(RB));
+					MemoryManagement.writeMemory(Integer.parseInt(arg1,16), tmp.toCharArray(), scheduler.pr_rdy.PID);
+				}
+				else
+					MemoryManagement.writeMemory(Integer.parseInt(arg1,16), arg2.toCharArray(), scheduler.pr_rdy.PID);
+				//MemoryManagement.displayAddressSpace(scheduler.pr_rdy.PID);
+			}
+			PC += 8; //zwiekszenie licznika rozkazow
 		}
-		PC += 8; //zwiekszenie licznika rozkazow
 	}
 
 	void mv(String arg1, String arg2){
@@ -535,6 +543,8 @@ public class Interpreter{
 
 	void wywlaszczenie(){
 		if(!test){
+			if(CPU == 4)
+				Output.write("Minal kwant czasu");
 			scheduler.pr_rdy.pRA = RA;
 			scheduler.pr_rdy.pRB = RB;
 			scheduler.pr_rdy.pPC = PC;

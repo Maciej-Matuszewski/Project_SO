@@ -429,7 +429,7 @@ public static void displayAddressSpace(int pid) {
         }
         for(Frame temp : frameTable){
             if(temp == null){continue;}
-            if(temp.page == pagenumber){
+            if(temp.page == pagenumber && temp.processID == procesID){
                 return true;
             }
         }
@@ -450,7 +450,7 @@ public static int newAddress (int vaddress,int pid) {
     int temp = pagenumber;
 
         if (pcb.ptable.map.get(pagenumber) == null) {
-            Output.write("Dodano nowy wpis do tabbeli stronic.");
+            Output.write("Dodano nowy wpis do tabeli stronic.");
             pcb.ptable.map.put(pagenumber, new PageTableEntry(temp, 0));
             swapFile.add(new SwapFileEntry(pagenumber, pid));
             //jesli wolna to laduj
