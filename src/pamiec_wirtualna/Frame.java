@@ -25,9 +25,18 @@ public class Frame {
 
 
     Frame(int number, pamiec_wirtualna.SwapFileEntry s){
-        this.number = number;
-        this.page = s.page;
-        this.processID = s.processID;
+        if(s==null){
+            System.out.println("fragment pliku wymiany == null");
+        }
+        try {
+            this.number = number;
+            this.page = s.page;
+            this.processID = s.processID;
+        }
+        catch (Exception e){
+            System.out.println("fragment pliku wymiany > "+s);
+        }
+
 
         //CharBuffer cb = CharBuffer.wrap(MemoryManagement.physicalMemory);
         //cb.put(s.data,page*MemoryManagement.pagesize,s.data.length);

@@ -14,6 +14,8 @@ public class SwapFileEntry {
    public SwapFileEntry(Frame frame){
         //CharBuffer cb = CharBuffer.wrap(MemoryManagement.physicalMemory);
        // cb.get(data,frame.number*MemoryManagement.pagesize,MemoryManagement.pagesize);
+       processID = frame.processID;
+       page = frame.page;
 
        data = Arrays.copyOfRange(MemoryManagement.physicalMemory,frame.number*MemoryManagement.pagesize,frame.number*MemoryManagement.pagesize+MemoryManagement.pagesize);
    }
