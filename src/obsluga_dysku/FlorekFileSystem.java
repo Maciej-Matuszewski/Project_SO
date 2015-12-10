@@ -401,11 +401,18 @@ public class FlorekFileSystem {
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("wmem") && Com.length==4){
-                int va =Integer.parseInt(Com[1]);
-                char[] text = Com[2].toCharArray();
-                int pid = Integer.parseInt(Com[3]);
-                MemoryManagement.writeMemory(va,text,pid);
-                MemoryManagement.displayStatus();
+            	try
+            	{
+	                int va =Integer.parseInt(Com[1]);
+	                char[] text = Com[2].toCharArray();
+	                int pid = Integer.parseInt(Com[3]);
+	                MemoryManagement.writeMemory(va,text,pid);
+	                MemoryManagement.displayStatus();
+            	}
+            	catch(NumberFormatException e)
+            	{
+            		Output.write("Niepoprawny format parametru.");
+            	}
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("shr")){ //wypisywanie kolejki procesow gotowych

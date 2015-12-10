@@ -103,7 +103,7 @@ public class Scheduler {
 	public boolean przelicz()  
 	{
 		ArrayList<ArrayList<Proces>> tmp_qs = new ArrayList<ArrayList<Proces>>(8); //tymczasowa kolejka procesow gotowych
-		Output.write("Przeliczanie priorytetu");
+		Output.write("Przeliczanie priorytetow");
 		for(int i=0;i<7;i++) //wlasciwe przeliczanie priorytetow
 		{
 			if(whichqs[i])
