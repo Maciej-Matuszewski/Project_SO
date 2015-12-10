@@ -32,8 +32,8 @@ public class Interpreter{
 	Proces tenproces;
 	
 	private String cmd = "ml RA,RB";
-	private String arg1;
-	private String arg2;
+	private String arg1 = "";
+	private String arg2 = "";
 	
 	public static int LifeTime=0;
 	
@@ -548,8 +548,7 @@ public class Interpreter{
 			scheduler.pr_rdy.pRA = RA;
 			scheduler.pr_rdy.pRB = RB;
 			scheduler.pr_rdy.pPC = PC;
-			scheduler.pr_rdy.pZF = ZF;
-			scheduler.pr_rdy.cpu +=CPU;
+			scheduler.pr_rdy.pZF = ZF;			scheduler.pr_rdy.cpu +=CPU;
 		}
 		CPU = 0;
 	}
@@ -559,11 +558,11 @@ public class Interpreter{
 		if(l_arg == 0){
 			Output.write(cmd.substring(0, 2));
 		}
-		if(l_arg == 1){
-			Output.write(cmd.substring(0, 5));
+		if(l_arg == 1  && cmd.length() > 5){
+			Output.write(" "+arg1);
 		}
-		if(l_arg == 2){
-			Output.write(cmd.substring(0, 8));
+		if(l_arg == 2  && cmd.length() > 8){
+			Output.write(","+arg2);
 		}
 	}
 }
