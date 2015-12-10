@@ -97,7 +97,7 @@ public class Frame {
         String s = new String("======="+"\n"+"Ramka numer " + this.number + " (strona: " + this.page + " proces: " + this.processID);
         //String fstring = new String(Integer.toString((int)flags));
         String fstring = Integer.toBinaryString((int) flags);
-        s=s+"ustawienienie flag: "+fstring;
+        s=s+" ustawienienie flag: "+fstring;
         /*if(fstring.substring(fstring.length()-2)=="11"){
            s=s+" bit odwolania, bit brudny";
         }
@@ -110,7 +110,7 @@ public class Frame {
         else {
             s=s+"zadna flaga nie jest ustawiona";
         }*/
-        s = s+")\n"+" Zawartość: \n"+String.valueOf(content)+"\n"+"=======";
+        s = s+")\n"+" Zawartosc: \n"+String.valueOf(content)+"\n"+"=======";
         return s;
     }
 }

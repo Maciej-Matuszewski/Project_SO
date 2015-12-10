@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import Interpreter.Output;
 import obsluga_dysku.FlorekFileSystem;
@@ -324,8 +325,10 @@ public static void displayAddressSpace(int pid) {
         byte dirtyUsed = (byte) (dirty|used);
         while(true){
             Frame f = MemoryManagement.frameTable[MemoryManagement.clockHand%frameCount];
+            Output.write(f.toString());
 
             if(f.flags==0 || f.flags == 4){
+                Output.write("Ramka "+f.number+" zostanie wymieniona");
                 return f.number;
             } else if ((f.flags & dirtyUsed) == 3) {
             	f.flags = (byte)(f.flags&5);
@@ -438,6 +441,7 @@ public static int newAddress (int vaddress,int pid) {
     int temp = pagenumber;
 
         if (pcb.ptable.map.get(pagenumber) == null) {
+            Output.write("Dodano nowy wpis do tabbeli stronic.");
             pcb.ptable.map.put(pagenumber, new PageTableEntry(temp, 0));
             swapFile.add(new SwapFileEntry(pagenumber, pid));
             //jesli wolna to laduj
@@ -452,7 +456,7 @@ public static int newAddress (int vaddress,int pid) {
                 return paddress;
             }
         }
-    System.out.println("tlumaczenie adresu nie udalo sie (newAddress)"+vaddress+pid);
+    System.out.println("Tlumaczenie adresu nie udalo sie (newAddress)"+vaddress+pid);
         return -1;
     }
 
@@ -463,6 +467,7 @@ public static int newAddress (int vaddress,int pid) {
         int offset  = vaddress%pagesize;
 
                 if(pcb.ptable.map.get(pagenumber).memoryOrSwapFile==1){
+                    Output.write("Szukane dane znajdują się w pamięci");
                     int paddress = pcb.ptable.map.get(pagenumber).pageSizeUnits*pagesize+offset;
                     return paddress;
                 }
@@ -480,6 +485,7 @@ public static int newAddress (int vaddress,int pid) {
 
             if(freeFrames.size()!=0){
                 int theFreeFrame = getFreeFrame();
+                Output.write("Konieczne jest wczytanie stronicy z dysku do wolnej ramki ("+theFreeFrame+")");
 
                 Frame fFrame = new Frame(theFreeFrame,getSFE(vaddress,pid));
 
@@ -519,7 +525,7 @@ public static int newAddress (int vaddress,int pid) {
         int temp = pagenumber;
 
         Proces pcb = Management.processLookup(pid);
-
+        Output.write("Konieczne jest znalezienie ramki ofiary.");
         int victimnumber = findVictim();
         Frame victimFrame = frameTable[victimnumber];
 
