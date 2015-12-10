@@ -194,7 +194,7 @@ public class Scheduler {
 		}
 		else
 			pr_rdy = qs.get(first_not_empty).get(0);
-		Output.write("Kontekst zmieniono.\nAktualny proces: "+pr_rdy.PID);
+		Output.write("Kontekst zmieniono.\nAktualny proces PID: "+pr_rdy.PID);
 		
 		return true; // udalo sie zmienic kontekst
 	}

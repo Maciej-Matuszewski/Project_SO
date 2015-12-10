@@ -178,7 +178,8 @@ public class Interpreter{
 					CPU++;
 					przelicz++;
 					
-					if(przelicz == 12 && !test){
+					if(przelicz == 8 && !test){
+						wait_Init();
 						przelicz = 0;
 						if(scheduler.przelicz()){
 							break;
@@ -196,6 +197,18 @@ public class Interpreter{
 					//System.out.print("Podaj komende: ");
 				Decision = Output.loadCMD("Podaj komende");
 				FlorekFileSystem.Disk_Command(Decision);
+			}
+		}
+	}
+	
+	private void wait_Init()
+	{
+		for(Proces temp: Management.zombies_list)
+		{
+			if(temp.PPID == 1)
+			{
+				management.wait(management.procesList.get(0));
+				break; 
 			}
 		}
 	}
