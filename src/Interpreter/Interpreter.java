@@ -34,6 +34,8 @@ public class Interpreter{
 	private String arg1;
 	private String arg2;
 	
+	public static int LifeTime=0;
+	
 	Scanner input;
 	
 	//String program = "mv RA,05mi 50,RAmv BR,RAml BR,BA sb b,01j1 25et";
@@ -176,6 +178,7 @@ public class Interpreter{
 					}
 					set_ZF();
 					CPU++;
+					LifeTime++;
 					przelicz++;
 					
 					if(przelicz == 8 && !test){

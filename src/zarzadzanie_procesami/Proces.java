@@ -2,7 +2,7 @@ package zarzadzanie_procesami;
 
 import java.util.Random;
 
-import Interpreter.Output;
+import Interpreter.*;
 
 import java.util.ArrayList;
 
@@ -39,6 +39,7 @@ public class Proces {
 	public boolean pZF;  //P
 	public String nazwa_pliku;
 	public String codeFile;
+	public int CreationTime;
 	
 	Proces()
 	{
@@ -48,6 +49,7 @@ public class Proces {
 		pri = 0; //P
 		uspri = 0; //P
 		stan = 0;
+		CreationTime = Interpreter.LifeTime;
 		Output.write("Powstal proces systemowy - root(Init)");
 	}
 	
@@ -64,7 +66,7 @@ public class Proces {
 		pRB = proces.pRB;
 		pPC = proces.pPC;
 		pZF = proces.pZF;
-		
+		CreationTime = Interpreter.LifeTime;
 		Output.write("Powstal: " + this.nazwa + ", Od procesu: " + proces.nazwa);
 		nazwa_pliku = proces.nazwa_pliku;
 		try {
