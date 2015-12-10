@@ -1,6 +1,6 @@
-﻿/******************************************************************/
+/******************************************************************/
 /*                     FLOREK FILE SYSTEM v1.0                    */
-/*                     Author: Łukasz Florczak                    */
+/*                     Author: ?ukasz Florczak                    */
 /*                  Last update: 07.12.2015 10:08                 */
 /******************************************************************/
 package obsluga_dysku;
@@ -10,19 +10,19 @@ import obsluga_dysku.FlorekFileSystem;
 /******************************************************************/
 public class Disk {
     String D_Name;              // nazwa dysku
-    String D_NameFileSystem;    // nazwa zamontowanego systemu plików
+    String D_NameFileSystem;    // nazwa zamontowanego systemu plik?w
     int D_Space;                // rozmiar dysku
-    int D_BusySpace;            // zajęte miejsce na dysku
+    int D_BusySpace;            // zaj?te miejsce na dysku
     int D_BlockSize;            // rozmiar bloku
-    int D_BlockValue;           // liczba bloków
+    int D_BlockValue;           // liczba blok?w
     Block[] D_Block;            // tablica z blokami danych
-    int[] D_BitVector_Block;    // wektor bitowy bloków
-    iNode[] D_iNode;            // tablica z i-węzłami
-    int[] D_BitVector_iNode;    // wektor bitowy i-węzłów
-    int D_MaxDirectBlock;       // liczba bezpośrednich bloków
-    int D_MaxInDirectBlock;     // liczba bloków w bloku pośrednm
+    int[] D_BitVector_Block;    // wektor bitowy blok?w
+    iNode[] D_iNode;            // tablica z i-w?z?ami
+    int[] D_BitVector_iNode;    // wektor bitowy i-w?z??w
+    int D_MaxDirectBlock;       // liczba bezpo?rednich blok?w
+    int D_MaxInDirectBlock;     // liczba blok?w w bloku po?rednm
     int D_MaxFileSize;          // maksymalny rozmiar pliku
-    File D_Catalog;             // katalog główny systemu
+    File D_Catalog;             // katalog g??wny systemu
     /**************************************************************/
     Disk(String D_Name, String D_NameFileSystem, int D_Space, int D_BlockSize) {
         this.D_Name                 =   D_Name;
@@ -43,8 +43,8 @@ public class Disk {
             this.D_Block[i] = new Block(this.D_BlockSize, i);
             this.D_iNode[i] = new iNode(this.D_MaxDirectBlock, this.D_MaxInDirectBlock);
             this.D_iNode[i].iNode_Clean();
-            this.D_BitVector_Block[i] = 0; // ustawienie bloków na wolne
-            this.D_BitVector_iNode[i] = 0; // ustawienie i-węzłów na wolne
+            this.D_BitVector_Block[i] = 0; // ustawienie blok?w na wolne
+            this.D_BitVector_iNode[i] = 0; // ustawienie i-w?z??w na wolne
         }
         this.D_Catalog              =   new File("/", this, 'C', "");
         /**********************************************************/
@@ -188,7 +188,7 @@ public class Disk {
             Output.write(hlp);
         }
         else {
-        	Output.write("Plik o podanej scieżce nie istnieje!");
+        	Output.write("Plik o podanej scie?ce nie istnieje!");
         }
     }
     /**************************************************************/

@@ -159,132 +159,7 @@ public static void displayAddressSpace(int pid) {
     }
 
 
-    public  static int translateAddress(int virtualAddress, int processID) {
 
-        Proces pcb = Management.processLookup(processID);
-        int paddress;
-        int pagenumber = virtualAddress / pagesize;
-        int offset = virtualAddress % pagesize;
-        try {
-
-            if(pcb.ptable.map.get(pagenumber) == null){
-                //!
-                // Output.write("stronicy nie ma w tabeli stronic");
-                //!
-                SwapFileEntry sfe = new SwapFileEntry(pagenumber,processID);
-                pcb.ptable.map.put(pagenumber,new PageTableEntry(pagenumber,0));
-                swapFile.add(sfe);
-
-                paddress =  translateAddress(virtualAddress,processID);
-                return paddress;
-            }
-
-            if (pcb.ptable.map.get(pagenumber).memoryOrSwapFile == 1) { //page in memory
-                paddress = pcb.ptable.map.get(pagenumber).pageSizeUnits*pagesize + offset; //TODO check it
-                int frN = paddress/pagesize;
-                frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
-                //!
-                // Output.write("weszło do ifa1");
-                //!
-                return paddress;
-            }
-            //else if (pcb.ptable.map.get(pagenumber) == null) {
-            //add SwapFileEntry to SwapFile and an entry to the PageTable
-            if (freeFrames.size() != 0) {//page can be loaded into memory
-                //TODO fill up a free frame
-                    /*Iterator<Integer> it = freeFrames.iterator();
-                    int freeFrameNumber = it.next(); deprecated*/
-                int freeFrameNumber = getFreeFrame();
-                //!
-                // Output.write("freeframenumber "+freeFrameNumber);
-                //!
-                    /*freeFrames.remove(freeFrameNumber); deprecated*/
-                // Output.write("szukana strona to:"+pagenumber+"procesu "+processID);
-                for(SwapFileEntry temp : swapFile){
-                    if(temp.processID == processID && temp.page == pagenumber)
-                    {
-                        // Iterator<Integer> it2 = freeFrames.iterator();
-                        // int freeFrameNumber2 = it.next(); //TODO make finding free frames a function
-                        frameTable[freeFrameNumber] = new Frame(freeFrameNumber, temp);
-                        //TODO update page table
-                        pcb.ptable.map.put(pagenumber,new PageTableEntry(freeFrameNumber,1));
-                        paddress = pcb.ptable.map.get(pagenumber).pageSizeUnits*MemoryManagement.pagesize+offset;//test - result of get() should be the same as f.number
-                        int frN = paddress/pagesize;
-                        frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
-                        //!
-                        //Output.write("weszło do odpowiedniego ifa(2)");
-                        //!
-                        return paddress;
-                    }
-                }
-                // Output.write("Nie znaleziono szukanego fragmetnu pliku wymiany");
-                frameTable[freeFrameNumber] = new Frame(freeFrameNumber, pagenumber, processID); // TODO PageFault happening
-                pcb.ptable.map.put(pagenumber, new PageTableEntry(freeFrameNumber, 1));
-                paddress = freeFrameNumber*MemoryManagement.pagesize + offset;
-                int frN = paddress/pagesize;
-                frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
-                frameTable[frN].flags = (byte) (frameTable[frN].flags|used);
-
-                return paddress;
-            }
-            else
-            {
-                pcb.ptable.map.put(pagenumber, new PageTableEntry(pagenumber/*to be changed if switched to iterative swapfile*/, 0));/*integer signyfying that page is in swapfile*/
-                swapFile.add(new SwapFileEntry(pagenumber, processID)); //
-                //!
-                // Output.write("weszło do ifa2");
-                //!
-            }
-            //}
-
-            //TODO PageFault
-            //!
-            Output.write("Konieczna wymiana ramki");
-            //!
-            int victimframe = findVictim();
-            Frame f = frameTable[victimframe];
-            Proces victimpcb = Management.processLookup(f.processID);
-            //victimpcb.ptable.map.put(victimpcb.ptable.map.get(f.page),victimpcb.ptable.)
-            PageTableEntry replacement = victimpcb.ptable.map.get(f.page);
-            replacement.memoryOrSwapFile = 0;
-            victimpcb.ptable.map.put(f.page,replacement);
-
-            f.flags = (byte) (f.flags|used);
-            if((f.flags& mustSave) !=0){
-                f.swap(pagenumber,processID);
-                //TODO update page table
-                pcb.ptable.map.put(pagenumber,new PageTableEntry(f.number,1));
-                paddress = pcb.ptable.map.get(pagenumber).pageSizeUnits*MemoryManagement.pagesize+offset;//test - result of get() should be the same as f.number
-                return paddress;
-            }
-            else
-            {
-                for(SwapFileEntry temp : MemoryManagement.swapFile){
-                    if(temp.processID == processID && temp.page == pagenumber)
-                    {
-                        f = new Frame(f.number,temp);
-                        frameTable[victimframe]=f;
-                        //TODO update page table
-                        pcb.ptable.map.put(pagenumber,new PageTableEntry(f.number,1));
-                        paddress = pcb.ptable.map.get(pagenumber).pageSizeUnits*MemoryManagement.pagesize+offset;//test - result of get() should be the same as f.number
-                        return paddress;
-                    }
-                }
-            }
-
-        }
-
-        catch (NullPointerException ne) {
-        }
-        catch (Exception e) {
-        }
-        //!
-        //Output.write(pcb.ptable.map);
-        Output.write(pcb.ptable.toString());
-        //!
-
-        return -1; //something went wrong
-    }
 
 
     //TODO what if the page is in the swapFile
@@ -493,7 +368,7 @@ public static void displayAddressSpace(int pid) {
                 }
                 Output.write("=======");
                 Output.write("Ramka numer " + temp.number + " (strona:" + temp.page + " proces:" + temp.processID);
-                Output.write("Zawartość:");
+                Output.write("Zawartosc:");
                 // CharBuffer cb = CharBuffer.wrap(physicalMemory);
                 char[] content = new char[pagesize];
                 // cb.get(content, temp.number * pagesize, pagesize);
@@ -503,7 +378,7 @@ public static void displayAddressSpace(int pid) {
             }
         }
         else{
-            Output.write("Wszystkie ramki są wolne");
+            Output.write("Wszystkie ramki sa wolne");
 
         }
 
@@ -545,4 +420,159 @@ public static void displayAddressSpace(int pid) {
         translateAddress(virtualaddress,procesID);
         return false;
     }
+
+
+
+
+public static int newAddress (int vaddress,int pid) {
+
+    Proces pcb = Management.processLookup(pid);
+    int paddress;
+    int pagenumber = vaddress / pagesize;
+    int offset = vaddress % pagesize;
+
+    int temp = pagenumber;
+
+        if (pcb.ptable.map.get(pagenumber) == null) {
+            pcb.ptable.map.put(pagenumber, new PageTableEntry(temp, 0));
+            swapFile.add(new SwapFileEntry(pagenumber, pid));
+            //jesli wolna to laduj
+            boolean loaded = false;
+            loaded = loadToFree(vaddress,pid);
+            if(loaded==true){
+                pcb.ptable.map.get(pagenumber).memoryOrSwapFile = 1;
+                return pcb.ptable.map.get(pagenumber).pageSizeUnits*pagesize+offset;
+            }
+            else{
+                paddress = translateAddress(vaddress,pid);
+                return paddress;
+            }
+        }
+    System.out.println("tlumaczenie adresu nie udalo sie (newAddress)"+vaddress+pid);
+        return -1;
+    }
+
+        public static int addressInPhysicalMemory(int vaddress, int pid){
+        Proces pcb = Management.processLookup(pid);
+
+        int pagenumber = vaddress/pagesize;
+        int offset  = vaddress%pagesize;
+
+                if(pcb.ptable.map.get(pagenumber).memoryOrSwapFile==1){
+                    int paddress = pcb.ptable.map.get(pagenumber).pageSizeUnits*pagesize+offset;
+                    return paddress;
+                }
+            else return -1;
+        }
+
+        public static boolean loadToFree(int vaddress, int pid){
+
+            int pagenumber = vaddress/pagesize;
+            int offset  = vaddress%pagesize;
+
+            int temp = pagenumber;
+
+            Proces pcb = Management.processLookup(pid);
+
+            if(freeFrames.size()!=0){
+                int theFreeFrame = getFreeFrame();
+
+                Frame fFrame = new Frame(theFreeFrame,getSFE(vaddress,pid));
+
+                frameTable[theFreeFrame] = fFrame;
+                pcb.ptable.map.put(pagenumber, new PageTableEntry(fFrame.number,1));
+
+                return  true;
+            }
+            return  false;
+        }
+
+
+    public static SwapFileEntry getSFE(int vaddress, int pid){ //moze zwracac null
+
+        int pagenumber = vaddress/pagesize;
+
+
+        Iterator<SwapFileEntry> it = swapFile.iterator();
+
+        while(it.hasNext()){
+            SwapFileEntry sf = it.next();
+            if(sf == null){continue;}
+            if(sf.page == pagenumber && sf.processID == pid){
+                it.remove();
+                return sf;
+            }
+        }
+        System.out.println("zwrócony został null (getSFE)"+vaddress+" "+pid);
+        return null;
+    }
+
+
+    public static int pageFault(int vaddress, int pid){
+        int pagenumber = vaddress/pagesize;
+        int offset  = vaddress%pagesize;
+
+        int temp = pagenumber;
+
+        Proces pcb = Management.processLookup(pid);
+
+        int victimnumber = findVictim();
+        Frame victimFrame = frameTable[victimnumber];
+
+        Proces victimpcb = Management.processLookup(victimFrame.processID);
+
+
+        swapFile.add(new SwapFileEntry(victimFrame));
+        temp = victimFrame.page;
+        victimpcb.ptable.map.put(victimFrame.page,new PageTableEntry(temp,0));
+
+        Frame newFrame = new Frame(victimnumber,getSFE(vaddress,pid));
+        frameTable[victimnumber]=newFrame;
+        Proces newpcb =Management.processLookup(newFrame.processID); //newpcb == pcb?
+        int newtemp = newFrame.page;
+        newpcb.ptable.map.put(newFrame.page,new PageTableEntry(newFrame.number,1));
+        return newFrame.number*pagesize+offset;
+
+    }
+
+    public static int translateAddress(int vaddress, int pid) {
+        int pagenumber = vaddress/pagesize;
+        int offset  = vaddress%pagesize;
+        int paddress;
+        int temp = pagenumber;
+
+        Proces pcb = Management.processLookup(pid);
+
+        if(pcb.ptable.map.get(pagenumber) == null){
+            paddress =  newAddress(vaddress, pid);
+           return paddress;
+        }
+
+        if(pcb.ptable.map.get(pagenumber).memoryOrSwapFile==1)
+        {
+            paddress =pcb.ptable.map.get(pagenumber).pageSizeUnits*pagesize+offset;
+            return paddress;
+        }
+        else{ //PAGEFAULT
+            boolean loaded=false;
+            if(freeFrames.size()!=0) {
+                loaded = loadToFree(vaddress, pid);
+            }
+            if(loaded == true){
+                paddress =pcb.ptable.map.get(pagenumber).pageSizeUnits*pagesize+offset;
+                return paddress;
+                //return translateAddress(vaddress,pid);
+            }
+            else{
+
+                paddress = pageFault(vaddress,pid);
+                return paddress;
+
+            }
+
+        }
+
+    }
+
+
 }
