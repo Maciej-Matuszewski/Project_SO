@@ -26,6 +26,7 @@ public class Interpreter{
 	private String Decision;
 	private String tmp;
 	boolean brak_stronicy = false;
+	boolean wt = false;
 	
 	private static Scheduler scheduler;
 	private static Management management;
@@ -65,7 +66,7 @@ public class Interpreter{
 					PC = scheduler.pr_rdy.pPC;
 					ZF = scheduler.pr_rdy.pZF;
 				}
-				while(!shutdown && !brak_stronicy && !exit && CPU < 4 && (test || MemoryManagement.inMemory(PC, scheduler.pr_rdy.PID))){
+				while(!shutdown && !brak_stronicy && !wt && !exit && CPU < 4 && (test || MemoryManagement.inMemory(PC, scheduler.pr_rdy.PID))){
 					if(test){
 						Output.write("");
 						cmd = Output.loadCMD("Podaj rozkaz");
@@ -509,6 +510,7 @@ public class Interpreter{
 	
 	void wt()
 	{
+		wt = true;
 		int tmp = management.wait(scheduler.pr_rdy);
 		if(tmp == 0)
 		{
@@ -542,6 +544,7 @@ public class Interpreter{
 	}
 
 	void wywlaszczenie(){
+		wt = false;
 		if(!test){
 			if(CPU == 4)
 				Output.write("Minal kwant czasu");
@@ -558,11 +561,11 @@ public class Interpreter{
 		if(l_arg == 0){
 			Output.write(cmd.substring(0, 2));
 		}
-		if(l_arg == 1  && cmd.length() > 5){
-			Output.write(" "+arg1);
+		if(l_arg == 1){
+			Output.write(cmd.substring(0, 2)+" "+arg1);
 		}
-		if(l_arg == 2  && cmd.length() > 8){
-			Output.write(","+arg2);
+		if(l_arg == 2){
+			Output.write(cmd.substring(0, 2)+" "+arg1+","+arg2);
 		}
 	}
 }
