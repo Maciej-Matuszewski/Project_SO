@@ -205,10 +205,6 @@ public class FlorekFileSystem {
                 SysDisk.D_ShowCatalog();
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
-            else if(Com[0].equals("sbc")) {
-                SysDisk.D_ShowBlockContent();
-            }
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if(Com[0].equals("siv")) {
                 SysDisk.D_ShowiNodesBitVector();
             }
