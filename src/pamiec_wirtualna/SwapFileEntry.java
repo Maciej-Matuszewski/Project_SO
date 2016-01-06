@@ -12,8 +12,7 @@ public class SwapFileEntry {
     char[] data = new char[MemoryManagement.pagesize];
 
    public SwapFileEntry(Frame frame){
-        //CharBuffer cb = CharBuffer.wrap(MemoryManagement.physicalMemory);
-       // cb.get(data,frame.number*MemoryManagement.pagesize,MemoryManagement.pagesize);
+
        processID = frame.processID;
        page = frame.page;
 
@@ -21,8 +20,7 @@ public class SwapFileEntry {
    }
 
     public SwapFileEntry(Frame frame, int id){
-        //CharBuffer cb = CharBuffer.wrap(MemoryManagement.physicalMemory);
-        //cb.get(data,frame.number*MemoryManagement.pagesize,MemoryManagement.pagesize);
+
 
         data = Arrays.copyOfRange(MemoryManagement.physicalMemory,frame.number*MemoryManagement.pagesize,frame.number*MemoryManagement.pagesize+MemoryManagement.pagesize);
 

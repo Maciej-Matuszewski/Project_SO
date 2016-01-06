@@ -287,6 +287,12 @@ public static void displayAddressSpace(int pid) {
 
     }
 
+    void clearAddressSpace(int pid){
+        Proces pcb = Management.processLookup(pid);
+
+        pcb.ptable.map.clear();
+    }
+
     public static void releaseMemory(int processid) {
         Proces pcb = Management.processLookup(processid); //will be needed in an indexed swapfile
         Output.write("Zwalnianie pamieci");
@@ -343,17 +349,19 @@ public static void displayAddressSpace(int pid) {
         while(true){
             Frame f = MemoryManagement.frameTable[MemoryManagement.clockHand%frameCount];
 
-            Output.write(f.toString());
+            //Output.write(f.toString());
 
             if(f.flags==0 || f.flags == 4){
                 Output.write("Ramka "+f.number+" zostanie wymieniona");
                 return f.number;
             } else if ((f.flags & dirtyUsed) == 3) {
             	f.flags = (byte)(f.flags&5);
+                Output.write(f.toString());
 
             }
             else if((f.flags & dirty) != 0 || (f.flags & used) != 0) {
                 f.flags = (byte) (f.flags&clear);
+                Output.write(f.toString());
             }
             MemoryManagement.clockHand++;
             MemoryManagement.clockHand=MemoryManagement.clockHand % 4;
