@@ -1,6 +1,7 @@
 package pamiec_wirtualna;
 
 
+import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -41,7 +42,7 @@ public class MemoryManagement {
         //MemoryManagement mm = new MemoryManagement();
 
 
-        Proces p = Management.fork();
+        /*Proces p = Management.fork();
 
         FlorekFileSystem.Create_File("Program1", "mv RA,01mv RB,05ad RA,RBj1 00uuuuuuuuuuuuuuuuuuooooooooooooooooooooaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeiiiiiiiiiiiiiiiiiiiii");
         readProgram("Program1",p.PID);
@@ -178,7 +179,9 @@ public static void displayAddressSpace(int pid) {
 
         int paddress = translateAddress(virtualAddress, processID);
         //!
+        int frameNumber = paddress/pagesize;
 
+        frameTable[frameNumber].flags = (byte) (frameTable[frameNumber].flags | used);
         // Output.write("paddress: "+paddress);
         // Output.write("znak pod paddress:"+String.valueOf(physicalMemory[paddress]));
         // Output.write("strona "+paddress/pagesize);
@@ -304,7 +307,11 @@ public static void displayAddressSpace(int pid) {
             if (temp.processID == processid) {
                 int frameToBeReleased = temp.number;
 
-                frameTable[frameToBeReleased] = new Frame();
+                //
+                Integer n = frameToBeReleased;
+                Output.write("zwolniono ramke: "+n.toString());
+                //
+                frameTable[frameToBeReleased] = new Frame(); //chyba lepiej zeby bylo
                 boolean sanityCheck = freeFrames.add(temp.number);
                 if (sanityCheck == false) {
                     try {
@@ -349,10 +356,12 @@ public static void displayAddressSpace(int pid) {
         while(true){
             Frame f = MemoryManagement.frameTable[MemoryManagement.clockHand%frameCount];
 
-            //Output.write(f.toString());
+
 
             if(f.flags==0 || f.flags == 4){
+               // Output.write(f.toString());
                 Output.write("Ramka "+f.number+" zostanie wymieniona");
+                Output.write(f.toString());
                 return f.number;
             } else if ((f.flags & dirtyUsed) == 3) {
             	f.flags = (byte)(f.flags&5);
@@ -394,20 +403,32 @@ public static void displayAddressSpace(int pid) {
     public  static void displayStatus (){
         if(freeFrames.size()!=frameCount) {
 
-            for(Frame temp : MemoryManagement.frameTable){
-
-                if(temp == null)
-                {
-                    continue;
-                }
+            //for(Frame temp : MemoryManagement.frameTable){
+            for(int ii = 0; ii < 4;ii++){
+                Frame temp = MemoryManagement.frameTable[ii];
                 Output.write("=======");
-                Output.write("Ramka numer " + temp.number + " (strona:" + temp.page + " proces:" + temp.processID);
-                Output.write("Zawartosc:");
-                // CharBuffer cb = CharBuffer.wrap(physicalMemory);
-                char[] content = new char[pagesize];
-                // cb.get(content, temp.number * pagesize, pagesize);
-                content = Arrays.copyOfRange(physicalMemory,temp.number*pagesize,temp.number*pagesize+pagesize);
-                Output.write(String.valueOf(content));
+                /*if(temp == null )
+                {
+                    Output.write("Ramka numer "+ii+" nie jest przydzielona zadnemu procesowi");
+                    continue;
+                }*/
+
+                if(!freeFrames.contains(temp.number)) {
+
+                    String s = new String("Ramka numer " + temp.number + " (strona: " + temp.page + " proces: " + temp.processID);
+
+                    String fstring = Integer.toBinaryString((int) temp.flags);
+                    s=s+" ustawienienie flag: "+fstring+")\nZawartość:";
+
+
+                    char []content = Arrays.copyOfRange(physicalMemory,temp.number*pagesize,temp.number*pagesize+pagesize);
+                    if(temp.processID!=0) {
+                        Output.write(s);
+                        Output.write(String.valueOf(content));
+                    }
+                }
+                else{Output.write("Ramka numer "+ii+" nie jest przydzielona zadnemu procesowi");}
+
                 Output.write("=======");
             }
         }
@@ -416,9 +437,12 @@ public static void displayAddressSpace(int pid) {
 
         }
 
+        /*
+        raczej niepotrzebne
         for(SwapFileEntry temp : swapFile){
             Output.write("fragment pliku wymiany:"+temp.processID+" "+temp.page+" "+String.valueOf(temp.data));
         }
+        */
         //
        // Proces pcb = Management.processLookup(1);
         //Output.write(pcb.ptable.toString());
@@ -431,6 +455,16 @@ public static void displayAddressSpace(int pid) {
             dst[dstoffset+i]=source[i];
         }
 
+    }
+
+    public static void displaymemory(){
+
+        String str = new String(physicalMemory);
+        Output.write("Zawartosc pamieci fizycznej:");
+        for(int ii = 0;ii <4;ii++){
+            Output.write(str.substring(ii*pagesize,ii*pagesize+pagesize));
+        }
+        MemoryManagement.displayStatus();
     }
 
     public static void overwrite(char[] source,int srcoffset, char[] dst, int dstoffset, int length) {

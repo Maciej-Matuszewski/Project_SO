@@ -386,6 +386,9 @@ public class FlorekFileSystem {
             else if (Com[0].equals("ds")){
                 MemoryManagement.displayStatus();
             }
+            else if (Com[0].equals("dm")){
+                MemoryManagement.displaymemory();
+            }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////
             else if (Com[0].equals("da")&& Com.length==2){
             	try
